@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>MAO Timers</title>
+    <!-- <link type="text/css" rel="stylesheet" href="style/stylesheet.css" /> -->
+  </head>
+  <body>
+    <p style="font-size: 48px">MA&#920; Timers</p>
+    <div id="gobackbuttonwrapper"><div id="gobackbutton"><a class="button small" id="goback">&laquo; back to menu</a></div></div>
+    <div class="genericbox" id="buttonbox">
+      <a class="button" onclick="teamInterface()">Team</a>
+      <!--a class="button" onclick="indivInterface()">Individual</a-->
+      <!--div>
+        <a class="button" onclick="hustle()">Hustle</a>
+        <a class="button" onclick="cipher()">Ciphering</a>
+        <a class="button" onclick="relay()">Relay</a>
+      </div>
+      <div>
+        <a class="button" onclick="speed()">Speed</a>
+        <a class="button" onclick="mental()">Mental</a>
+      </div-->
+      <p><strong>Pick a test type above!</strong></p>
+      <p style="margin: 50px">New test types are coming... (i.e. Individual, Ciphering, Hustle, Relay, Speed, Mental)... also, sound alerts.</p>
+      <!--p><strong>Note:</strong> Turn on your sound to hear time warnings.</p-->
+    </div>
+    
+    <div class="genericbox" id="teambox">
+      <div class="startbox">
+        <a class="button" id="startbutton" onclick="startButton()">
+          <div style="font-size: 32px;">Start</div>
+          <div class="qnumber" id="startbuttonnum">Question 1</div>
+        </a>
+        <p class="qnumber" id="teamcurrentnum">Question 1</p>
+      </div>
+      <div class="halfbox">
+        Current minute
+        <div class="countbox" id="minbox">
+          <div class="genericnumber" id="minnumber"></div>
+        </div>
+      </div>
+      <div class="halfbox">
+        Seconds remaining in this minute
+        <div class="countbox" id="secbox">
+          <div class="genericnumber" id="secnumber"></div>
+        </div>
+      </div>
+      <div class="timercontrols">
+        <div class="halfbox" style="width: 25%"><a class="button" onclick="stopButton()">Stop</a></div>
+        <div class="halfbox" style="width: 25%"><a class="button" id="pausebutton" onclick="pauseButton()">Pause</a></div>
+        <div><a class="button small" id="redobutton" onclick="redo()">Redo last question</a></div>
+      </div>
+    </div>
+    
+    <!--<script src="/js/engine.js"></script>-->
+  </body>
+</html>

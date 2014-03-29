@@ -1,0 +1,100 @@
+/* filename: stylesheet.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #faf8ef;
+  color: #776e65;
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px; }
+
+p {
+  text-align: center;
+}
+
+.genericbox {
+  margin: auto;
+  margin-top: 50px;
+  width: 800px;
+  text-align: center;
+}
+
+#teambox { display:none; }
+
+.button {
+  color: #f9f6f2;
+  font-size: 36px;
+  margin: 10px;
+  padding: 10px 15px 10px 15px;
+  display: inline-block;
+  background-color: #9c9086;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #8f7a66;
+}
+
+/*.button.big {
+  font-size: 48px;
+  margin: 10px;
+  padding: 25px 40px 25px 40px;
+}*/
+
+.button.small {
+  font-size: 18px;
+}
+
+#gobackbuttonwrapper {
+  float: right;
+}
+#gobackbutton {
+  position: fixed;
+  width: 180px;
+  margin-left: -175px;
+  margin-top: -150px;
+  display: none;
+}
+
+.qnumber { font-size: 32px; font-weight: bold; }
+#teamcurrentnum { 
+  margin-top: 58px;
+  display: none;
+}
+
+.startbox {
+  /*border: 1px solid black;*/
+  height: 115px;
+}
+
+.halfbox {
+  display: inline-block;
+  width: 40%;
+  margin: 15px 0px 15px 0px;
+  /*border: 1px solid black;*/
+}
+.halfbox.button {
+  width: 20%;
+  margin: 0;
+  border: 1px solid black;
+}
+
+.countbox {
+  height: 100px;
+  width: 100px;
+  border: 1px solid #c2b4a7;
+  border-radius: 10px;
+  /*background-color: #f2c01b;*/
+  margin: auto;
+}
+
+.genericnumber {
+  margin-top: 10px;
+  font-size: 72px;
+  font-weight: bold;
+}
+
+#redobutton {
+  display: none;
+}
