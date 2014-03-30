@@ -1,13 +1,32 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>MA&#920; Timers</title>
     <!-- style stuff -->
     <link type="text/css" rel="stylesheet" href="stylesheet.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/clear-sans.css" />
+    <link type="text/css" rel="stylesheet" media="screen" href="css/clear-sans.css" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="png-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <meta name="HandheldFriendly" content="True">
+    <!--meta name="MobileOptimized" content="320"-->
+    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:title" content="MA&#920; Timers"/>
+    <meta property="og:site_name" content="MA&#920; Timers"/>
+    <meta property="og:description" content="Timers designed for Mu Alpha Theta style tests."/>
+    <meta property="og:image" content="og_image.png"/>
   </head>
   <body>
     <p style="font-size: 48px">MA&#920; Timers</p>
-    <div id="backbuttonwrapper"><div id="backbutton"><a class="button small" onclick="backButton()">&laquo; back to menu</a></div></div>
+    <div id="backbuttonwrapper">
+      <div id="backbutton">
+        <a class="button small" onclick="backButton()">&laquo; back to menu</a>
+      </div>
+    </div>
     <div class="genericbox" id="buttonbox">
       <a class="button" onclick="teamInterface()">Team</a>
       <!--a class="button" onclick="indivInterface()">Individual</a-->
@@ -21,7 +40,8 @@
         <a class="button" onclick="mental()">Mental</a>
       </div-->
       <p><strong>Pick a test type above!</strong></p>
-      <p style="margin: 50px">New test types are coming... (i.e. Individual, Ciphering, Hustle, Relay, Speed, Mental)... also, sound alerts.</p>
+      <hr>
+      <p>New test types are coming... (i.e. Individual, Ciphering, Hustle, Relay, Speed, Mental)... also, sound alerts.</p>
       <!--p><strong>Note:</strong> Turn on your sound to hear time warnings.</p-->
     </div>
     
