@@ -1,12 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>MAO Timers</title>
+    <title>MA&#920; Timers</title>
+    <!-- style stuff -->
     <link type="text/css" rel="stylesheet" href="stylesheet.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/clear-sans.css" />
   </head>
   <body>
     <p style="font-size: 48px">MA&#920; Timers</p>
-    <div id="gobackbuttonwrapper"><div id="gobackbutton"><a class="button small" id="goback">&laquo; back to menu</a></div></div>
+    <div id="backbuttonwrapper"><div id="backbutton"><a class="button small" onclick="backButton()">&laquo; back to menu</a></div></div>
     <div class="genericbox" id="buttonbox">
       <a class="button" onclick="teamInterface()">Team</a>
       <!--a class="button" onclick="indivInterface()">Individual</a-->
@@ -51,6 +52,7 @@
       </div>
     </div>
     
+    <!-- javascript -->
     <script src="engine.js"></script>
   </body>
 </html>
