@@ -4,9 +4,9 @@
 summary of changes:
  - back button is no longer fixed (since it gets in the way) and is absolutely positioned at the top left corner
  - generic-box is now just 85% width
- - count-box is now 155px square
+ - count-box is now 110px square
  - generic-number is now 80px
- - stop and pause button wrappers are now 45% width
+ - stop and pause button wrappers are now 40%, 50% width
  - min and sec box wrappers now have 5px margin
 
 ***************************************************************************************************/
@@ -67,8 +67,8 @@ hr {
 }
 #min-box-wrapper { margin: 5px; }
 #sec-box-wrapper { margin: 5px; }
-#stop-button-wrapper { width: 45%; }
-#pause-button-wrapper { width: 45%; }
+#stop-button-wrapper { width: 40%; }
+#pause-button-wrapper { width: 50%; }
 #REDO_BUTTON { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
@@ -95,8 +95,8 @@ hr {
 }
 
 .count-box {
-  height: 155px;
-  width: 155px;
+  height: 110px;
+  width: 110px;
   border: 1px solid #c2b4a7;
   border-radius: 10px;
   /*background-color: #f2c01b;*/
