@@ -55,6 +55,8 @@ hr {
   position: fixed;
   display: none;
 }
+#stop-button-wrapper { width: 35%; }
+#pause-button-wrapper { width: 35%; }
 #REDO_BUTTON { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
@@ -82,7 +84,7 @@ hr {
 
 .count-box {
   height: 220px;
-  width: 220px;
+  width: 70%;
   border: 1px solid #c2b4a7;
   border-radius: 10px;
   /*background-color: #f2c01b;*/
