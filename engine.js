@@ -83,6 +83,8 @@ function tick()
 {
   // makes the timer go
   time--;
+  // in case we want to switch to time ELAPSED?
+  //var timeElapsed = 240 - time;
 
   // parse time remaining into the divs
   minnumber.innerHTML = Math.ceil((240 - time)/60);

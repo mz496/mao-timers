@@ -21,7 +21,7 @@ hr {
 .generic-box {
   margin: auto;
   margin-top: 50px;
-  width: 50%;
+  width: 600px;
   text-align: center;
 }
 
@@ -55,6 +55,8 @@ hr {
   position: fixed;
   display: none;
 }
+#min-box-wrapper { margin: 10px; }
+#sec-box-wrapper { margin: 10px; }
 #stop-button-wrapper { width: 35%; }
 #pause-button-wrapper { width: 35%; }
 #REDO_BUTTON { display: none; }
@@ -83,8 +85,8 @@ hr {
 }
 
 .count-box {
-  height: 220px;
-  width: 70%;
+  height: 210px;
+  width: 210px;
   border: 1px solid #c2b4a7;
   border-radius: 10px;
   /*background-color: #f2c01b;*/
