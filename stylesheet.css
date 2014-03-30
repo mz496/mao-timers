@@ -1,4 +1,6 @@
-/* -filename: stylesheet.css */
+/* filename: stylesheet.css */
+
+@import url(fonts/clear-sans.css);
 
 html, body {
   margin: 0;
@@ -46,26 +48,34 @@ p {
   font-size: 18px;
 }
 
-#gobackbuttonwrapper {
-  float: right;
+#backbuttonwrapper {
+  float: left;
 }
-#gobackbutton {
+#backbutton {
   position: fixed;
   width: 180px;
-  margin-left: -175px;
   margin-top: -150px;
   display: none;
 }
 
 .qnumber { font-size: 32px; font-weight: bold; }
-#teamcurrentnum { 
-  margin-top: 58px;
+/*#teamcurrentnum { 
+  /*margin-top: 58px;
+  display: none;
+}*/
+
+#ghostbutton {
+  /* all the formatting of a button except not a button! */
+  background-color: transparent;
+  cursor: initial;
+  color: #776e65;
+  margin: 10px;
+  padding: 10px 15px 10px 15px;
   display: none;
 }
 
 .startbox {
-  /*border: 1px solid black;*/
-  height: 115px;
+  height: 120px;
 }
 
 .halfbox {
@@ -73,11 +83,6 @@ p {
   width: 40%;
   margin: 15px 0px 15px 0px;
   /*border: 1px solid black;*/
-}
-.halfbox.button {
-  width: 20%;
-  margin: 0;
-  border: 1px solid black;
 }
 
 .countbox {
@@ -87,12 +92,18 @@ p {
   border-radius: 10px;
   /*background-color: #f2c01b;*/
   margin: auto;
+  position: relative;
 }
 
 .genericnumber {
-  margin-top: 10px;
   font-size: 72px;
   font-weight: bold;
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 1em;
+  margin: auto;
+  margin-top: -0.65em;
 }
 
 #redobutton {

@@ -31,7 +31,12 @@
           <div style="font-size: 32px;">Start</div>
           <div class="qnumber" id="startbuttonnum">Question 1</div>
         </a>
-        <p class="qnumber" id="teamcurrentnum">Question 1</p>
+        <!-- here we make a "ghost button" so we can have the nice "question # in-place" effect without having to deal with ugly margin px values that are nonconstant -->
+        <!-- potential easter eggs in place of <br>? :P -->
+        <a class="button" id="ghostbutton">
+            <div style="font-size: 32px;"><br></div>
+            <div class="qnumber" id="teamcurrentnum">Question 1</div>
+          </a>
       </div>
       <div class="halfbox">
         Current minute

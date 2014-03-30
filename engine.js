@@ -1,4 +1,4 @@
-// -filename: engine.js
+// filename: engine.js
 
 var time;
 var stoptime;
@@ -6,25 +6,35 @@ var buffer = 100;
 var deltaT;
 var ticking;
 var timeout;
-var qnum;
+
 var minbox = document.getElementById("minbox");
 var secbox = document.getElementById("secbox");
 var minnumber = document.getElementById("minnumber");
 var secnumber = document.getElementById("secnumber");
+var teamqnum;
 var teamstate = "stopped";
 // "stopped": the timer is not running at all
 // "paused": the timer is on, we do not have the option to go to the next question, but it is not running
 // "running": timer is running
 
+function backButton()
+{
+  // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually...
+  document.getElementById("teambox").style.display = "none";
+  document.getElementById("buttonbox").style.display = "block";
+  document.getElementById("backbutton").style.display = "none";
+}
+
 function teamInterface()
 {
   document.getElementById("buttonbox").style.display = "none";
-  document.getElementById("teambox").style.display = "block";  
+  document.getElementById("teambox").style.display = "block";
+  document.getElementById("backbutton").style.display = "inline-block";
   time = 240; //240s = 4m
   deltaT = 1000; // actual time between increments of the time variable -- 1000 in normal situation
   stoptime = time * deltaT; //ms
   buffer = 100; //ms
-  qnum = 1;
+  teamqnum = 1;
 }
 
 function startTimer()
@@ -97,7 +107,7 @@ function startButton()
 {
   // make the button into text that just says the question number
   document.getElementById("startbutton").style.display = "none";
-  document.getElementById("teamcurrentnum").style.display = "inline-block";
+  document.getElementById("ghostbutton").style.display = "inline-block";
   // start the timer and let it goooo
   startTimer();
 }
@@ -137,11 +147,14 @@ function pauseButton()
 function reset()
 {
   // advance question number for the start button, reset time, reset pause button
-  qnum++;
+  if (teamqnum < 15)
+  {
+    teamqnum++;
+  }
   document.getElementById("startbutton").style.display = "inline-block";
-  document.getElementById("teamcurrentnum").style.display = "none";
-  document.getElementById("startbuttonnum").innerHTML = "Question " + qnum;
-  document.getElementById("teamcurrentnum").innerHTML = "Question " + qnum;
+  document.getElementById("ghostbutton").style.display = "none";
+  document.getElementById("startbuttonnum").innerHTML = "Question " + teamqnum;
+  document.getElementById("teamcurrentnum").innerHTML = "Question " + teamqnum;
   document.getElementById("pausebutton").innerHTML = "Pause";
   time = 240;
 }
@@ -149,11 +162,13 @@ function reset()
 function redo()
 {
   // essentially from a paused position, decrease qnum by 1 so the start button reads something else, but can't go past 1
-  if (qnum > 1)
-    qnum--;
-  document.getElementById("startbuttonnum").innerHTML = "Question " + qnum;
-  document.getElementById("teamcurrentnum").innerHTML = "Question " + qnum;
-  time = 240;
+  if (teamqnum > 1)
+  {
+    teamqnum--;
+    document.getElementById("startbuttonnum").innerHTML = "Question " + teamqnum;
+    document.getElementById("teamcurrentnum").innerHTML = "Question " + teamqnum;
+    time = 240;
+  }
 }
 
 function indivInterface()
