@@ -18,14 +18,14 @@ hr {
   margin-bottom: 30px;
 }
 
-.genericbox {
+.generic-box {
   margin: auto;
   margin-top: 50px;
   width: 600px;
   text-align: center;
 }
 
-#teambox { display:none; }
+#team-box { display:none; }
 
 .button {
   color: #f9f6f2;
@@ -46,19 +46,20 @@ hr {
   font-size: 18px;
 }
 
-#backbuttonwrapper {
+#back-button-wrapper {
   position: absolute;
   top: 0%;
   float: left;
 }
-#backbutton {
+#BACK_BUTTON {
   position: fixed;
   display: none;
 }
+#REDO_BUTTON { display: none; }
 
-.qnumber { font-size: 32px; font-weight: bold; }
+.q-number { font-size: 32px; font-weight: bold; }
 
-#ghostbutton {
+#ghost-button {
   /* all the formatting of a button except not a button! */
   background-color: transparent;
   cursor: initial;
@@ -68,18 +69,18 @@ hr {
   display: none;
 }
 
-.startbox {
+.start-box {
   height: 120px;
 }
 
-.halfbox {
+.half-box {
   display: inline-block;
   width: 40%;
   margin: 15px 0px 15px 0px;
   /*border: 1px solid black;*/
 }
 
-.countbox {
+.count-box {
   height: 220px;
   width: 220px;
   border: 1px solid #c2b4a7;
@@ -89,7 +90,7 @@ hr {
   position: relative;
 }
 
-.genericnumber {
+.generic-number {
   font-size: 120px; /* ONE TWENNY */
   font-weight: bold;
   position: absolute;
@@ -98,8 +99,4 @@ hr {
   height: 1em;
   margin: auto;
   margin-top: -0.7em;
-}
-
-#redobutton {
-  display: none;
 }
