@@ -1,4 +1,4 @@
-/* filename: stylesheet.css */
+/* filename: root/main.css */
 
 @import url(fonts/clear-sans.css);
 
@@ -21,7 +21,7 @@ hr {
 .generic-box {
   margin: auto;
   margin-top: 50px;
-  width: 600px;
+  width: 50%;
   text-align: center;
 }
 

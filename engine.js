@@ -1,4 +1,4 @@
-// filename: engine.js
+// filename: root/engine.js
 
 document.getElementById("BACK_BUTTON").onclick = backButton;
 document.getElementById("TEAM_OPEN").onclick = teamInterface;
