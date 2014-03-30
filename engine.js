@@ -180,8 +180,9 @@ function finish()
     secbox.style.background = "#f72d23";
     minnumber.style.color = "#f9f6f2";
     secnumber.style.color = "#f9f6f2";
-    // force the time to read 0 when the boxes go red, since it doesn't seem to be working in tick()
-    secnumber.innerHTML = 0;
+    // force the time to read 0 time is 0, since it doesn't seem to be working in tick()
+    if (time === 0)
+      secnumber.innerHTML = 0;
     // let user advance
     reset();
     teamstate = "stopped";
