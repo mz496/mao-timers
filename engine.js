@@ -11,10 +11,6 @@ var time;
 var deltaT;
 var ticking;
 
-var minbox = get("min-box");
-var secbox = get("sec-box");
-var minnumber = get("min-number");
-var secnumber = get("sec-number");
 var teamqnum = 1;
 var teamstate = "stopped";
 // "stopped": the timer is not running at all
@@ -36,6 +32,8 @@ or Resume...)
 
 function get(elem)
 { return document.getElementById(elem); }
+function loadSound(sound)
+{ get(sound).load(); }
 function playSound(sound)
 { get(sound).play(); }
 
@@ -46,7 +44,7 @@ function backButton()
   get("team-box").style.display = "none";
   // and pause all the timers unless they're stopped already
   if (teamstate !== "stopped")
-  {teamstate = "paused";}
+    teamstate = "paused";
   get("button-box").style.display = "block";
   get("BACK_BUTTON").style.display = "none";
 }
@@ -72,6 +70,13 @@ function teamInterface()
     deltaT = 1000; // actual time between increments of the time variable -- 1000 in normal situation
     // do NOT re-initialize teamqnum! or else redo button breaks!
   }
+  
+  // load sounds for mobile/iPad upon click
+  loadSound("time");
+  loadSound("fifteenseconds");
+  loadSound("secondminute");
+  loadSound("thirdminute");
+  loadSound("fourthminute");
 }
 
 function startTimer()
