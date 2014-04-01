@@ -27,7 +27,7 @@ var teamstate = "stopped";
 function get(elem)
 { return document.getElementById(elem); }
 function playSound(sound)
-{ get(sound).autoplay = true; get(sound).autostart = true; }
+{ get(sound).autoplay = "true"; get(sound).autostart = "true"; }
 
 
 function backButton()
