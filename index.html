@@ -86,15 +86,12 @@
     </div>
     
     <!-- sound containers -->
-    <embed id="time" src="sounds/time.mp3" hidden autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="fifteenseconds" src="sounds/fifteenseconds.mp3" hidden  autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="secondminute" src="sounds/secondminute.mp3" hidden  autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="thirdminute" src="sounds/thirdminute.mp3" hidden  autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="fourthminute" src="sounds/fourthminute.mp3" hidden  autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="newminute" src="sounds/newminute.mp3" hidden  autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="fifteenminutes" src="sounds/fifteenminutes.mp3" hidden autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="fiveminutes" src="sounds/fiveminutes.mp3" hidden autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
-    <embed id="oneminute" src="sounds/oneminute.mp3" hidden autoplay="false" autostart="false" loop="false" preload="auto" type="audio/mp3" />
+    <audio hidden="true" id="time">
+      <source src="sounds/time.mp3" autoplay="false" autostart="false" preload="auto" type="audio/mp3" />
+    </audio>
+    <audio hidden="true" id="fifteenseconds">
+      <source src="sounds/fifteenseconds.mp3" autoplay="false" autostart="false" preload="auto" type="audio/mp3" />
+    </audio>
     <!-- javascript -->
     <script src="engine.js"></script>
   </body>

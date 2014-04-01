@@ -100,7 +100,7 @@ function tick()
     case 195:
       playSound("fifteenseconds");
       break;
-    case 180:
+    /**case 180:
       playSound("secondminute");
       break;
     case 120:
@@ -111,7 +111,7 @@ function tick()
       break;
     case 0:
       playSound("time");
-      break;
+      break;*/
   }
   // in case we want to switch to time ELAPSED?
   //var timeElapsed = 240 - time;
