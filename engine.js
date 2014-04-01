@@ -3,16 +3,13 @@
 document.getElementById("BACK_BUTTON").onclick = backButton;
 document.getElementById("TEAM_OPEN").onclick = teamInterface;
 document.getElementById("START_BUTTON").onclick = startButton;
-document.getElementById("STOP_BUTTON").onclick = stopButton;
+document.getElementById("STOP_BUTTON").onclick = finish;
 document.getElementById("PAUSE_BUTTON").onclick = pauseButton;
 document.getElementById("REDO_BUTTON").onclick = redoButton;
 
 var time;
-var stoptime;
-var buffer;
 var deltaT;
 var ticking;
-var timeout;
 
 var minbox = get("min-box");
 var secbox = get("sec-box");
@@ -23,6 +20,19 @@ var teamstate = "stopped";
 // "stopped": the timer is not running at all
 // "paused": the timer is on, we do not have the option to go to the next question, but it is not running
 // "running": timer is running
+
+/**
+          +<--> paused (trigger via Pause or Back)
+          |       |
+running --+       |
+   ^      |       v
+   |      +---> stopped (trigger via OoT or Stop)
+   |              |
+   +--------------+
+^ (trigger
+via Start
+or Resume...)
+**/
 
 function get(elem)
 { return document.getElementById(elem); }
@@ -60,8 +70,6 @@ function teamInterface()
     // initialize things
     time = 240; //240s = 4m
     deltaT = 1000; // actual time between increments of the time variable -- 1000 in normal situation
-    stoptime = time * deltaT; //ms
-    buffer = 100; //ms
     // do NOT re-initialize teamqnum! or else redo button breaks!
   }
 }
@@ -69,16 +77,15 @@ function teamInterface()
 function startTimer()
 {
   // initial values
-  minnumber.innerHTML = 1;
-  secnumber.innerHTML = 60;
-  minbox.style.background = "transparent";
-  minnumber.style.color = "inherit";
-  secbox.style.background = "transparent";
-  secnumber.style.color = "inherit";
+  get("min-number").innerHTML = 1;
+  get("sec-number").innerHTML = 60;
+  get("min-box").style.background = "transparent";
+  get("min-number").style.color = "inherit";
+  get("sec-box").style.background = "transparent";
+  get("sec-number").style.color = "inherit";
 
   teamstate = "running";
   ticking = setInterval(tick, deltaT);
-  timeout = setTimeout(finish, stoptime+buffer);
 }
   
 function tick()
@@ -100,7 +107,7 @@ function tick()
     case 195:
       playSound("fifteenseconds");
       break;
-    /**case 180:
+    case 180:
       playSound("secondminute");
       break;
     case 120:
@@ -111,35 +118,41 @@ function tick()
       break;
     case 0:
       playSound("time");
-      break;*/
+      break;
   }
+  
   // in case we want to switch to time ELAPSED?
   //var timeElapsed = 240 - time;
 
   // parse time remaining into the divs
-  minnumber.innerHTML = Math.ceil((240 - time)/60);
-  secnumber.innerHTML = time % 60;
+  get("min-number").innerHTML = Math.ceil((240 - time)/60);
+  get("sec-number").innerHTML = time % 60;
     
   // check if <15sec in the minute
   if (time % 60 <= 15 && time % 60 !== 0)
   {
     // make boxes yellow w/ white text for warning
-    secbox.style.background = "#f2c01b";
-    secnumber.style.color = "#f9f6f2";
+    get("sec-box").style.background = "#f2c01b";
+    get("sec-number").style.color = "#f9f6f2";
   }
   
-    // however, secnumber should only read 0 at the end
+   // however, secnumber should only read 0 at the end
   if (time % 60 === 0 && time !== 0)
   {
-    secnumber.innerHTML = 60;
+    get("sec-number").innerHTML = 60;
     // new minute starting, reset color
     // advance minute count at 60 (i.e. now) instead of at the 59
-    minnumber.innerHTML++;
-    secbox.style.background = "transparent";
-    secnumber.style.color = "inherit";
+    get("min-number").innerHTML++;
+    get("sec-box").style.background = "transparent";
+    get("sec-number").style.color = "inherit";
   }
 
-  // finish sets the time 0 at the end
+  // when time is 0, call finish() and set the seconds to 0
+  if (time === 0)
+  {
+    get("sec-number").innerHTML = 0;
+    finish();
+  }
 }
 
 function startButton()
@@ -151,25 +164,15 @@ function startButton()
   // start the timer and let it goooo
   startTimer();
 }
-  
-function stopButton()
-{
-  // premature finish; clear timeout, interval is cleared in the first line of finish()
-  clearTimeout(timeout);
-  finish();
-}
 
 function pauseButton()
 {
   // running --> paused section
   if (teamstate === "running")
   {
-    // freeze timer, don't change anything
     teamstate = "paused";
-    // remove timeout and interval for now, to be replaced
+    // remove interval for now, to be replaced
     clearInterval(ticking);
-    clearTimeout(timeout);
-    // change text to Resume...
     get("PAUSE_BUTTON").innerHTML = "Resume...";
   }
   
@@ -177,17 +180,16 @@ function pauseButton()
   else if (teamstate === "paused")
   {
     teamstate = "running";
-    // remake timeout and interval
+    // remake interval
     ticking = setInterval(tick, deltaT);
-    timeout = setTimeout(finish, time*deltaT + buffer); // timeout for the time remaining to finish up
-    // resembles definition of stoptime except that stoptime is a constant
     get("PAUSE_BUTTON").innerHTML = "Pause";
   }
 }
 
 function redoButton()
 {
-  // essentially from a paused position, decrease qnum by 1 so the start button reads something else, but can't go past 1
+  // precondition: stopped position
+  // postcondition: decrease teamqnum by 1 so we would start the previous question; can't go past 1
   if (teamqnum > 1)
   {
     teamqnum--;
@@ -198,21 +200,18 @@ function redoButton()
 
 function finish()
 {
-  // this must be here in the case of non-user-initiated stop (OoT)
-  // by definition the timeout has already cleared, since this is the function that the timeout triggers
+  // can be user initiated stop, or out of time (OoT)
   clearInterval(ticking);
   // now only reset once
   if (teamstate === "running" || teamstate === "paused")
   {
     // make the boxes red so they're noticeable
-    minbox.style.background = "#f72d23";
-    secbox.style.background = "#f72d23";
-    minnumber.style.color = "#f9f6f2";
-    secnumber.style.color = "#f9f6f2";
-    // force the time to read 0 time is 0, since it doesn't seem to be working in tick()
-    if (time === 0)
-      secnumber.innerHTML = 0;
-    // let user advance
+    get("min-box").style.background = "#f72d23";
+    get("sec-box").style.background = "#f72d23";
+    get("min-number").style.color = "#f9f6f2";
+    get("sec-number").style.color = "#f9f6f2";
+    
+    // let user advance, using the same parameters we've been using
     reset();
     teamstate = "stopped";
     // show the redo button
@@ -224,9 +223,8 @@ function reset()
 {
   // advance question number for the start button, reset time, reset pause button
   if (teamqnum < 15)
-  {
     teamqnum++;
-  }
+  
   get("START_BUTTON").style.display = "inline-block";
   get("ghost-button").style.display = "none";
   get("start-button-num").innerHTML = "Question " + teamqnum;
