@@ -8,14 +8,14 @@ document.getElementById("PAUSE_BUTTON").onclick = pauseButton;
 document.getElementById("REDO_BUTTON").onclick = redoButton;
 
 var time = "sounds/time.mp3";
-var fifteensec = "sounds/fifteenseconds.mp3";
+var fifteenseconds = "sounds/fifteenseconds.mp3";
 var secondminute = "sounds/secondminute.mp3";
 var thirdminute = "sounds/thirdminute.mp3";
 var fourthminute = "sounds/fourthminute.mp3";
 var newminute = "sounds/newminute.mp3";
-var fifteenmin = "sounds/fifteenminutes.mp3";
-var fivemin = "sounds/fiveminutes.mp3";
-var onemin = "sounds/oneminute.mp3";
+var fifteenminutes = "sounds/fifteenminutes.mp3";
+var fiveminutes = "sounds/fiveminutes.mp3";
+var oneminute = "sounds/oneminute.mp3";
 
 var time;
 var stoptime;
@@ -126,7 +126,16 @@ function tick()
   // sound handler
   switch(time)
   {
-    case time === 15 || time === 75 || time === 135 || time === 195:
+    case 15:
+      playSound(fifteenseconds);
+      break;
+    case 75:
+      playSound(fifteenseconds);
+      break;
+    case 135:
+      playSound(fifteenseconds);
+      break;
+    case 195:
       playSound(fifteenseconds);
       break;
     case 180:
