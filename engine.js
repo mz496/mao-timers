@@ -37,7 +37,7 @@ var teamstate = "stopped";
 function get(elem)
 { return document.getElementById(elem); }
 function playSound(sound)
-{ get("sound-wrapper").innerHTML = "<embed src=\"" + sound + "\" hidden=\"true\" autoplay=\"true\" autostart=\"true\" loop=\"false\" type=\"audio/mp3\" />"; }
+{ get("sound-wrapper").innerHTML = "<embed src=\"" + sound + "\" hidden=\"true\" autoplay=\"true\" autostart=\"true\" loop=\"false\" preload=\"auto\" type=\"audio/mp3\" />"; }
 
 
 function backButton()
