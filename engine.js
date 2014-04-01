@@ -141,6 +141,7 @@ function tick()
     case 0:
       playSound(time);
       break;
+  }
 }
 
 function startButton()
