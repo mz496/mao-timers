@@ -7,16 +7,6 @@ document.getElementById("STOP_BUTTON").onclick = stopButton;
 document.getElementById("PAUSE_BUTTON").onclick = pauseButton;
 document.getElementById("REDO_BUTTON").onclick = redoButton;
 
-var time = "sounds/time.mp3";
-var fifteenseconds = "sounds/fifteenseconds.mp3";
-var secondminute = "sounds/secondminute.mp3";
-var thirdminute = "sounds/thirdminute.mp3";
-var fourthminute = "sounds/fourthminute.mp3";
-var newminute = "sounds/newminute.mp3";
-var fifteenminutes = "sounds/fifteenminutes.mp3";
-var fiveminutes = "sounds/fiveminutes.mp3";
-var oneminute = "sounds/oneminute.mp3";
-
 var time;
 var stoptime;
 var buffer;
@@ -37,7 +27,7 @@ var teamstate = "stopped";
 function get(elem)
 { return document.getElementById(elem); }
 function playSound(sound)
-{ get("sound-wrapper").innerHTML = "<embed src=\"" + sound + "\" hidden=\"true\" autoplay=\"true\" autostart=\"true\" loop=\"false\" preload=\"auto\" type=\"audio/mp3\" />"; }
+{ get(sound).autoplay = true; get(sound).autostart = true; }
 
 
 function backButton()
@@ -99,28 +89,28 @@ function tick()
   switch(time)
   {
     case 15:
-      playSound(fifteenseconds);
+      playSound("fifteenseconds");
       break;
     case 75:
-      playSound(fifteenseconds);
+      playSound("fifteenseconds");
       break;
     case 135:
-      playSound(fifteenseconds);
+      playSound("fifteenseconds");
       break;
     case 195:
-      playSound(fifteenseconds);
+      playSound("fifteenseconds");
       break;
     case 180:
-      playSound(secondminute);
+      playSound("secondminute");
       break;
     case 120:
-      playSound(thirdminute);
+      playSound("thirdminute");
       break;
     case 60:
-      playSound(fourthminute);
+      playSound("fourthminute");
       break;
     case 0:
-      playSound(time);
+      playSound("time");
       break;
   }
   // in case we want to switch to time ELAPSED?
