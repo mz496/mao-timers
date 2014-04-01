@@ -95,35 +95,7 @@ function tick()
 {
   // makes the timer go
   time--;
-  // in case we want to switch to time ELAPSED?
-  //var timeElapsed = 240 - time;
-
-  // parse time remaining into the divs
-  minnumber.innerHTML = Math.ceil((240 - time)/60);
-  secnumber.innerHTML = time % 60;
-    
-  // check if <15sec in the minute
-  if (time % 60 <= 15 && time % 60 !== 0)
-  {
-    // make boxes yellow w/ white text for warning
-    secbox.style.background = "#f2c01b";
-    secnumber.style.color = "#f9f6f2";
-  }
-  
-    // however, secnumber should only read 0 at the end
-  if (time % 60 === 0 && time !== 0)
-  {
-    secnumber.innerHTML = 60;
-    // new minute starting, reset color
-    // advance minute count at 60 (i.e. now) instead of at the 59
-    minnumber.innerHTML++;
-    secbox.style.background = "transparent";
-    secnumber.style.color = "inherit";
-  }
-
-  // finish sets the time 0 at the end
-
-  // sound handler
+  // sound handler -- this is at the top to have minimum delays possible
   switch(time)
   {
     case 15:
@@ -151,6 +123,33 @@ function tick()
       playSound(time);
       break;
   }
+  // in case we want to switch to time ELAPSED?
+  //var timeElapsed = 240 - time;
+
+  // parse time remaining into the divs
+  minnumber.innerHTML = Math.ceil((240 - time)/60);
+  secnumber.innerHTML = time % 60;
+    
+  // check if <15sec in the minute
+  if (time % 60 <= 15 && time % 60 !== 0)
+  {
+    // make boxes yellow w/ white text for warning
+    secbox.style.background = "#f2c01b";
+    secnumber.style.color = "#f9f6f2";
+  }
+  
+    // however, secnumber should only read 0 at the end
+  if (time % 60 === 0 && time !== 0)
+  {
+    secnumber.innerHTML = 60;
+    // new minute starting, reset color
+    // advance minute count at 60 (i.e. now) instead of at the 59
+    minnumber.innerHTML++;
+    secbox.style.background = "transparent";
+    secnumber.style.color = "inherit";
+  }
+
+  // finish sets the time 0 at the end
 }
 
 function startButton()
