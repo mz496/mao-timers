@@ -1,11 +1,12 @@
 // filename: root/engine.js
 
-document.getElementById("BACK_BUTTON").onclick = backButton;
-document.getElementById("TEAM_OPEN").onclick = teamInterface;
-document.getElementById("START_BUTTON").onclick = startButton;
-document.getElementById("STOP_BUTTON").onclick = finish;
-document.getElementById("PAUSE_BUTTON").onclick = pauseButton;
-document.getElementById("REDO_BUTTON").onclick = redoButton;
+get("BACK_BUTTON").onclick = backButton;
+get("TEAM_OPEN").onclick = teamInterface;
+get("TEAM_OPEN").touchstart = teamInterface;
+get("START_BUTTON").onclick = startButton;
+get("STOP_BUTTON").onclick = finish;
+get("PAUSE_BUTTON").onclick = pauseButton;
+get("REDO_BUTTON").onclick = redoButton;
 
 var time;
 var deltaT;
@@ -32,10 +33,10 @@ or Resume...)
 
 function get(elem)
 { return document.getElementById(elem); }
-function loadSound(sound)
+/* function loadSound(sound)
 { get(sound).load(); }
 function playSound(sound)
-{ get(sound).play(); }
+{ get(sound).play(); } */
 
 
 function backButton()
@@ -72,11 +73,13 @@ function teamInterface()
   }
   
   // load sounds for mobile/iPad upon click
-  loadSound("time");
+  /* loadSound("time");
   loadSound("fifteenseconds");
   loadSound("secondminute");
   loadSound("thirdminute");
-  loadSound("fourthminute");
+  loadSound("fourthminute"); */
+  // play the sound triggered by touchstart so we can enable sound forever
+  playSound("sounds/silence.mp3");
 }
 
 function startTimer()
@@ -101,28 +104,28 @@ function tick()
   switch(time)
   {
     case 15:
-      playSound("fifteenseconds");
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 75:
-      playSound("fifteenseconds");
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 135:
-      playSound("fifteenseconds");
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 195:
-      playSound("fifteenseconds");
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 180:
-      playSound("secondminute");
+      playSound("sounds/secondminute.mp3");
       break;
     case 120:
-      playSound("thirdminute");
+      playSound("sounds/thirdminute.mp3");
       break;
     case 60:
-      playSound("fourthminute");
+      playSound("sounds/fourthminute.mp3");
       break;
     case 0:
-      playSound("time");
+      playSound("sounds/time.mp3");
       break;
   }
   
@@ -238,9 +241,103 @@ function reset()
   time = 240;
 }
 
-////////////////////////////////////////////////////////
+/***********************************************\
+    INDIVIDUAL
+\***********************************************/
 
 function indivInterface()
 {
   
+}
+
+/***********************************************\
+    SOUND HANDLERS
+\***********************************************/
+
+// BufferLoader class
+function BufferLoader(context, urlList, callback) {
+    this.context = context;
+    this.urlList = urlList;
+    this.onload = callback;
+    this.bufferList = new Array();
+    this.loadCount = 0;
+}
+
+BufferLoader.prototype.loadBuffer = function(url, index) {
+    // Load buffer asynchronously
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.responseType = "arraybuffer";
+
+    var loader = this;
+
+    request.onload = function() {
+        // Asynchronously decode the audio file data in request.response
+        loader.context.decodeAudioData(
+            request.response,
+            function(buffer) {
+                if (!buffer) {
+                    alert('error decoding file data: ' + url);
+                    return;
+                }
+                loader.bufferList[index] = buffer;
+                if (++loader.loadCount == loader.urlList.length)
+                    loader.onload(loader.bufferList);
+            }    
+        );
+    }
+
+    request.onerror = function() {
+        alert('BufferLoader: XHR error');        
+    }
+
+    request.send();
+}
+
+BufferLoader.prototype.load = function() {
+    for (var i = 0; i < this.urlList.length; ++i)
+        this.loadBuffer(this.urlList[i], i);
+}
+///////////////////////////////////////////////
+// Create sound buffers for each sound
+
+window.onload = init;
+var context;
+var bufferLoader;
+var soundsloaded;
+
+function init() {
+  // Fix up prefixing
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  context = new AudioContext();
+
+  bufferLoader = new BufferLoader(
+    context,
+    [
+      "sounds/silence.mp3",
+      "sounds/time.mp3",
+      "sounds/fifteenseconds.mp3",
+      "sounds/secondminute.mp3",
+      "sounds/thirdminute.mp3",
+      "sounds/fourthminute.mp3",
+      "sounds/newminute.mp3",
+      "sounds/fifteenminutes.mp3",
+      "sounds/fiveminutes.mp3",
+      "sounds/oneminute.mp3"
+    ],
+    finishedLoading
+    );
+
+  bufferLoader.load();
+}
+
+// this function has no use yet since we don't need the sounds as soon as they load
+function finishedLoading() { soundsloaded = true; }
+
+function playSound(soundBuffer) {
+  // create a source with the sound's buffer (which is just the filename) and play it
+  var source = context.createBufferSource();
+  source.buffer = soundBuffer;
+  source.connect(context.destination);
+  source.start(0);
 }
