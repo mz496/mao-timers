@@ -83,7 +83,7 @@ function makeAudioContext() {
       addStatus("Finished decoding audio");
       soundBuffer = buffer_;
     },
-    function() { addStatus("Failed to decode") });
+    function() { addStatus("Failed to decode"); });
   };
   request.send();
 }
