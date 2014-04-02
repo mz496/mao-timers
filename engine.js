@@ -4,7 +4,7 @@ window.onerror = function(errorMsg, url, lineNumber) {
 
 audioDict = {audio: {}, audio_src: {}};
 
-var audio = {
+audioDict.audio = {
   time: 'sounds/time.mp3',
   fifteenseconds: 'sounds/fifteenseconds.mp3',
   secondminute: 'sounds/secondminute.mp3',
@@ -14,7 +14,7 @@ var audio = {
   fifteenminutes: 'sounds/fifteenminutes.mp3',
   fiveminutes: 'sounds/fiveminutes.mp3',
   oneminute: 'sounds/oneminute.mp3'
-}
+};
 
 // WAAPI supported section
 var WAAPIsupport = false;
