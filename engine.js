@@ -1,3 +1,4 @@
+
 var sounds = [
   "sounds/time.mp3",
   "sounds/fifteenseconds.mp3",
@@ -25,6 +26,7 @@ var oneminuteBuffer;
 window.onload = loadAll;
 
 function loadAll() {
+  makeAudioContext();
   loadSound(sounds[0], timeBuffer);
   loadSound(sounds[1], fifteensecondsBuffer);
   loadSound(sounds[2], secondminuteBuffer);
@@ -51,8 +53,7 @@ function addStatus(text)
   get("status").innerHTML += ("<br>" + text);
 }
 
-		function loadSound(soundURL, soundBuffer) {
-  // first is the URL, second is the loaded version we're storing
+function makeAudioContext() {
   if (typeof AudioContext !== "undefined") {
       context = new AudioContext();
       addStatus("Created AudioContext");
@@ -62,25 +63,31 @@ function addStatus(text)
       addStatus("Created webkitAudioContext");
   }
   else
-    {
-      addStatus("Web Audio API does not appear to be supported");
-      return;
-    }
+  {
+    addStatus("Web Audio API does not appear to be supported");
+    return;
+  }
+}
+
+		function loadSound(soundURL, soundBuffer) {
+  // first is the URL, second is the loaded version we're storing
 
   // AJAX request for the sound file
   var request = new XMLHttpRequest();
   request.open("GET", soundURL, true);
   request.responseType = "arraybuffer";
   request.onload = function () {
-    addStatus(soundURL +" loaded, decoding...");
+    addStatus(soundURL + " loaded, decoding...");
     context.decodeAudioData(request.response, function (buffer_)
     {
       addStatus("Finished decoding audio");
       soundBuffer = buffer_;
     },
-    function() { addStatus("Failed") });
+    function() { addStatus("Failed to decode") });
   };
   request.send();
+  
+  playSound(soundBuffer); // test...
 }
 
 
@@ -340,50 +347,60 @@ function indivInterface()
     SOUND HANDLERS
 \***********************************************/
 
-/* BufferLoader class
-function BufferLoader(context, urlList, callback) {
-    this.context = context;
-    this.urlList = urlList;
-    this.onload = callback;
-    this.bufferList = [];
-    this.loadCount = 0;
-}
-
-BufferLoader.prototype.loadBuffer = function(url, index) {
-    // Load buffer asynchronously
-    var request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.responseType = "arraybuffer";
-
-    var loader = this;
-
-    request.onload = function() {
-        // Asynchronously decode the audio file data in request.response
-        loader.context.decodeAudioData(
-            request.response,
-            function(buffer) {
-                if (!buffer) {
-                    alert('error decoding file data: ' + url);
-                    return;
-                }
-                loader.bufferList[index] = buffer;
-                if (++loader.loadCount == loader.urlList.length)
-                    loader.onload(loader.bufferList);
-            }    
-        );
-    };
-
-    request.onerror = function() {
-        alert('BufferLoader: XHR error');        
-    };
-
-    request.send();
-};
-
-BufferLoader.prototype.load = function() {
-    for (var i = 0; i < this.urlList.length; ++i)
-        this.loadBuffer(this.urlList[i], i);
-};*/
 ///////////////////////////////////////////////
 // Create sound buffers for each sound
 
+/*(function () {
+  var context = null;
+  var buffer = null;
+  
+  function addStatus(msg)
+  {
+    jQuery("#status").append("<br/>" + msg);
+  };
+		
+  window.onerror = function(errorMsg, url, lineNumber) {
+    addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+  };
+  
+  function decodeError() {
+    addStatus("Error in decodeAudioData");
+  };
+  
+  function playSound(soundBuffer) {
+    if (!soundBuffer)
+      return;
+    
+    var source = context.createBufferSource();			source.buffer = soundBuffer;			source.connect(context.destination);			source.noteOn(0);
+  };
+		
+  jQuery(document).ready(function () {
+    if (typeof AudioContext !== "undefined")
+    {
+      context = new AudioContext();
+      addStatus("Created AudioContext");
+    }
+    else if (typeof webkitAudioContext !== "undefined")
+    {
+      context = new webkitAudioContext();				addStatus("Created webkitAudioContext");
+    }
+    else
+    {
+      addStatus("Web Audio API does not appear to be supported");
+      return;
+    }
+		
+    // AJAX request sound.m4a
+    var request = new XMLHttpRequest();
+    request.open("GET", "sound.m4a", true);			request.responseType = "arraybuffer";
+    request.onload = function () {				
+      addStatus("sound.m4a loaded, decoding...");
+      context.decodeAudioData(request.response, function (buffer_) {
+        addStatus("Finished decoding audio");
+        buffer = buffer_;
+      }, decodeError);
+    };
+    
+    request.send();
+  });
+})();*/
