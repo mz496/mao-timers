@@ -6,138 +6,6 @@ function addStatus(msg) {
   get("status").innerHTML += "<br>" + msg;
 }
 
-var audioDict = {};
-audioDict.audio = {};
-// stores AudioBuffers
-
-var audio = {
-  time: 'sounds/time.mp3',
-  fifteenseconds: 'sounds/fifteenseconds.mp3',
-  secondminute: 'sounds/secondminute.mp3',
-  thirdminute: 'sounds/thirdminute.mp3',
-  fourthminute: 'sounds/fourthminute.mp3',
-  newminute: 'sounds/newminute.mp3',
-  fifteenminutes: 'sounds/fifteenminutes.mp3',
-  fiveminutes: 'sounds/fiveminutes.mp3',
-  oneminute: 'sounds/oneminute.mp3'
-};
-
-// WAAPI supported section
-var WAAPIsupport = false;
-
-if (typeof webkitAudioContext !== 'undefined') {
-  var audio_ctx = new webkitAudioContext();
-  WAAPIsupport = true;
-  addStatus("Created webkitAudioContext");
-}
-else if (typeof AudioContext !== "undefined") {
-  var audio_ctx = new AudioContext();
-  WAAPIsupport = true;
-  addStatus("Created AudioContext");
-}
-   
-function loadMusic(url, cb) {
-  var req = new XMLHttpRequest();
-  req.open('GET', url, true);
-  // XHR2
-  req.responseType = 'arraybuffer';
- 
-  req.onload = function() {
-    audio_ctx.decodeAudioData(req.response, cb);
-  };
- 
-  req.send();
-}
-
-var loadAudioData = function(name, url) {
- 
-  // Async
-  loadMusic(url, function(buffer) {
-    audioDict.audio[name] = buffer;
-  });
- 
-};
-
-// audio is the one storing the names vs urls
-for (var name in audio) {
-  var url = audio[name];
-  loadAudioData(name, url);
-  addStatus("Loaded " + name);
-}
-
-function playSound (buffer, opt, cb) {
-  if (!opt) cb = opt;
-  opt = opt || {};
- 
-  var src = audio_ctx.createBufferSource();
-  src.buffer = buffer;
- 
-  gain_node = audio_ctx.createGainNode();
-  src.connect(gain_node);
-   
-  gain_node.connect(audio_ctx.destination);
-  //console.log(gain_node);
- 
-  if (typeof opt.sound !== 'undefined')
-    gain_node.gain.value = opt.sound;
-  else
-    gain_node.gain.value = 1;
- 
-  // Options
-  if (opt.loop)
-    src.loop = true;
- 
-  src.start(0);
- 
-  cb(src);
-  addStatus("Ran playSound on " + src);
-}
- 
-function stopSound (src) {
-  src.stop(0);
-}
-
-function playAlert(name, opt) {
-  opt = opt || {};
- 
-  var cb = function(src) {
-    audioDict.audio_src[name] = src;
-  };
-  
-  playSound( audioDict.audio[name], opt, cb );
-  addStatus("Played " + name);
-}
-
-// stopSound(GAME.audio_src[name]);
-
-function insertAudios()
-{
-  for (var name in audio) {
-    var url = audio[name];
-    // Create an audio node
-    var audio_el = document.createElement('audio');
-    // Source nodes for mp3 and ogg
-    var src1_el = document.createElement('source');
-    //var src2_el = document.createElement('source');
-
-    audio_el.id = name;
-    src1_el.src = url;
-    src1_el.type = 'audio/mp3';
-    //src2_el.src = url.replace('.mp3', '.ogg');
-    //src2_el.type = 'audio/ogg';
-
-    // Append OGG first (else firefox cries)
-    //audio_el.appendChild(src2_el);
-    // Append MP3 second/next
-    audio_el.appendChild(src1_el);
-
-    $$('body').appendChild(audio_el);
-
-    audioDict.audio[name] = audio_el;
-    addStatus("html5 fallback added " + name);
-  }
-}
-
 // filename: root/engine.js
 
 get("BACK_BUTTON").onclick = backButton;
@@ -428,60 +296,134 @@ function indivInterface()
     SOUND HANDLERS
 \***********************************************/
 
-///////////////////////////////////////////////
-// Create sound buffers for each sound
+var audioDict = {};
+audioDict.audioBuffersByName = {};
+// stores AudioBuffers
 
-/*(function () {
-  var context = null;
-  var buffer = null;
-  
-  function addStatus(msg)
-  {
-    jQuery("#status").append("<br/>" + msg);
+var audioURLsByName = {
+  time: 'sounds/time.mp3',
+  fifteenseconds: 'sounds/fifteenseconds.mp3',
+  secondminute: 'sounds/secondminute.mp3',
+  thirdminute: 'sounds/thirdminute.mp3',
+  fourthminute: 'sounds/fourthminute.mp3',
+  newminute: 'sounds/newminute.mp3',
+  fifteenminutes: 'sounds/fifteenminutes.mp3',
+  fiveminutes: 'sounds/fiveminutes.mp3',
+  oneminute: 'sounds/oneminute.mp3'
+};
+
+// WAAPI supported section
+var WAAPIsupport = false;
+
+if (typeof webkitAudioContext !== 'undefined') {
+  var audio_ctx = new webkitAudioContext();
+  WAAPIsupport = true;
+  addStatus("Created webkitAudioContext");
+}
+else if (typeof AudioContext !== "undefined") {
+  var audio_ctx = new AudioContext();
+  WAAPIsupport = true;
+  addStatus("Created AudioContext");
+}
+   
+function loadMusic(url, cb) {
+  var req = new XMLHttpRequest();
+  req.open('GET', url, true);
+  // XHR2
+  req.responseType = 'arraybuffer';
+ 
+  req.onload = function() {
+    audio_ctx.decodeAudioData(req.response, cb);
   };
-		
-  window.onerror = function(errorMsg, url, lineNumber) {
-    addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
-  };
-  
-  function decodeError() {
-    addStatus("Error in decodeAudioData");
-  };
-  
-  function playSound(soundBuffer) {
-    if (!soundBuffer)
-      return;
-    
-    var source = context.createBufferSource();			source.buffer = soundBuffer;			source.connect(context.destination);			source.noteOn(0);
-  };
-		
-  jQuery(document).ready(function () {
-    if (typeof AudioContext !== "undefined")
-    {
-      context = new AudioContext();
-      addStatus("Created AudioContext");
-    }
-    else if (typeof webkitAudioContext !== "undefined")
-    {
-      context = new webkitAudioContext();				addStatus("Created webkitAudioContext");
-    }
-    else
-    {
-      addStatus("Web Audio API does not appear to be supported");
-      return;
-    }
-		
-    // AJAX request sound.m4a
-    var request = new XMLHttpRequest();
-    request.open("GET", "sound.m4a", true);			request.responseType = "arraybuffer";
-    request.onload = function () {				
-      addStatus("sound.m4a loaded, decoding...");
-      context.decodeAudioData(request.response, function (buffer_) {
-        addStatus("Finished decoding audio");
-        buffer = buffer_;
-      }, decodeError);
-    };
-    
-    request.send();
+ 
+  req.send();
+}
+
+var loadAudioData = function(name, url) {
+ 
+  // Async
+  loadMusic(url, function(buffer) {
+    audioDict.audioBuffersByName[name] = buffer;
   });
-})();*/
+ 
+};
+
+// audioURLsByName is the one storing the names vs urls
+for (var name in audioURLsByName) {
+  var url = audioURLsByName[name];
+  loadAudioData(name, url);
+  addStatus("Loaded " + name);
+}
+
+function playSound (buffer, opt, cb) {
+  if (!opt) cb = opt;
+  opt = opt || {};
+ 
+  var src = audio_ctx.createBufferSource();
+  src.buffer = buffer;
+ 
+  gain_node = audio_ctx.createGainNode();
+  src.connect(gain_node);
+   
+  gain_node.connect(audio_ctx.destination);
+  //console.log(gain_node);
+ 
+  if (typeof opt.sound !== 'undefined')
+    gain_node.gain.value = opt.sound;
+  else
+    gain_node.gain.value = 1;
+ 
+  // Options
+  if (opt.loop)
+    src.loop = true;
+ 
+  src.start(0);
+ 
+  cb(src);
+  addStatus("Ran playSound on " + src);
+}
+ 
+function stopSound (src) {
+  src.stop(0);
+}
+
+function playAlert(name, opt) {
+  opt = opt || {};
+ 
+  var cb = function(src) {
+    audioDict.audio_src[name] = src;
+  };
+  
+  playSound( audioDict.audioBuffersByName[name], opt, cb );
+  addStatus("Played " + name);
+}
+
+// stopSound(audioDict.audio_src[name]);
+
+function insertAudios()
+{
+  for (var name in audioURLsByName) {
+    var url = audioURLsByName[name];
+    // Create an audio node
+    var audio_el = document.createElement('audio');
+    // Source nodes for mp3 and ogg
+    var src1_el = document.createElement('source');
+    //var src2_el = document.createElement('source');
+
+    audio_el.id = name;
+    src1_el.src = url;
+    src1_el.type = 'audio/mp3';
+    //src2_el.src = url.replace('.mp3', '.ogg');
+    //src2_el.type = 'audio/ogg';
+
+    // Append OGG first (else firefox cries)
+    //audio_el.appendChild(src2_el);
+    // Append MP3 second/next
+    audio_el.appendChild(src1_el);
+
+    $$('body').appendChild(audio_el);
+
+    audioDict.audioBuffersByName[name] = audio_el;
+    addStatus("html5 fallback added " + name);
+  }
+}
