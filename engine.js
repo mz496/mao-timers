@@ -86,6 +86,8 @@ function makeAudioContext() {
     function() { addStatus("Failed to decode"); });
   };
   request.send();
+      
+  playSound(soundBuffer);
 }
 
 
