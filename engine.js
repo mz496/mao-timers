@@ -263,16 +263,16 @@ function tick()
   switch(time)
   {
     case 15:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound("sounds/fifteenseconds.wav");
       break;
     case 75:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound("sounds/fifteenseconds.wav");
       break;
     case 135:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound("sounds/fifteenseconds.wav");
       break;
     case 195:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound("sounds/fifteenseconds.wav");
       break;
     case 180:
       playSound("sounds/secondminute.mp3");
