@@ -1,8 +1,8 @@
 window.onerror = function(errorMsg, url, lineNumber) {
-    get("status").innerHTML = ("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+    get("status").innerHTML += ("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };
 
-audioDict = {};
+audioDict = {audio: {}, audio_src: {}};
 
 var audio = {
   time: 'sounds/time.mp3',
@@ -14,7 +14,7 @@ var audio = {
   fifteenminutes: 'sounds/fifteenminutes.mp3',
   fiveminutes: 'sounds/fiveminutes.mp3',
   oneminute: 'sounds/oneminute.mp3'
-};
+}
 
 // WAAPI supported section
 var WAAPIsupport = false;
@@ -86,7 +86,7 @@ function stopSound (src) {
   src.stop(0);
 }
 
-function playAlert(name, opt) {
+function broadcast(name, opt) {
   opt = opt || {};
  
   var cb = function(src) {
@@ -95,6 +95,8 @@ function playAlert(name, opt) {
   
   playSound( audioDict.audio[name], opt, cb );
 }
+
+// stopSound(GAME.audio_src[name]);
 
 function insertAudios()
 {
