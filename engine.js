@@ -1,128 +1,126 @@
+audioDict.audio = {};
 
-var sounds = [
-  "sounds/time.mp3",
-  "sounds/fifteenseconds.wav",
-  "sounds/secondminute.mp3",
-  "sounds/thirdminute.mp3",
-  "sounds/fourthminute.mp3",
-  "sounds/newminute.mp3",
-  "sounds/fifteenminutes.mp3",
-  "sounds/fiveminutes.mp3",
-  "sounds/oneminute.mp3"
-];
-var context = null;
-
-// AudioBuffer carriers for all the sounds
-var timeBuffer;
-var fifteensecondsBuffer;
-var secondminuteBuffer;
-var thirdminuteBuffer;
-var fourthminuteBuffer;
-var newminuteBuffer;
-var fifteenminutesBuffer;
-var fiveminutesBuffer;
-var oneminuteBuffer;
-
-/*window.onload = loadAll;
-
-function loadAll() {
-  makeAudioContext();
-  loadSound(sounds[0], timeBuffer);
-  loadSound(sounds[1], fifteensecondsBuffer);
-  loadSound(sounds[2], secondminuteBuffer);
-  loadSound(sounds[3], thirdminuteBuffer);
-  loadSound(sounds[4], fourthminuteBuffer);
-  loadSound(sounds[5], newminuteBuffer);
-  loadSound(sounds[6], fifteenminutesBuffer);
-  loadSound(sounds[7], fiveminutesBuffer);
-  loadSound(sounds[8], oneminuteBuffer);
-}*/
-
-/*		function playSound(soundBuffer) {
-  // argument is the sound carrier, loaded version we're storing
-  //if (!soundBuffer)
-  //  return;
-  var source = context.createBufferSource();
-  source.buffer = soundBuffer;
-  source.connect(context.destination);
-  source.noteOn(0);
-}*/
-		
-window.onerror = function(errorMsg, url, lineNumber) {
-  addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+var audio = {
+  time: 'sounds/time.mp3',
+  fifteenseconds: 'sounds/fifteenseconds.mp3',
+  secondminute: 'sounds/secondminute.mp3',
+  thirdminute: 'sounds/thirdminute.mp3',
+  fourthminute: 'sounds/fourthminute.mp3',
+  newminute: 'sounds/newminute.mp3',
+  fifteenminutes: 'sounds/fifteenminutes.mp3',
+  fiveminutes: 'sounds/fiveminutes.mp3',
+  oneminute: 'sounds/oneminute.mp3'
 };
 
-function addStatus(text)
-{
-  get("status").innerHTML += ("<br>" + text);
+// WAAPI supported section
+var WAAPIsupport = false;
+
+if (typeof webkitAudioContext !== 'undefined') {
+  var audio_ctx = new webkitAudioContext();
+  WAAPIsupport = true;
 }
-
-var audioContext;
-
-if (typeof AudioContext !== "undefined") audioContext = new AudioContext();
-else if (typeof webkitAudioContext !== "undefined") audioContext = new webkitAudioContext();
-else alert("Web Audio API does not appear to be supported");
-
-function playSound(URL) {
-    req = new XMLHttpRequest();
-    req.open('GET', URL);
-    req.responseType = 'arraybuffer';
-
-    var source = null;
-    req.onload = audioContext.decodeAudioData(req.response, function (buffer) {
-        source = audioContext.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioContext.destination);
-        source.start(0);
-    }, function () {
-        alert("fail");
-    });
-    req.send();
+else if (typeof AudioContext !== "undefined") {
+  var audio_ctx = new AudioContext();
+  WAAPIsupport = true;
 }
-
-/*function makeAudioContext() {
-  if (typeof AudioContext !== "undefined") {
-      context = new AudioContext();
-      addStatus("Created AudioContext");
-  }
-  else if (typeof webkitAudioContext !== "undefined") {
-      context = new webkitAudioContext();
-      addStatus("Created webkitAudioContext");
-  }
-  else
-  {
-    addStatus("Web Audio API does not appear to be supported");
-    return;
-  }
-}
-
-		function playSound(soundURL) {
-  // first is the URL, second is the loaded version we're storing
-
-  var soundBuffer;
-  
-  // AJAX request for the sound file
-  var request = new XMLHttpRequest();
-  request.open("GET", soundURL);
-  request.responseType = "arraybuffer";
-  request.onload = function () {
-    addStatus(soundURL + " loaded, decoding...");
-    context.decodeAudioData(request.response, function (buffer_)
-    {
-      addStatus("Finished decoding audio");
-      soundBuffer = buffer_;
-    },
-    function() { addStatus("Failed to decode"); });
+   
+function loadMusic(url, cb) {
+  var req = new XMLHttpRequest();
+  req.open('GET', url, true);
+  // XHR2
+  req.responseType = 'arraybuffer';
+ 
+  req.onload = function() {
+    audio_ctx.decodeAudioData(req.response, cb);
   };
-  request.send();
-  if (!soundBuffer)
-    return;
-  var source = context.createBufferSource();
-  source.buffer = soundBuffer;
-  source.connect(context.destination);
-  source.start(0);
+ 
+  req.send();
 }
-*/
+
+var loadAudioData = function(name, url) {
+ 
+  // Async
+  loadMusic(url, function(buffer) {
+    audioDict.audio[name] = buffer;
+  });
+ 
+};
+
+for (var name in audio) {
+  var url = audio[name];
+  loadAudioData(name, url);
+}
+
+function playSound (buffer, opt, cb) {
+  if (!opt) cb = opt;
+  opt = opt || {};
+ 
+  var src = audio_ctx.createBufferSource();
+  src.buffer = buffer;
+ 
+  gain_node = audio_ctx.createGainNode();
+  src.connect(gain_node);
+   
+  gain_node.connect(audio_ctx.destination);
+  //console.log(gain_node);
+ 
+  if (typeof opt.sound !== 'undefined')
+    gain_node.gain.value = opt.sound;
+  else
+    gain_node.gain.value = 1;
+ 
+  // Options
+  if (opt.loop)
+    src.loop = true;
+ 
+  src.start(0);
+ 
+  cb(src);
+}
+ 
+function stopSound (src) {
+  src.stop(0);
+}
+
+function broadcast(name, opt) {
+  opt = opt || {};
+ 
+  var cb = function(src) {
+    audioDict.audio_src[name] = src;
+  };
+  
+  playSound( audioDict.audio[name], opt, cb );
+}
+
+function insertAudios()
+{
+	for (var name in audio) {
+	  var url = audio[name];
+	 
+	  // Create an audio node
+	  var audio_el = document.createElement('audio');
+	 
+	  // Source nodes for mp3 and ogg
+	  var src1_el = document.createElement('source');
+	  //var src2_el = document.createElement('source');
+	 
+	  audio_el.id = name;
+	 
+	  src1_el.src = url;
+	  src1_el.type = 'audio/mp3';
+	  //src2_el.src = url.replace('.mp3', '.ogg');
+	  //src2_el.type = 'audio/ogg';
+	   
+	  // Append OGG first (else firefox cries)
+	  //audio_el.appendChild(src2_el);
+	  // Append MP3 second/next
+	  audio_el.appendChild(src1_el);
+	 
+	  $$('body').appendChild(audio_el);
+	 
+	  audioDict.audio[name] = audio_el;
+	}
+}
 
 // filename: root/engine.js
 
@@ -193,7 +191,7 @@ function teamInterface()
   {
     // initialize things
     time = 240; //240s = 4m
-    deltaT = 1000; // actual time between increments of the time variable -- 1000 in normal situation
+    deltaT = 300; // actual time between increments of the time variable -- 1000 in normal situation
     // do NOT re-initialize teamqnum! or else redo button breaks!
   }
   
@@ -260,32 +258,66 @@ function tick()
   }
   
   // sound handler
-  switch(time)
+  if (WAAPIsupport === true)
   {
-    case 15:
-      playSound("sounds/fifteenseconds.wav");
-      break;
-    case 75:
-      playSound("sounds/fifteenseconds.wav");
-      break;
-    case 135:
-      playSound("sounds/fifteenseconds.wav");
-      break;
-    case 195:
-      playSound("sounds/fifteenseconds.wav");
-      break;
-    case 180:
-      playSound("sounds/secondminute.mp3");
-      break;
-    case 120:
-      playSound("sounds/thirdminute.mp3");
-      break;
-    case 60:
-      playSound("sounds/fourthminute.mp3");
-      break;
-    case 0:
-      playSound("sounds/time.mp3");
-      break;
+    switch(time)
+    {
+      case 15:
+        broadcast('fifteenseconds');
+        break;
+      case 75:
+        broadcast('fifteenseconds');
+        break;
+      case 135:
+        broadcast('fifteenseconds');
+        break;
+      case 195:
+        broadcast('fifteenseconds');
+        break;
+      case 180:
+        broadcast('secondminute');
+        break;
+      case 120:
+        broadcast('thirdminute');
+        break;
+      case 60:
+        broadcast('fourthminute');
+        break;
+      case 0:
+        broadcast('time');
+        break;
+    }
+  }
+  else
+  {
+    insertAudios();
+    switch(time)
+    {
+      case 15:
+        audioDict.audio.fifteenseconds.play();
+        break;
+      case 75:
+        audioDict.audio.fifteenseconds.play()
+        break;
+      case 135:
+        audioDict.audio.fifteenseconds.play()
+        break;
+      case 195:
+        audioDict.audio.fifteenseconds.play()
+        break;
+      case 180:
+        audioDict.audio.secondminute.play();
+        break;
+      case 120:
+        audioDict.audio.thirdminute.play();
+        break;
+      case 60:
+        audioDict.audio.fourthminute.play();
+        break;
+      case 0:
+        audioDict.audio.time.play();
+        break;
+    }
   }
 }
 
