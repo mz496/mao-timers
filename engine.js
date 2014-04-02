@@ -325,15 +325,19 @@ var fifteenminutesBuffer;
 var fiveminutesBuffer;
 var oneminuteBuffer;
 
-window.onload = loadSound(sounds[0], timeBuffer);
-window.onload = loadSound(sounds[1], fifteensecondsBuffer);
-window.onload = loadSound(sounds[2], secondminuteBuffer);
-window.onload = loadSound(sounds[3], thirdminuteBuffer);
-window.onload = loadSound(sounds[4], fourthminuteBuffer);
-window.onload = loadSound(sounds[5], newminuteBuffer);
-window.onload = loadSound(sounds[6], fifteenminutesBuffer);
-window.onload = loadSound(sounds[7], fiveminutesBuffer);
-window.onload = loadSound(sounds[8], oneminuteBuffer);
+window.onload = loadAll;
+
+function loadAll() {
+  loadSound(sounds[0], timeBuffer);
+  loadSound(sounds[1], fifteensecondsBuffer);
+  loadSound(sounds[2], secondminuteBuffer);
+  loadSound(sounds[3], thirdminuteBuffer);
+  loadSound(sounds[4], fourthminuteBuffer);
+  loadSound(sounds[5], newminuteBuffer);
+  loadSound(sounds[6], fifteenminutesBuffer);
+  loadSound(sounds[7], fiveminutesBuffer);
+  loadSound(sounds[8], oneminuteBuffer);
+}
 
 		function playSound(soundBuffer) {
   // argument is the sound carrier, loaded version we're storing
