@@ -340,5 +340,5 @@ function playSound(soundBuffer) {
   var source = context.createBufferSource();
   source.buffer = soundBuffer;
   source.connect(context.destination);
-  source.start(0);
+  source.noteOn(0);
 }
