@@ -1,3 +1,89 @@
+var sounds = [
+  "sounds/time.mp3",
+  "sounds/fifteenseconds.mp3",
+  "sounds/secondminute.mp3",
+  "sounds/thirdminute.mp3",
+  "sounds/fourthminute.mp3",
+  "sounds/newminute.mp3",
+  "sounds/fifteenminutes.mp3",
+  "sounds/fiveminutes.mp3",
+  "sounds/oneminute.mp3"
+];
+var context = null;
+
+// AudioBuffer carriers for all the sounds
+var timeBuffer;
+var fifteensecondsBuffer;
+var secondminuteBuffer;
+var thirdminuteBuffer;
+var fourthminuteBuffer;
+var newminuteBuffer;
+var fifteenminutesBuffer;
+var fiveminutesBuffer;
+var oneminuteBuffer;
+
+window.onload = loadAll;
+
+function loadAll() {
+  loadSound(sounds[0], timeBuffer);
+  loadSound(sounds[1], fifteensecondsBuffer);
+  loadSound(sounds[2], secondminuteBuffer);
+  loadSound(sounds[3], thirdminuteBuffer);
+  loadSound(sounds[4], fourthminuteBuffer);
+  loadSound(sounds[5], newminuteBuffer);
+  loadSound(sounds[6], fifteenminutesBuffer);
+  loadSound(sounds[7], fiveminutesBuffer);
+  loadSound(sounds[8], oneminuteBuffer);
+}
+
+		function playSound(soundBuffer) {
+  // argument is the sound carrier, loaded version we're storing
+  if (!soundBuffer)
+    return;
+  var source = context.createBufferSource();
+  source.buffer = soundBuffer;
+  source.connect(context.destination);
+  source.noteOn(0);
+}
+		
+function addStatus(text)
+{
+  get("status").innerHTML += ("<br>" + text);
+}
+
+		function loadSound(soundURL, soundBuffer) {
+  // first is the URL, second is the loaded version we're storing
+  if (typeof AudioContext !== "undefined") {
+      context = new AudioContext();
+      addStatus("Created AudioContext");
+  }
+  else if (typeof webkitAudioContext !== "undefined") {
+      context = new webkitAudioContext();
+      addStatus("Created webkitAudioContext");
+  }
+  else
+    {
+      addStatus("Web Audio API does not appear to be supported");
+      return;
+    }
+
+  // AJAX request for the sound file
+  var request = new XMLHttpRequest();
+  request.open("GET", soundURL, true);
+  request.responseType = "arraybuffer";
+  request.onload = function () {
+    addStatus(soundURL +" loaded, decoding...");
+    context.decodeAudioData(request.response, function (buffer_)
+    {
+      addStatus("Finished decoding audio");
+      soundBuffer = buffer_;
+    },
+    function() { addStatus("Failed") });
+  };
+  request.send();
+}
+
+
 // filename: root/engine.js
 
 get("BACK_BUTTON").onclick = backButton;
@@ -301,87 +387,3 @@ BufferLoader.prototype.load = function() {
 ///////////////////////////////////////////////
 // Create sound buffers for each sound
 
-var sounds = [
-  "sounds/time.mp3",
-  "sounds/fifteenseconds.mp3",
-  "sounds/secondminute.mp3",
-  "sounds/thirdminute.mp3",
-  "sounds/fourthminute.mp3",
-  "sounds/newminute.mp3",
-  "sounds/fifteenminutes.mp3",
-  "sounds/fiveminutes.mp3",
-  "sounds/oneminute.mp3"
-];
-var context = null;
-
-// AudioBuffer carriers for all the sounds
-var timeBuffer;
-var fifteensecondsBuffer;
-var secondminuteBuffer;
-var thirdminuteBuffer;
-var fourthminuteBuffer;
-var newminuteBuffer;
-var fifteenminutesBuffer;
-var fiveminutesBuffer;
-var oneminuteBuffer;
-
-window.onload = loadAll;
-
-function loadAll() {
-  loadSound(sounds[0], timeBuffer);
-  loadSound(sounds[1], fifteensecondsBuffer);
-  loadSound(sounds[2], secondminuteBuffer);
-  loadSound(sounds[3], thirdminuteBuffer);
-  loadSound(sounds[4], fourthminuteBuffer);
-  loadSound(sounds[5], newminuteBuffer);
-  loadSound(sounds[6], fifteenminutesBuffer);
-  loadSound(sounds[7], fiveminutesBuffer);
-  loadSound(sounds[8], oneminuteBuffer);
-}
-
-		function playSound(soundBuffer) {
-  // argument is the sound carrier, loaded version we're storing
-  if (!soundBuffer)
-    return;
-  var source = context.createBufferSource();
-  source.buffer = soundBuffer;
-  source.connect(context.destination);
-  source.noteOn(0);
-}
-		
-function addStatus(text)
-{
-  get("status").innerHTML += ("<br>" + text);
-}
-
-		function loadSound(soundURL, soundBuffer) {
-  // first is the URL, second is the loaded version we're storing
-  if (typeof AudioContext !== "undefined") {
-      context = new AudioContext();
-      addStatus("Created AudioContext");
-  }
-  else if (typeof webkitAudioContext !== "undefined") {
-      context = new webkitAudioContext();
-      addStatus("Created webkitAudioContext");
-  }
-  else
-    {
-      addStatus("Web Audio API does not appear to be supported");
-      return;
-    }
-
-  // AJAX request for the sound file
-  var request = new XMLHttpRequest();
-  request.open("GET", soundURL, true);
-  request.responseType = "arraybuffer";
-  request.onload = function () {
-    addStatus(soundURL +" loaded, decoding...");
-    context.decodeAudioData(request.response, function (buffer_)
-    {
-      addStatus("Finished decoding audio");
-      soundBuffer = buffer_;
-    },
-    function() { addStatus("Failed") });
-  };
-  request.send();
-}
