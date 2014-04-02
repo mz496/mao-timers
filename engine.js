@@ -298,7 +298,7 @@ function indivInterface()
 
 var audioDict = {};
 audioDict.audioBuffersByName = {};
-// stores AudioBuffers
+audioDict.audio_src = {};
 
 var audioURLsByName = {
   time: 'sounds/time.mp3',
