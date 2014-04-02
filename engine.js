@@ -86,7 +86,7 @@ function stopSound (src) {
   src.stop(0);
 }
 
-function broadcast(name, opt) {
+function playAlert(name, opt) {
   opt = opt || {};
  
   var cb = function(src) {
