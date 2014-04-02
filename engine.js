@@ -1,10 +1,16 @@
 window.onerror = function(errorMsg, url, lineNumber) {
-    get("status").innerHTML += ("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+    get("status").innerHTML += ("<br> JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };
 
-audioDict = {audio: {}, audio_src: {}};
+function addStatus(msg) {
+  get("status").innerHTML += "<br>" + msg;
+}
 
-audioDict.audio = {
+var audioDict = {};
+audioDict.audio = {};
+// stores AudioBuffers
+
+var audio = {
   time: 'sounds/time.mp3',
   fifteenseconds: 'sounds/fifteenseconds.mp3',
   secondminute: 'sounds/secondminute.mp3',
@@ -22,10 +28,12 @@ var WAAPIsupport = false;
 if (typeof webkitAudioContext !== 'undefined') {
   var audio_ctx = new webkitAudioContext();
   WAAPIsupport = true;
+  addStatus("Created webkitAudioContext");
 }
 else if (typeof AudioContext !== "undefined") {
   var audio_ctx = new AudioContext();
   WAAPIsupport = true;
+  addStatus("Created AudioContext");
 }
    
 function loadMusic(url, cb) {
@@ -50,9 +58,11 @@ var loadAudioData = function(name, url) {
  
 };
 
+// audio is the one storing the names vs urls
 for (var name in audio) {
   var url = audio[name];
   loadAudioData(name, url);
+  addStatus("Loaded " + name);
 }
 
 function playSound (buffer, opt, cb) {
@@ -80,6 +90,7 @@ function playSound (buffer, opt, cb) {
   src.start(0);
  
   cb(src);
+  addStatus("Ran playSound on " + src);
 }
  
 function stopSound (src) {
@@ -94,6 +105,7 @@ function playAlert(name, opt) {
   };
   
   playSound( audioDict.audio[name], opt, cb );
+  addStatus("Played " + name);
 }
 
 // stopSound(GAME.audio_src[name]);
@@ -122,6 +134,7 @@ function insertAudios()
     $$('body').appendChild(audio_el);
 
     audioDict.audio[name] = audio_el;
+    addStatus("html5 fallback added " + name);
   }
 }
 
@@ -194,7 +207,7 @@ function teamInterface()
   {
     // initialize things
     time = 240; //240s = 4m
-    deltaT = 300; // actual time between increments of the time variable -- 1000 in normal situation
+    deltaT = 200; // actual time between increments of the time variable -- 1000 in normal situation
     // do NOT re-initialize teamqnum! or else redo button breaks!
   }
   
