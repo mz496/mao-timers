@@ -23,7 +23,7 @@ var fifteenminutesBuffer;
 var fiveminutesBuffer;
 var oneminuteBuffer;
 
-window.onload = loadAll;
+/*window.onload = loadAll;
 
 function loadAll() {
   makeAudioContext();
@@ -36,9 +36,9 @@ function loadAll() {
   loadSound(sounds[6], fifteenminutesBuffer);
   loadSound(sounds[7], fiveminutesBuffer);
   loadSound(sounds[8], oneminuteBuffer);
-}
+}*/
 
-		function playSound(soundBuffer) {
+/*		function playSound(soundBuffer) {
   // argument is the sound carrier, loaded version we're storing
   //if (!soundBuffer)
   //  return;
@@ -46,7 +46,7 @@ function loadAll() {
   source.buffer = soundBuffer;
   source.connect(context.destination);
   source.noteOn(0);
-}
+}*/
 		
 function addStatus(text)
 {
@@ -69,7 +69,7 @@ function makeAudioContext() {
   }
 }
 
-		function loadSound(soundURL, soundBuffer) {
+		function playSound(soundURL) {
   // first is the URL, second is the loaded version we're storing
 
   // AJAX request for the sound file
@@ -81,13 +81,16 @@ function makeAudioContext() {
     context.decodeAudioData(request.response, function (buffer_)
     {
       addStatus("Finished decoding audio");
-      soundBuffer = buffer_;
+      var soundBuffer = buffer_;
     },
     function() { addStatus("Failed to decode"); });
   };
   request.send();
       
-  playSound(soundBuffer);
+  var source = context.createBufferSource();
+  source.buffer = soundBuffer;
+  source.connect(context.destination);
+  source.noteOn(0);
 }
 
 
@@ -230,28 +233,28 @@ function tick()
   switch(time)
   {
     case 15:
-      playSound(fifteensecondsBuffer);
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 75:
-      playSound(fifteensecondsBuffer);
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 135:
-      playSound(fifteensecondsBuffer);
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 195:
-      playSound(fifteensecondsBuffer);
+      playSound("sounds/fifteenseconds.mp3");
       break;
     case 180:
-      playSound(secondminuteBuffer);
+      playSound("sounds/secondminute.mp3");
       break;
     case 120:
-      playSound(thirdminuteBuffer);
+      playSound("sounds/thirdminute.mp3");
       break;
     case 60:
-      playSound(fourthminuteBuffer);
+      playSound("sounds/fourthminute.mp3");
       break;
     case 0:
-      playSound(timeBuffer);
+      playSound("sounds/time.mp3");
       break;
   }
 }
