@@ -48,6 +48,11 @@ function loadAll() {
   source.noteOn(0);
 }*/
 		
+window.onload = makeAudioContext;
+window.onerror = function(errorMsg, url, lineNumber) {
+  addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+};
+
 function addStatus(text)
 {
   get("status").innerHTML += ("<br>" + text);
