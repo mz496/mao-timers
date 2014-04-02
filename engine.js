@@ -349,30 +349,39 @@ function loadAll() {
   source.noteOn(0);
 }
 		
+function addStatus(text)
+{
+  get("status").innerHTML += ("<br>" + text);
+}
+
 		function loadSound(soundURL, soundBuffer) {
   // first is the URL, second is the loaded version we're storing
-  if (typeof AudioContext !== "undefined")
+  if (typeof AudioContext !== "undefined") {
       context = new AudioContext();
-      //addStatus("Created AudioContext");
-  else if (typeof webkitAudioContext !== "undefined")
+      addStatus("Created AudioContext");
+  }
+  else if (typeof webkitAudioContext !== "undefined") {
       context = new webkitAudioContext();
-      //addStatus("Created webkitAudioContext");
-  /*else
+      addStatus("Created webkitAudioContext");
+  }
+  else
     {
       addStatus("Web Audio API does not appear to be supported");
       return;
-    }*/
+    }
 
   // AJAX request for the sound file
   var request = new XMLHttpRequest();
   request.open("GET", soundURL, true);
   request.responseType = "arraybuffer";
   request.onload = function () {
-    //addStatus("sound.m4a loaded, decoding...");
-    context.decodeAudioData(request.response, function (buffer_) {
-      //addStatus("Finished decoding audio");
+    addStatus(soundURL +" loaded, decoding...");
+    context.decodeAudioData(request.response, function (buffer_)
+    {
+      addStatus("Finished decoding audio");
       soundBuffer = buffer_;
-    }, decodeError);
+    },
+    function() { addStatus("Failed") });
   };
   request.send();
 }
