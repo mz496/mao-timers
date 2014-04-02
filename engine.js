@@ -2,7 +2,6 @@
 
 get("BACK_BUTTON").onclick = backButton;
 get("TEAM_OPEN").onclick = teamInterface;
-get("TEAM_OPEN").touchstart = teamInterface;
 get("START_BUTTON").onclick = startButton;
 get("STOP_BUTTON").onclick = finish;
 get("PAUSE_BUTTON").onclick = pauseButton;
@@ -79,7 +78,7 @@ function teamInterface()
   loadSound("thirdminute");
   loadSound("fourthminute"); */
   // play the sound triggered by touchstart so we can enable sound forever
-  playSound("sounds/silence.mp3");
+  //playSound("sounds/silence.mp3");
 }
 
 function startTimer()
@@ -138,28 +137,28 @@ function tick()
   switch(time)
   {
     case 15:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound(fifteensecondsBuffer);
       break;
     case 75:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound(fifteensecondsBuffer);
       break;
     case 135:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound(fifteensecondsBuffer);
       break;
     case 195:
-      playSound("sounds/fifteenseconds.mp3");
+      playSound(fifteensecondsBuffer);
       break;
     case 180:
-      playSound("sounds/secondminute.mp3");
+      playSound(secondminuteBuffer);
       break;
     case 120:
-      playSound("sounds/thirdminute.mp3");
+      playSound(thirdminuteBuffer);
       break;
     case 60:
-      playSound("sounds/fourthminute.mp3");
+      playSound(fourthminuteBuffer);
       break;
     case 0:
-      playSound("sounds/time.mp3");
+      playSound(timeBuffer);
       break;
   }
 }
@@ -255,7 +254,7 @@ function indivInterface()
     SOUND HANDLERS
 \***********************************************/
 
-// BufferLoader class
+/* BufferLoader class
 function BufferLoader(context, urlList, callback) {
     this.context = context;
     this.urlList = urlList;
@@ -298,47 +297,78 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
 BufferLoader.prototype.load = function() {
     for (var i = 0; i < this.urlList.length; ++i)
         this.loadBuffer(this.urlList[i], i);
-};
+};*/
 ///////////////////////////////////////////////
 // Create sound buffers for each sound
 
-window.onload = init;
-var context;
-var bufferLoader;
-var soundsloaded;
+var sounds = [
+  "sounds/time.mp3",
+  "sounds/fifteenseconds.mp3",
+  "sounds/secondminute.mp3",
+  "sounds/thirdminute.mp3",
+  "sounds/fourthminute.mp3",
+  "sounds/newminute.mp3",
+  "sounds/fifteenminutes.mp3",
+  "sounds/fiveminutes.mp3",
+  "sounds/oneminute.mp3"
+];
+var context = null;
 
-function init() {
-  // Fix up prefixing
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  context = new AudioContext();
+// AudioBuffer carriers for all the sounds
+var timeBuffer;
+var fifteensecondsBuffer;
+var secondminuteBuffer;
+var thirdminuteBuffer;
+var fourthminuteBuffer;
+var newminuteBuffer;
+var fifteenminutesBuffer;
+var fiveminutesBuffer;
+var oneminuteBuffer;
 
-  bufferLoader = new BufferLoader(
-    context,
-    [
-      "sounds/silence.mp3",
-      "sounds/time.mp3",
-      "sounds/fifteenseconds.mp3",
-      "sounds/secondminute.mp3",
-      "sounds/thirdminute.mp3",
-      "sounds/fourthminute.mp3",
-      "sounds/newminute.mp3",
-      "sounds/fifteenminutes.mp3",
-      "sounds/fiveminutes.mp3",
-      "sounds/oneminute.mp3"
-    ],
-    finishedLoading
-    );
+window.onload = loadSound(sounds[0], timeBuffer);
+window.onload = loadSound(sounds[1], fifteensecondsBuffer);
+window.onload = loadSound(sounds[2], secondminuteBuffer);
+window.onload = loadSound(sounds[3], thirdminuteBuffer);
+window.onload = loadSound(sounds[4], fourthminuteBuffer);
+window.onload = loadSound(sounds[5], newminuteBuffer);
+window.onload = loadSound(sounds[6], fifteenminutesBuffer);
+window.onload = loadSound(sounds[7], fiveminutesBuffer);
+window.onload = loadSound(sounds[8], oneminuteBuffer);
 
-  bufferLoader.load();
-}
-
-// this function has no use yet since we don't need the sounds as soon as they load
-function finishedLoading() { soundsloaded = true;  get("title").style.color = "red"; }
-
-function playSound(soundBuffer) {
-  // create a source with the sound's buffer (which is just the filename) and play it
+		function playSound(soundBuffer) {
+  // argument is the sound carrier, loaded version we're storing
+  if (!soundBuffer)
+    return;
   var source = context.createBufferSource();
   source.buffer = soundBuffer;
   source.connect(context.destination);
   source.noteOn(0);
+}
+		
+		function loadSound(soundURL, soundBuffer) {
+  // first is the URL, second is the loaded version we're storing
+  if (typeof AudioContext !== "undefined")
+      context = new AudioContext();
+      //addStatus("Created AudioContext");
+  else if (typeof webkitAudioContext !== "undefined")
+      context = new webkitAudioContext();
+      //addStatus("Created webkitAudioContext");
+  /*else
+    {
+      addStatus("Web Audio API does not appear to be supported");
+      return;
+    }*/
+
+  // AJAX request for the sound file
+  var request = new XMLHttpRequest();
+  request.open("GET", soundURL, true);
+  request.responseType = "arraybuffer";
+  request.onload = function () {
+    //addStatus("sound.m4a loaded, decoding...");
+    context.decodeAudioData(request.response, function (buffer_) {
+      //addStatus("Finished decoding audio");
+      soundBuffer = buffer_;
+    }, decodeError);
+  };
+  request.send();
 }
