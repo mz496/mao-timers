@@ -48,14 +48,6 @@ function loadAll() {
   source.noteOn(0);
 }*/
 		
-window.onload = loadAll;
-function loadAll() {
-  makeAudioContext();
-  for (i in sounds)
-  {
-    playSound(sounds[i]);
-  }
-}
 window.onerror = function(errorMsg, url, lineNumber) {
   addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };
@@ -65,7 +57,30 @@ function addStatus(text)
   get("status").innerHTML += ("<br>" + text);
 }
 
-function makeAudioContext() {
+var audioContext;
+
+if (typeof AudioContext !== "undefined") audioContext = new AudioContext();
+else if (typeof webkitAudioContext !== "undefined") audioContext = new webkitAudioContext();
+else alert("Web Audio API does not appear to be supported");
+
+function playSound(URL) {
+    req = new XMLHttpRequest();
+    req.open('GET', URL);
+    req.responseType = 'arraybuffer';
+
+    var source = null;
+    req.onload = audioContext.decodeAudioData(req.response, function (buffer) {
+        source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+    }, function () {
+        alert("fail");
+    });
+    req.send();
+}
+
+/*function makeAudioContext() {
   if (typeof AudioContext !== "undefined") {
       context = new AudioContext();
       addStatus("Created AudioContext");
@@ -88,7 +103,7 @@ function makeAudioContext() {
   
   // AJAX request for the sound file
   var request = new XMLHttpRequest();
-  request.open("GET", soundURL, true);
+  request.open("GET", soundURL);
   request.responseType = "arraybuffer";
   request.onload = function () {
     addStatus(soundURL + " loaded, decoding...");
@@ -105,9 +120,9 @@ function makeAudioContext() {
   var source = context.createBufferSource();
   source.buffer = soundBuffer;
   source.connect(context.destination);
-  source.noteOn(0);
+  source.start(0);
 }
-
+*/
 
 // filename: root/engine.js
 
