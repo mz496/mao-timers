@@ -100,35 +100,7 @@ function tick()
 {
   // makes the timer go
   time--;
-  // sound handler -- this is at the top to have minimum delays possible
-  switch(time)
-  {
-    case 15:
-      playSound("sounds/fifteenseconds.mp3");
-      break;
-    case 75:
-      playSound("sounds/fifteenseconds.mp3");
-      break;
-    case 135:
-      playSound("sounds/fifteenseconds.mp3");
-      break;
-    case 195:
-      playSound("sounds/fifteenseconds.mp3");
-      break;
-    case 180:
-      playSound("sounds/secondminute.mp3");
-      break;
-    case 120:
-      playSound("sounds/thirdminute.mp3");
-      break;
-    case 60:
-      playSound("sounds/fourthminute.mp3");
-      break;
-    case 0:
-      playSound("sounds/time.mp3");
-      break;
-  }
-  
+ 
   // in case we want to switch to time ELAPSED?
   //var timeElapsed = 240 - time;
 
@@ -160,6 +132,35 @@ function tick()
   {
     get("sec-number").innerHTML = 0;
     finish();
+  }
+  
+  // sound handler
+  switch(time)
+  {
+    case 15:
+      playSound("sounds/fifteenseconds.mp3");
+      break;
+    case 75:
+      playSound("sounds/fifteenseconds.mp3");
+      break;
+    case 135:
+      playSound("sounds/fifteenseconds.mp3");
+      break;
+    case 195:
+      playSound("sounds/fifteenseconds.mp3");
+      break;
+    case 180:
+      playSound("sounds/secondminute.mp3");
+      break;
+    case 120:
+      playSound("sounds/thirdminute.mp3");
+      break;
+    case 60:
+      playSound("sounds/fourthminute.mp3");
+      break;
+    case 0:
+      playSound("sounds/time.mp3");
+      break;
   }
 }
 
@@ -332,7 +333,7 @@ function init() {
 }
 
 // this function has no use yet since we don't need the sounds as soon as they load
-function finishedLoading() { soundsloaded = true; }
+function finishedLoading() { soundsloaded = true;  get("title").style.color = "red"; }
 
 function playSound(soundBuffer) {
   // create a source with the sound's buffer (which is just the filename) and play it
