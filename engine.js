@@ -100,7 +100,8 @@ function makeAudioContext() {
     function() { addStatus("Failed to decode"); });
   };
   request.send();
-      
+  if (!soundBuffer)
+    return;
   var source = context.createBufferSource();
   source.buffer = soundBuffer;
   source.connect(context.destination);
