@@ -40,8 +40,8 @@ function loadAll() {
 
 		function playSound(soundBuffer) {
   // argument is the sound carrier, loaded version we're storing
-  if (!soundBuffer)
-    return;
+  //if (!soundBuffer)
+  //  return;
   var source = context.createBufferSource();
   source.buffer = soundBuffer;
   source.connect(context.destination);
@@ -86,8 +86,6 @@ function makeAudioContext() {
     function() { addStatus("Failed to decode") });
   };
   request.send();
-  
-  playSound(soundBuffer); // test...
 }
 
 
