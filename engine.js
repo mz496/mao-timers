@@ -264,28 +264,28 @@ function tick()
     switch(time)
     {
       case 15:
-        broadcast('fifteenseconds', {});
+        playAlert('fifteenseconds', {});
         break;
       case 75:
-        broadcast('fifteenseconds', {});
+        playAlert('fifteenseconds', {});
         break;
       case 135:
-        broadcast('fifteenseconds', {});
+        playAlert('fifteenseconds', {});
         break;
       case 195:
-        broadcast('fifteenseconds', {});
+        playAlert('fifteenseconds', {});
         break;
       case 180:
-        broadcast('secondminute', {});
+        playAlert('secondminute', {});
         break;
       case 120:
-        broadcast('thirdminute', {});
+        playAlert('thirdminute', {});
         break;
       case 60:
-        broadcast('fourthminute', {});
+        playAlert('fourthminute', {});
         break;
       case 0:
-        broadcast('time', {});
+        playAlert('time', {});
         break;
     }
   }
