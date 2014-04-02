@@ -1,7 +1,7 @@
 
 var sounds = [
   "sounds/time.mp3",
-  "sounds/fifteenseconds.mp3",
+  "sounds/fifteenseconds.wav",
   "sounds/secondminute.mp3",
   "sounds/thirdminute.mp3",
   "sounds/fourthminute.mp3",
