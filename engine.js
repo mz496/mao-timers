@@ -1,4 +1,8 @@
-audioDict.audio = {};
+window.onerror = function(errorMsg, url, lineNumber) {
+    get("status").innerHTML = ("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+};
+
+audioDict = {};
 
 var audio = {
   time: 'sounds/time.mp3',
@@ -82,7 +86,7 @@ function stopSound (src) {
   src.stop(0);
 }
 
-function broadcast(name, opt) {
+function playAlert(name, opt) {
   opt = opt || {};
  
   var cb = function(src) {
@@ -94,32 +98,29 @@ function broadcast(name, opt) {
 
 function insertAudios()
 {
-	for (var name in audio) {
-	  var url = audio[name];
-	 
-	  // Create an audio node
-	  var audio_el = document.createElement('audio');
-	 
-	  // Source nodes for mp3 and ogg
-	  var src1_el = document.createElement('source');
-	  //var src2_el = document.createElement('source');
-	 
-	  audio_el.id = name;
-	 
-	  src1_el.src = url;
-	  src1_el.type = 'audio/mp3';
-	  //src2_el.src = url.replace('.mp3', '.ogg');
-	  //src2_el.type = 'audio/ogg';
-	   
-	  // Append OGG first (else firefox cries)
-	  //audio_el.appendChild(src2_el);
-	  // Append MP3 second/next
-	  audio_el.appendChild(src1_el);
-	 
-	  $$('body').appendChild(audio_el);
-	 
-	  audioDict.audio[name] = audio_el;
-	}
+  for (var name in audio) {
+    var url = audio[name];
+    // Create an audio node
+    var audio_el = document.createElement('audio');
+    // Source nodes for mp3 and ogg
+    var src1_el = document.createElement('source');
+    //var src2_el = document.createElement('source');
+
+    audio_el.id = name;
+    src1_el.src = url;
+    src1_el.type = 'audio/mp3';
+    //src2_el.src = url.replace('.mp3', '.ogg');
+    //src2_el.type = 'audio/ogg';
+
+    // Append OGG first (else firefox cries)
+    //audio_el.appendChild(src2_el);
+    // Append MP3 second/next
+    audio_el.appendChild(src1_el);
+
+    $$('body').appendChild(audio_el);
+
+    audioDict.audio[name] = audio_el;
+  }
 }
 
 // filename: root/engine.js
@@ -263,28 +264,28 @@ function tick()
     switch(time)
     {
       case 15:
-        broadcast('fifteenseconds');
+        broadcast('fifteenseconds', {});
         break;
       case 75:
-        broadcast('fifteenseconds');
+        broadcast('fifteenseconds', {});
         break;
       case 135:
-        broadcast('fifteenseconds');
+        broadcast('fifteenseconds', {});
         break;
       case 195:
-        broadcast('fifteenseconds');
+        broadcast('fifteenseconds', {});
         break;
       case 180:
-        broadcast('secondminute');
+        broadcast('secondminute', {});
         break;
       case 120:
-        broadcast('thirdminute');
+        broadcast('thirdminute', {});
         break;
       case 60:
-        broadcast('fourthminute');
+        broadcast('fourthminute', {});
         break;
       case 0:
-        broadcast('time');
+        broadcast('time', {});
         break;
     }
   }
@@ -297,13 +298,13 @@ function tick()
         audioDict.audio.fifteenseconds.play();
         break;
       case 75:
-        audioDict.audio.fifteenseconds.play()
+        audioDict.audio.fifteenseconds.play();
         break;
       case 135:
-        audioDict.audio.fifteenseconds.play()
+        audioDict.audio.fifteenseconds.play();
         break;
       case 195:
-        audioDict.audio.fifteenseconds.play()
+        audioDict.audio.fifteenseconds.play();
         break;
       case 180:
         audioDict.audio.secondminute.play();
