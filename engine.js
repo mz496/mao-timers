@@ -48,7 +48,14 @@ function loadAll() {
   source.noteOn(0);
 }*/
 		
-window.onload = makeAudioContext;
+window.onload = loadAll;
+function loadAll() {
+  makeAudioContext();
+  for (i in sounds)
+  {
+    playSound(sounds[i]);
+  }
+}
 window.onerror = function(errorMsg, url, lineNumber) {
   addStatus("JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };
@@ -77,6 +84,8 @@ function makeAudioContext() {
 		function playSound(soundURL) {
   // first is the URL, second is the loaded version we're storing
 
+  var soundBuffer;
+  
   // AJAX request for the sound file
   var request = new XMLHttpRequest();
   request.open("GET", soundURL, true);
@@ -86,7 +95,7 @@ function makeAudioContext() {
     context.decodeAudioData(request.response, function (buffer_)
     {
       addStatus("Finished decoding audio");
-      var soundBuffer = buffer_;
+      soundBuffer = buffer_;
     },
     function() { addStatus("Failed to decode"); });
   };
