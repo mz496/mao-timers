@@ -3,7 +3,7 @@ window.onerror = function(errorMsg, url, lineNumber) {
 };
 
 function addStatus(msg) {
-  get("status").innerHTML += "<br>" + msg;
+  //get("status").innerHTML += "<br>" + msg;
 }
 
 // filename: root/engine.js
@@ -32,7 +32,7 @@ running --+       |
    ^      |       v
    |      +---> stopped (trigger via OoT or Stop)
    |              |
-   +--------------+
+   +---next q.----+
 ^ (trigger
 via Start
 or Resume...)
@@ -40,11 +40,6 @@ or Resume...)
 
 function get(elem)
 { return document.getElementById(elem); }
-/* function loadSound(sound)
-{ get(sound).load(); }
-function playSound(sound)
-{ get(sound).play(); } */
-
 
 function backButton()
 {
