@@ -301,6 +301,7 @@ audioDict.audioBuffersByName = {};
 audioDict.audio_src = {};
 
 var audioURLsByName = {
+  silent: 'sounds/silent.mp3',
   time: 'sounds/time.mp3',
   fifteenseconds: 'sounds/fifteenseconds.mp3',
   secondminute: 'sounds/secondminute.mp3',
@@ -380,7 +381,7 @@ function playSound (buffer, opt, cb) {
   src.start(0);
  
   cb(src);
-  addStatus("Ran playSound on " + src);
+  addStatus("Ran playSound");
 }
  
 function stopSound (src) {
@@ -390,7 +391,8 @@ function stopSound (src) {
 function playAlert(name, opt) {
   opt = opt || {};
  
-  var cb = function(src) {
+  var cb = function(src) { // ERROR ON NEXT LINE?
+    audioDict.audio_src[name] = {};
     audioDict.audio_src[name] = src;
   };
   
