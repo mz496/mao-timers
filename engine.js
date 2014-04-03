@@ -80,7 +80,10 @@ function teamInterface()
   }
   
   // play the sound triggered by touchstart so we can enable sound forever
-  playAlert('silent', {});
+  if (WAAPIsupport === true)
+    playAlert('silent', {});
+  //else
+    //insert audio for silent and let it play
 }
 
 function startTimer()
@@ -159,7 +162,7 @@ function tick()
         break;
     }
   }
-  else
+  /*else insert the audio elements and let them play
   {
     insertAudios();
     switch(time)
@@ -188,7 +191,7 @@ function tick()
       case 0:
         audioDict.audio.time.play();
         break;
-    }
+    }*/
   }
   
   // when time is 0, call finish() and set the seconds to 0
