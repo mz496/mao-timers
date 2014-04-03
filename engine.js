@@ -162,7 +162,7 @@ function tick()
         break;
     }
   }
-  /*else insert the audio elements and let them play
+  else // does this work? each value for the keyed file-name is an Element
   {
     insertAudios();
     switch(time)
@@ -192,7 +192,7 @@ function tick()
         audioDict.audio.time.play();
         break;
     }
-  }*/
+  }
   
   // when time is 0, call finish() and set the seconds to 0
   if (time === 0)
@@ -323,6 +323,8 @@ else if (typeof AudioContext !== "undefined") {
   WAAPIsupport = true;
   addStatus("Created AudioContext");
 }
+else
+  addStatus("No Web Audio support");
    
 function loadMusic(url, cb) {
   var req = new XMLHttpRequest();
@@ -359,8 +361,13 @@ function playSound (buffer, opt, cb) {
  
   var src = audio_ctx.createBufferSource();
   src.buffer = buffer;
- 
-  gain_node = audio_ctx.createGainNode();
+  
+  // for firefox -- make gain_node global w/in this function
+  try { gain_node = audio_ctx.createGainNode(); }
+  catch (e) {
+    if (e instanceof TypeError)
+      gain_node = audio_ctx.createGain();
+  }
   src.connect(gain_node);
    
   gain_node.connect(audio_ctx.destination);
@@ -374,7 +381,8 @@ function playSound (buffer, opt, cb) {
   // Options
   if (opt.loop)
     src.loop = true;
-	
+  
+  // for the old browsers
   try { src.start(0); }
   catch (e) {
     if (e instanceof TypeError)
@@ -382,7 +390,6 @@ function playSound (buffer, opt, cb) {
   }
  
   cb(src);
-  addStatus("Ran playSound");
 }
  
 function stopSound (src) {
@@ -396,7 +403,7 @@ try { src.stop(0); }
 function playAlert(name, opt) {
   opt = opt || {};
  
-  var cb = function(src) { // ERROR ON NEXT LINE?
+  var cb = function(src) {
     audioDict.audio_src[name] = {};
     audioDict.audio_src[name] = src;
   };
