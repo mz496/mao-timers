@@ -162,33 +162,33 @@ function tick()
         break;
     }
   }
-  else // does this work? each value for the keyed file-name is an Element
+  else // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
   {
     switch(time)
     {
       case 15:
-        audioDict.audio.fifteenseconds.play();
+        audioDict.audioBuffersByName.fifteenseconds.play();
         break;
       case 75:
-        audioDict.audio.fifteenseconds.play();
+        audioDict.audioBuffersByName.fifteenseconds.play();
         break;
       case 135:
-        audioDict.audio.fifteenseconds.play();
+        audioDict.audioBuffersByName.fifteenseconds.play();
         break;
       case 195:
-        audioDict.audio.fifteenseconds.play();
+        audioDict.audioBuffersByName.fifteenseconds.play();
         break;
       case 180:
-        audioDict.audio.secondminute.play();
+        audioDict.audioBuffersByName.secondminute.play();
         break;
       case 120:
-        audioDict.audio.thirdminute.play();
+        audioDict.audioBuffersByName.thirdminute.play();
         break;
       case 60:
-        audioDict.audio.fourthminute.play();
+        audioDict.audioBuffersByName.fourthminute.play();
         break;
       case 0:
-        audioDict.audio.time.play();
+        audioDict.audioBuffersByName.time.play();
         break;
     }
   }
