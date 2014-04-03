@@ -82,8 +82,8 @@ function teamInterface()
   // play the sound triggered by touchstart so we can enable sound forever
   if (WAAPIsupport === true)
     playAlert('silent', {});
-  //else
-    //insert audio for silent and let it play
+  else
+    insertAudios();
 }
 
 function startTimer()
@@ -164,7 +164,6 @@ function tick()
   }
   else // does this work? each value for the keyed file-name is an Element
   {
-    insertAudios();
     switch(time)
     {
       case 15:
@@ -435,7 +434,7 @@ function insertAudios()
     // Append MP3 second/next
     audio_el.appendChild(src1_el);
 
-    $$('body').appendChild(audio_el);
+    document.body.appendChild(audio_el);
 
     audioDict.audioBuffersByName[name] = audio_el;
     addStatus("html5 fallback added " + name);
