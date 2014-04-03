@@ -133,13 +133,6 @@ function tick()
     get("sec-box").style.background = "transparent";
     get("sec-number").style.color = "inherit";
   }
-
-  // when time is 0, call finish() and set the seconds to 0
-  if (time === 0)
-  {
-    get("sec-number").innerHTML = 0;
-    finish();
-  }
   
   // sound handler
   if (WAAPIsupport === true)
@@ -202,6 +195,13 @@ function tick()
         audioDict.audio.time.play();
         break;
     }
+  }
+  
+  // when time is 0, call finish() and set the seconds to 0
+  if (time === 0)
+  {
+    get("sec-number").innerHTML = 0;
+    finish();
   }
 }
 
@@ -377,15 +377,23 @@ function playSound (buffer, opt, cb) {
   // Options
   if (opt.loop)
     src.loop = true;
- 
-  src.start(0);
+	
+  try { src.start(0); }
+  catch (e) {
+    if (e instanceof TypeError)
+	      src.noteOn(0);
+  }
  
   cb(src);
   addStatus("Ran playSound");
 }
  
 function stopSound (src) {
-  src.stop(0);
+  try { src.stop(0); }
+  catch (e) {
+    if (e instanceof TypeError)
+	      src.noteOff(0);
+  }
 }
 
 function playAlert(name, opt) {
