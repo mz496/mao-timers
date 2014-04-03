@@ -79,14 +79,8 @@ function teamInterface()
     // do NOT re-initialize teamqnum! or else redo button breaks!
   }
   
-  // load sounds for mobile/iPad upon click
-  /* loadSound("time");
-  loadSound("fifteenseconds");
-  loadSound("secondminute");
-  loadSound("thirdminute");
-  loadSound("fourthminute"); */
   // play the sound triggered by touchstart so we can enable sound forever
-  //playSound("sounds/silence.mp3");
+  playAlert('silent', {});
 }
 
 function startTimer()
