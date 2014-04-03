@@ -191,8 +191,8 @@ function tick()
       case 0:
         audioDict.audio.time.play();
         break;
-    }*/
-  }
+    }
+  }*/
   
   // when time is 0, call finish() and set the seconds to 0
   if (time === 0)
@@ -378,7 +378,7 @@ function playSound (buffer, opt, cb) {
   try { src.start(0); }
   catch (e) {
     if (e instanceof TypeError)
-	      src.noteOn(0);
+      src.noteOn(0);
   }
  
   cb(src);
@@ -386,10 +386,10 @@ function playSound (buffer, opt, cb) {
 }
  
 function stopSound (src) {
-  try { src.stop(0); }
+try { src.stop(0); }
   catch (e) {
     if (e instanceof TypeError)
-	      src.noteOff(0);
+      src.noteOff(0);
   }
 }
 
