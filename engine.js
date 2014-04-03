@@ -339,7 +339,6 @@ function loadMusic(url, cb) {
 }
 
 var loadAudioData = function(name, url) {
- 
   // Async
   loadMusic(url, function(buffer) {
     audioDict.audioBuffersByName[name] = buffer;
@@ -348,11 +347,14 @@ var loadAudioData = function(name, url) {
 };
 
 // audioURLsByName is the one storing the names vs urls
-for (var name in audioURLsByName) {
-  var url = audioURLsByName[name];
-  loadAudioData(name, url);
-  addStatus("Loaded " + name);
+if (WAAPIsupport === true) {
+  for (var name in audioURLsByName) {
+    var url = audioURLsByName[name];
+    loadAudioData(name, url);
+    addStatus("Loaded " + name);
+  }
 }
+
 
 function playSound (buffer, opt, cb) {
   if (!opt) cb = opt;
