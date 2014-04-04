@@ -22,6 +22,7 @@ html, body {
   font-size: 18px; }
 
 p { text-align: center; }
+a { color: inherit; }
 hr {
   border: none;
   border-bottom: 1px solid #d8d4d0;
