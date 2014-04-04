@@ -10,6 +10,7 @@ function addStatus(msg) {
 
 get("BACK_BUTTON").onclick = backButton;
 get("TEAM_OPEN").onclick = teamInterface;
+get("INDIV_OPEN").onclick = indivInterface;
 get("START_BUTTON").onclick = startButton;
 get("STOP_BUTTON").onclick = finish;
 get("PAUSE_BUTTON").onclick = pauseButton;
@@ -18,6 +19,13 @@ get("REDO_BUTTON").onclick = redoButton;
 var time;
 var deltaT;
 var ticking;
+
+// colors
+red = "#f72d23";
+orange = "#f4771f";
+yellow = "#f2c01b";
+gray = "#696969";
+whitish = "#f9f6f2";
 
 var teamqnum = 1;
 var teamstate = "stopped";
@@ -111,8 +119,8 @@ function tick()
   if (time % 60 <= 15 && time % 60 !== 0)
   {
     // make boxes yellow w/ white text for warning
-    get("sec-box").style.background = "#f2c01b";
-    get("sec-number").style.color = "#f9f6f2";
+    get("sec-box").style.background = yellow;
+    get("sec-number").style.color = whitish;
   }
   
    // however, secnumber should only read 0 at the end
@@ -247,10 +255,10 @@ function finish()
   if (teamstate === "running" || teamstate === "paused")
   {
     // make the boxes red so they're noticeable
-    get("min-box").style.background = "#f72d23";
-    get("sec-box").style.background = "#f72d23";
-    get("min-number").style.color = "#f9f6f2";
-    get("sec-number").style.color = "#f9f6f2";
+    get("min-box").style.background = red;
+    get("sec-box").style.background = red;
+    get("min-number").style.color = whitish;
+    get("sec-number").style.color = whitish;
     
     // let user advance, using the same parameters we've been using
     reset();
