@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>MA&#920; Timers</title>
     <!-- style stuff -->
-    <!--link type="text/css" rel="stylesheet" href="main.css" /-->
+    <link type="text/css" rel="stylesheet" href="main.css" />
     <link type="text/css" rel="stylesheet" media="screen" href="css/clear-sans.css" />
     
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -16,17 +16,12 @@
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
     <meta name="format-detection" content="telephone=no" />
-
-    <!-- iphone 4 and 5 are both 640px wide, and most screens such as android are not less than 320px wide, but the thingy is only 600px wide -->
-    <link rel="stylesheet" media="screen and (min-width: 320px) and (max-width: 600px)" href="mobile.css" />
-    <link rel="stylesheet" media="screen and (min-device-width: 601px)" href="main.css" />
     
     <meta property="og:title" content="MA&#920; Timers"/>
     <meta property="og:site_name" content="MA&#920; Timers"/>
     <meta property="og:description" content="Timers designed for Mu Alpha Theta style tests."/>
     <meta property="og:image" content="images/og_image.png"/>
   </head>
-  
   
   <body>
     <p style="font-size: 48px" id="title">MA&#920; Timers</p>
@@ -35,22 +30,23 @@
         <a class="button small" id="BACK_BUTTON">&laquo; back to menu</a>
       </div>
     </div>
-    <p id="status">Status:</p>
+    <p id="status"></p>
     <div class="generic-box" id="button-box">
       <a class="button" id="TEAM_OPEN">Team</a>
       <a class="button" id="INDIV_OPEN">Individual</a>
-      <!--div>
-        <a class="button" onclick="hustle()">Hustle</a>
-        <a class="button" onclick="cipher()">Ciphering</a>
-        <a class="button" onclick="relay()">Relay</a>
+      <div>
+        <a class="button">Hustle</a>
+        <a class="button">Ciphering</a>
+        <a class="button">Relay</a>
       </div>
       <div>
-        <a class="button" onclick="speed()">Speed</a>
-        <a class="button" onclick="mental()">Mental</a>
-      </div-->
-      <p><strong>Pick a test type above!</strong></p>
+        <a class="button">Speed</a>
+        <a class="button">Mental</a>
+      </div>
+      <a class="button" id="CONTINUOUS_OPEN">Continuous*</a>
       <hr>
       <p>Read the timing and test rules <a href="http://floridamao.org/Downloadable/2014StateLetter.pdf">here</a> on the Florida MA&#920; website.</p>
+      <p style="font-size: 14px">*Continuous is a general-purpose, non-official, self-paced style for assessing speed without having to stop/restart the timer.</p>
       <p>New test types are coming... (i.e. Individual, Ciphering, Hustle, Relay, Speed, Mental)</p>
     </div>
 

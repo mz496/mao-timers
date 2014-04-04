@@ -1,6 +1,6 @@
-window.onerror = function(errorMsg, url, lineNumber) {
+/*window.onerror = function(errorMsg, url, lineNumber) {
     get("status").innerHTML += ("<br> JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
-};
+};*/
 
 function addStatus(msg) {
   //get("status").innerHTML += "<br>" + msg;
@@ -280,6 +280,12 @@ function reset()
   get("team-current-num").innerHTML = "Question " + teamqnum;
   get("PAUSE_BUTTON").innerHTML = "Pause";
   time = 240;
+}
+
+// constructor
+function Timer() {
+	// arguments
+
 }
 
 /***********************************************\
