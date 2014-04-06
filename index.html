@@ -26,60 +26,78 @@
   <body>
     <p style="font-size: 48px" id="title">MA&#920; Timers</p>
     <div id="back-button-wrapper">
-      <div id="back-button">
-        <a class="button small" id="BACK_BUTTON">&laquo; back to menu</a>
-      </div>
+      <a class="button small" id="back-button">&laquo; back to menu</a>
     </div>
     <p id="status"></p>
     <div class="generic-box" id="button-box">
-      <a class="button" id="TEAM_OPEN">Team</a>
-      <a class="button" id="INDIV_OPEN">Individual</a>
+      <a class="button" id="team-open">Team</a>
+      <a class="button" id="indiv-open">Individual</a>
       <div>
-        <a class="button">Hustle</a>
-        <a class="button">Ciphering</a>
-        <a class="button">Relay</a>
+        <a class="button" id="hustle-open">Hustle</a>
+        <a class="button" id="ciphering-open">Ciphering</a>
+        <a class="button" id="relay-open">Relay</a>
       </div>
       <div>
-        <a class="button">Speed</a>
-        <a class="button">Mental</a>
+        <a class="button" id="speed-open">Speed</a>
+        <a class="button" id="mental-open">Mental</a>
       </div>
-      <a class="button" id="CONTINUOUS_OPEN">Continuous*</a>
+      <a class="button" id="continuous-open">Continuous*</a>
       <hr>
-      <p>Read the timing and test rules <a href="http://floridamao.org/Downloadable/2014StateLetter.pdf">here</a> on the Florida MA&#920; website.</p>
+      <p>Read the timing and test rules <a href="http://floridamao.org/Downloadable/2014StateLetter.pdf">here</a>.</p>
       <p style="font-size: 14px">*Continuous is an unofficial, general-purpose, self-paced style for assessing speed without having to stop/restart the timer.</p>
-      <p>New test types are coming... (i.e. Individual, Ciphering, Hustle, Relay, Speed, Mental)</p>
+      <p>New test types are coming... Turn up your sound to hear alerts!</p>
     </div>
+
 
     <div class="generic-box" id="team-box">
       <div class="start-box">
-        <a class="button" id="START_BUTTON">
+        <a class="button" id="team-start-button">
           <div style="font-size: 32px;">Start</div>
-          <div class="q-number" id="start-button-num">Question 1</div>
+          <div class="q-number" id="team-start-button-num">Question 1</div>
         </a>
         <!-- here we make a "ghost button" so we can have the nice "question # in-place" effect without having to deal with ugly margin px values that are nonconstant -->
         <!-- potential easter eggs in place of <br>? :P -->
-        <a class="button" id="ghost-button">
+        <a class="button ghost" id="team-ghost-button">
             <div style="font-size: 32px;"><br></div>
-            <div class="q-number" id="ghost-button-num">Question 1</div>
+            <div class="q-number" id="team-ghost-button-num">Question 1</div>
           </a>
       </div>
-      <div class="half-box" id="min-box-wrapper">
-        Current minute
-        <div class="count-box" id="min-box">
-          <div class="generic-number" id="min-number"></div>
+
+      <div class="half-box">
+        <div class="round-box-wrapper">
+          Current minute
+          <div class="count-box" id="team-min-box">
+            <div class="generic-number" id="team-min-number"></div>
+          </div>
         </div>
       </div>
-      <div class="half-box" id="sec-box-wrapper">
-        <div>Seconds remaining</div>
-        <div>in this minute</div>
-        <div class="count-box" id="sec-box">
-          <div class="generic-number" id="sec-number"></div>
+
+      <div class="half-box">
+        <div class="sec-box-wrapper">
+          <div>Seconds remaining</div>
+          <div>in this minute</div>
+          <div class="count-box" id="team-sec-box">
+            <div class="generic-number" id="team-sec-number"></div>
+          </div>
         </div>
       </div>
-      <div class="timer-controls">
-        <div class="half-box" id="stop-button-wrapper"><a class="button" id="STOP_BUTTON">Stop</a></div>
-        <div class="half-box" id="pause-button-wrapper"><a class="button" id="PAUSE_BUTTON">Pause</a></div>
-        <div><a class="button small" id="REDO_BUTTON">Redo last question</a></div>
+
+      <div class="half-box">
+        <div class="stop-button-wrapper">
+          <a class="button" id="team-stop-button">Stop</a>
+        </div>
+      </div>
+
+      <div class="half-box">
+        <div class="pause-button-wrapper">
+          <a class="button" id="team-pause-button">Pause</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="redo-button-wrapper" id="team-redo-button-wrapper">
+          <a class="button small" id="team-redo-button">Redo last question</a>
+        </div>
       </div>
     </div>
     

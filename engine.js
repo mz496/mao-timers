@@ -38,11 +38,11 @@ function back() {
   if (team.currentState !== "stopped")
     team.currentState = "paused";
   get("button-box").style.display = "block";
-  get("BACK_BUTTON").style.display = "none";
+  get("back-button").style.display = "none";
 }
 
 // for "round-based" schemes -- team, ciphering, relay
-function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQuestions, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButton) {
+function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQuestions, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper) {
   var currentState = "stopped";
   var HTML5SoundInserted = false;
 
@@ -58,7 +58,7 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
     // triggers onclick of the test type button
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
-    get("BACK_BUTTON").style.display = "inline-block";
+    get("back-button").style.display = "inline-block";
     // if currentState happens to be paused already, that's because "back to menu" was pressed while running OR while paused by user
     // pretend we were running as usual and got paused by a mysterious force
     // under user-paused conditions, this doesn't produce any changes
@@ -101,7 +101,7 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
 
     get(startButton).style.display = "none";
     get(ghostButton).style.display = "inline-block";
-    get(redoButton).style.display = "none";
+    get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can apply css to the CLASS of all redo wrappers but get the ID of the "button" here
 
     currentState = "running";
     ticking = setInterval(function() { self.tick() }, deltaT);
@@ -191,7 +191,7 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
     
       get(startButton).style.display = "inline-block";
       get(ghostButton).style.display = "none";
-      get(redoButton).style.display = "inline-block";
+      get(redoButtonWrapper).style.display = "inline-block";
       get(startButtonElement).innerHTML = "Question " + currentQnum;
       get(ghostButtonElement).innerHTML = "Question " + currentQnum;
       get(pauseButton).innerHTML = "Pause";
@@ -200,13 +200,11 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
   };
 
   this.warn = function(){}; // overridden in and specific to every child
-  this.getTime = function() {
-    return time;
-  }
+  this.getTime = function() { return time; }
 }
 
 function TeamTimer() {};
-TeamTimer.prototype = new RoundTimer("team-box", 240, 60, 15, "min-box", "min-number", "sec-box", "sec-number", "START_BUTTON", "start-button-num", "ghost-button", "ghost-button-num", "PAUSE_BUTTON", "STOP_BUTTON", "REDO_BUTTON");
+TeamTimer.prototype = new RoundTimer("team-box", 240, 60, 15, "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
 TeamTimer.prototype.warn = function() {
   if (WAAPIsupport === true) {
     switch(this.getTime()) {
@@ -252,13 +250,13 @@ TeamTimer.prototype.warn = function() {
 
 team = new TeamTimer();
 
-get("BACK_BUTTON").onclick = back;
+get("back-button").onclick = back;
 
-get("TEAM_OPEN").onclick = team.makeInterface;
-get("START_BUTTON").onclick = team.start;
-get("STOP_BUTTON").onclick = team.finish;
-get("PAUSE_BUTTON").onclick = team.pause;
-get("REDO_BUTTON").onclick = team.redo;
+get("team-open").onclick = team.makeInterface;
+get("team-start-button").onclick = team.start;
+get("team-stop-button").onclick = team.finish;
+get("team-pause-button").onclick = team.pause;
+get("team-redo-button").onclick = team.redo;
 
 /***********************************************\
     INDIVIDUAL

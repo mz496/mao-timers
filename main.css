@@ -52,25 +52,22 @@ hr {
   top: 0%;
   float: left;
 }
-#BACK_BUTTON {
+#back-button {
   position: fixed;
   display: none;
 }
-#min-box-wrapper { margin: 10px; }
-#sec-box-wrapper { margin: 10px; }
-#stop-button-wrapper { width: 35%; }
-#pause-button-wrapper { width: 35%; }
-#REDO_BUTTON { display: none; }
+.round-box-wrapper { margin: 10px; }
+.sec-box-wrapper { margin: 10px; }
+.stop-button-wrapper { width: 100%; }
+.pause-button-wrapper { width: 100%; }
+.redo-button-wrapper { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
 
-#ghost-button {
-  /* all the formatting of a button except not a button! */
+.button.ghost {
   background-color: transparent;
   cursor: initial;
   color: #776e65;
-  margin: 10px;
-  padding: 10px 15px 10px 15px;
   display: none;
 }
 
@@ -82,7 +79,6 @@ hr {
   display: inline-block;
   width: 40%;
   margin: 15px 0px 15px 0px;
-  /*border: 1px solid black;*/
 }
 
 .count-box {
@@ -123,14 +119,14 @@ summary of changes:
     top: 0%;
     float: left;
   }
-  #BACK_BUTTON {
+  #back-button {
     display: none;
   }
 
-  #min-box-wrapper { margin: 5px; }
-  #sec-box-wrapper { margin: 5px; }
-  #stop-button-wrapper { width: 40%; }
-  #pause-button-wrapper { width: 50%; }
+  .round-box-wrapper { margin: 5px; }
+  .sec-box-wrapper { margin: 5px; }
+  .stop-button-wrapper { width: 40%; }
+  .pause-button-wrapper { width: 50%; }
 
   .generic-box {
     margin: auto;
