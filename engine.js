@@ -1,3 +1,5 @@
+// filename: root/engine.js
+
 /*window.onerror = function(errorMsg, url, lineNumber) {
     get("status").innerHTML += ("<br> JAVASCRIPT ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };*/
@@ -6,32 +8,12 @@ function addStatus(msg) {
   //get("status").innerHTML += "<br>" + msg;
 }
 
-// filename: root/engine.js
-
-get("BACK_BUTTON").onclick = backButton;
-get("TEAM_OPEN").onclick = teamInterface;
-get("INDIV_OPEN").onclick = indivInterface;
-get("START_BUTTON").onclick = startButton;
-get("STOP_BUTTON").onclick = finish;
-get("PAUSE_BUTTON").onclick = pauseButton;
-get("REDO_BUTTON").onclick = redoButton;
-
-var time;
-var deltaT;
-var ticking;
-
 // colors
-red = "#f72d23";
-orange = "#f4771f";
-yellow = "#f2c01b";
-gray = "#696969";
-whitish = "#f9f6f2";
-
-var teamqnum = 1;
-var teamstate = "stopped";
-// "stopped": the timer is not running at all
-// "paused": the timer is on, we do not have the option to go to the next question, but it is not running
-// "running": timer is running
+var red = "#f72d23";
+var orange = "#f4771f";
+var yellow = "#f2c01b";
+var gray = "#696969";
+var whitish = "#f9f6f2";
 
 /**
           +<--> paused (trigger via Pause or Back)
@@ -49,244 +31,231 @@ or Resume...)
 function get(elem)
 { return document.getElementById(elem); }
 
-function backButton()
-{
+function back() {
   // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually...
   get("team-box").style.display = "none";
   // and pause all the timers unless they're stopped already
-  if (teamstate !== "stopped")
-    teamstate = "paused";
+  if (team.currentState !== "stopped")
+    team.currentState = "paused";
   get("button-box").style.display = "block";
   get("BACK_BUTTON").style.display = "none";
 }
 
-function teamInterface()
-{
-  get("button-box").style.display = "none";
-  get("team-box").style.display = "block";
-  get("BACK_BUTTON").style.display = "inline-block";
-  // if teamstate happens to be paused already, that's because "back to menu" was pressed while running OR while paused by user
-  // pretend we were running as usual and got paused by a mysterious force
-  // under user-paused conditions, this doesn't produce any changes
-  if (teamstate === "paused")
-  {
-    teamstate = "running";
-    pauseButton();
-  }
-  // if teamstate happens to be stopped already, it was stopped before "back to menu" OR we have just started
-  else
-  {
-    // initialize things
-    time = 240; //240s = 4m
-    deltaT = 200; // actual time between increments of the time variable -- 1000 in normal situation
-    // do NOT re-initialize teamqnum! or else redo button breaks!
-  }
-  
-  // play the sound triggered by touchstart so we can enable sound forever
-  if (WAAPIsupport === true)
-    playAlert('silent', {});
-  else
-    insertAudios();
-}
+// for "round-based" schemes -- team, ciphering, relay
+function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQuestions, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButton) {
+  var currentState = "stopped";
+  var HTML5SoundInserted = false;
 
-function startTimer()
-{
-  // initial values
-  get("min-number").innerHTML = 1;
-  get("sec-number").innerHTML = 60;
-  get("min-box").style.background = "transparent";
-  get("min-number").style.color = "inherit";
-  get("sec-box").style.background = "transparent";
-  get("sec-number").style.color = "inherit";
+  this.numQuestions = numQuestions;
+  var currentQnum = 1;
 
-  teamstate = "running";
-  ticking = setInterval(tick, deltaT);
-}
-  
-function tick()
-{
-  // makes the timer go
-  time--;
- 
-  // in case we want to switch to time ELAPSED?
-  //var timeElapsed = 240 - time;
+  var self = this; // very important for setInterval
+  var ticking;
+  var time = secondsPerQuestion;
+  var deltaT = 200; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
-  // parse time remaining into the divs
-  get("min-number").innerHTML = Math.ceil((240 - time)/60);
-  get("sec-number").innerHTML = time % 60;
+  this.makeInterface = function() {
+    // triggers onclick of the test type button
+    get("button-box").style.display = "none";
+    get(timerContainer).style.display = "block";
+    get("BACK_BUTTON").style.display = "inline-block";
+    // if currentState happens to be paused already, that's because "back to menu" was pressed while running OR while paused by user
+    // pretend we were running as usual and got paused by a mysterious force
+    // under user-paused conditions, this doesn't produce any changes
+    if (currentState === "paused")
+    {
+      currentState = "running";
+      this.pause();
+    }
+    // if currentState happens to be stopped already, it was stopped before "back to menu" OR we have just started
     
-  // check if <15sec in the minute
-  if (time % 60 <= 15 && time % 60 !== 0)
-  {
-    // make boxes yellow w/ white text for warning
-    get("sec-box").style.background = yellow;
-    get("sec-number").style.color = whitish;
-  }
-  
-   // however, secnumber should only read 0 at the end
-  if (time % 60 === 0 && time !== 0)
-  {
-    get("sec-number").innerHTML = 60;
-    // new minute starting, reset color
-    // advance minute count at 60 (i.e. now) instead of at the 59
-    get("min-number").innerHTML++;
-    get("sec-box").style.background = "transparent";
-    get("sec-number").style.color = "inherit";
-  }
-  
-  // sound handler
-  if (WAAPIsupport === true)
-  {
-    switch(time)
-    {
-      case 15:
-        playAlert('fifteenseconds', {});
-        break;
-      case 75:
-        playAlert('fifteenseconds', {});
-        break;
-      case 135:
-        playAlert('fifteenseconds', {});
-        break;
-      case 195:
-        playAlert('fifteenseconds', {});
-        break;
-      case 180:
-        playAlert('secondminute', {});
-        break;
-      case 120:
-        playAlert('thirdminute', {});
-        break;
-      case 60:
-        playAlert('fourthminute', {});
-        break;
-      case 0:
-        playAlert('time', {});
-        break;
+    if (WAAPIsupport === true)
+      playSound('silent');
+    else if (HTML5SoundInserted === false) {
+      insertAudios();
+      HTML5SoundInserted = true;
     }
-  }
-  else // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
-  {
-    switch(time)
-    {
-      case 15:
-        audioDict.audioBuffersByName.fifteenseconds.play();
-        break;
-      case 75:
-        audioDict.audioBuffersByName.fifteenseconds.play();
-        break;
-      case 135:
-        audioDict.audioBuffersByName.fifteenseconds.play();
-        break;
-      case 195:
-        audioDict.audioBuffersByName.fifteenseconds.play();
-        break;
-      case 180:
-        audioDict.audioBuffersByName.secondminute.play();
-        break;
-      case 120:
-        audioDict.audioBuffersByName.thirdminute.play();
-        break;
-      case 60:
-        audioDict.audioBuffersByName.fourthminute.play();
-        break;
-      case 0:
-        audioDict.audioBuffersByName.time.play();
-        break;
+  };
+
+  function parseSeconds(currentTime) {
+    // makes a permanent min:sec timer, so only call this when the starting time is over 60
+    // returns the (min):(sec) string
+    var timeThisRound = currentTime % secondsPerRound;
+    var minThisRound = Math.ceil(timeThisRound/secondsPerRound); // compare to the roundElement statement in tick
+    var secThisRound = timeThisRound - 60*minThisRound;
+    return minThisRound + ":" + secThisRound;
+  };
+
+  this.start = function() {
+    // called upon clicking -- initialize appearances, start timer
+    get(roundElement).innerHTML = 1;
+    if (secondsPerRound <= 60)
+      get(secondsElement).innerHTML = secondsPerRound;
+    else
+      get(secondsElement).innerHTML = parseSeconds(secondsPerRound);
+
+    get(roundBox).style.background = "transparent";
+    get(roundElement).style.color = "inherit";
+    get(secondsBox).style.background = "transparent";
+    get(secondsElement).style.color = "inherit";
+
+    get(startButton).style.display = "none";
+    get(ghostButton).style.display = "inline-block";
+    get(redoButton).style.display = "none";
+
+    currentState = "running";
+    ticking = setInterval(function() { self.tick() }, deltaT);
+  };
+
+  this.tick = function() {
+    // timer's actual mechanism
+    time--;
+    this.warn();
+    // time warnings are handled inside children
+
+    // parse time remaining into the divs
+    get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
+    if (secondsPerRound <= 60)
+      get(secondsElement).innerHTML = time % secondsPerRound;
+    else
+      get(secondsElement).innerHTML = parseSeconds(time);
+    
+    // 15 SECONDS!
+    if (time % secondsPerRound <= 15 && time % secondsPerRound !== 0) {
+      get(secondsBox).style.background = yellow;
+      get(secondsElement).style.color = whitish;
     }
-  }
+    
+     // NEW ROUND!
+    if (time % secondsPerRound === 0 && time !== 0) {
+      // reset colors, advance minute at secondsPerRound not minus 1
+      get(secondsElement).innerHTML = secondsPerRound;
+      get(roundElement).innerHTML++;
+      get(secondsBox).style.background = "transparent";
+      get(secondsElement).style.color = "inherit";
+    }
   
-  // when time is 0, call finish() and set the seconds to 0
-  if (time === 0)
-  {
-    get("sec-number").innerHTML = 0;
-    finish();
-  }
-}
+    // TIME!
+    if (time === 0) {
+      get(secondsElement).innerHTML = 0;
+      this.finish();
+    }
+  };
 
-function startButton()
-{
-  // remake the buttons
-  get("START_BUTTON").style.display = "none";
-  get("ghost-button").style.display = "inline-block";
-  get("REDO_BUTTON").style.display = "none";
-  // start the timer and let it goooo
-  startTimer();
-}
+  this.pause = function() {
+    // running --> paused section
+    if (currentState === "running") {
+      currentState = "paused";
+      // remove interval for now, to be replaced
+      clearInterval(ticking);
+      get(pauseButton).innerHTML = "Resume...";
+    }
+    
+    // paused --> running section
+    else if (currentState === "paused") {
+      currentState = "running";
+      // remake interval
+      ticking = setInterval(function() { self.tick() }, deltaT);
+      get(pauseButton).innerHTML = "Pause";
+    }
+  };
 
-function pauseButton()
-{
-  // running --> paused section
-  if (teamstate === "running")
-  {
-    teamstate = "paused";
-    // remove interval for now, to be replaced
+  this.redo = function() {
+    // precondition: stopped position
+    // postcondition: decrease currentQnum by 1 so we would start the previous question; can't go past 1
+    if (currentQnum > 1) {
+      currentQnum--;
+      get(startButtonElement).innerHTML = "Question " + currentQnum;
+      get(ghostButtonElement).innerHTML = "Question " + currentQnum;
+    }
+  };
+
+  this.finish = function() {
+    // can be user initiated stop, or out of time (OoT)
     clearInterval(ticking);
-    get("PAUSE_BUTTON").innerHTML = "Resume...";
-  }
-  
-  // paused --> running section
-  else if (teamstate === "paused")
-  {
-    teamstate = "running";
-    // remake interval
-    ticking = setInterval(tick, deltaT);
-    get("PAUSE_BUTTON").innerHTML = "Pause";
-  }
-}
-
-function redoButton()
-{
-  // precondition: stopped position
-  // postcondition: decrease teamqnum by 1 so we would start the previous question; can't go past 1
-  if (teamqnum > 1)
-  {
-    teamqnum--;
-    get("start-button-num").innerHTML = "Question " + teamqnum;
-    get("team-current-num").innerHTML = "Question " + teamqnum;
-  }
-}
-
-function finish()
-{
-  // can be user initiated stop, or out of time (OoT)
-  clearInterval(ticking);
-  // now only reset once
-  if (teamstate === "running" || teamstate === "paused")
-  {
-    // make the boxes red so they're noticeable
-    get("min-box").style.background = red;
-    get("sec-box").style.background = red;
-    get("min-number").style.color = whitish;
-    get("sec-number").style.color = whitish;
+    // now only reset once
+    if (currentState === "running" || currentState === "paused") {
+      get(roundBox).style.background = red;
+      get(secondsBox).style.background = red;
+      get(roundElement).style.color = whitish;
+      get(secondsElement).style.color = whitish;
+      
+      // let user advance, using the same parameters we've been using
+      currentState = "stopped";
+      
+      if (currentQnum < numQuestions)
+      currentQnum++;
     
-    // let user advance, using the same parameters we've been using
-    reset();
-    teamstate = "stopped";
-    // show the redo button
-    get("REDO_BUTTON").style.display = "inline-block";
+      get(startButton).style.display = "inline-block";
+      get(ghostButton).style.display = "none";
+      get(redoButton).style.display = "inline-block";
+      get(startButtonElement).innerHTML = "Question " + currentQnum;
+      get(ghostButtonElement).innerHTML = "Question " + currentQnum;
+      get(pauseButton).innerHTML = "Pause";
+      time = secondsPerQuestion;
+    }
+  };
+
+  this.warn = function(){}; // overridden in and specific to every child
+  this.getTime = function() {
+    return time;
   }
 }
 
-function reset()
-{
-  // advance question number for the start button, reset time, reset pause button
-  if (teamqnum < 15)
-    teamqnum++;
-  
-  get("START_BUTTON").style.display = "inline-block";
-  get("ghost-button").style.display = "none";
-  get("start-button-num").innerHTML = "Question " + teamqnum;
-  get("team-current-num").innerHTML = "Question " + teamqnum;
-  get("PAUSE_BUTTON").innerHTML = "Pause";
-  time = 240;
-}
+function TeamTimer() {};
+TeamTimer.prototype = new RoundTimer("team-box", 240, 60, 15, "min-box", "min-number", "sec-box", "sec-number", "START_BUTTON", "start-button-num", "ghost-button", "ghost-button-num", "PAUSE_BUTTON", "STOP_BUTTON", "REDO_BUTTON");
+TeamTimer.prototype.warn = function() {
+  if (WAAPIsupport === true) {
+    switch(this.getTime()) {
+      case 15:
+        playSound('fifteenseconds'); break;
+      case 75:
+        playSound('fifteenseconds'); break;
+      case 135:
+        playSound('fifteenseconds'); break;
+      case 195:
+        playSound('fifteenseconds'); break;
+      case 180:
+        playSound('secondminute'); break;
+      case 120:
+        playSound('thirdminute'); break;
+      case 60:
+        playSound('fourthminute'); break;
+      case 0:
+        playSound('time'); break;
+    }
+  }
+  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
+    switch(time) {
+      case 15:
+        playHTML5Sound('fifteenseconds'); break;
+      case 75:
+        playHTML5Sound('fifteenseconds'); break;
+      case 135:
+        playHTML5Sound('fifteenseconds'); break;
+      case 195:
+        playHTML5Sound('fifteenseconds'); break;
+      case 180:
+        playHTML5Sound('secondminute'); break;
+      case 120:
+        playHTML5Sound('thirdminute'); break;
+      case 60:
+        playHTML5Sound('fourthminute'); break;
+      case 0:
+        playHTML5Sound('time'); break;
+    }
+  }
+};
 
-// constructor
-function Timer() {
-	// arguments
+team = new TeamTimer();
 
-}
+get("BACK_BUTTON").onclick = back;
+
+get("TEAM_OPEN").onclick = team.makeInterface;
+get("START_BUTTON").onclick = team.start;
+get("STOP_BUTTON").onclick = team.finish;
+get("PAUSE_BUTTON").onclick = team.pause;
+get("REDO_BUTTON").onclick = team.redo;
 
 /***********************************************\
     INDIVIDUAL
@@ -323,12 +292,12 @@ var WAAPIsupport = false;
 
 if (typeof webkitAudioContext !== 'undefined') {
   var audio_ctx = new webkitAudioContext();
-  WAAPIsupport = true;
+  WAAPIsupport = false;
   addStatus("Created webkitAudioContext");
 }
 else if (typeof AudioContext !== "undefined") {
   var audio_ctx = new AudioContext();
-  WAAPIsupport = true;
+  WAAPIsupport = false;
   addStatus("Created AudioContext");
 }
 else
@@ -352,7 +321,6 @@ var loadAudioData = function(name, url) {
   loadMusic(url, function(buffer) {
     audioDict.audioBuffersByName[name] = buffer;
   });
- 
 };
 
 // audioURLsByName is the one storing the names vs urls
@@ -365,7 +333,7 @@ if (WAAPIsupport === true) {
 }
 
 
-function playSound (buffer, opt, cb) {
+function playBuffer (buffer, opt, cb) {
   if (!opt) cb = opt;
   opt = opt || {};
  
@@ -410,7 +378,7 @@ try { src.stop(0); }
   }
 }
 
-function playAlert(name, opt) {
+function playSound(name, opt) {
   opt = opt || {};
  
   var cb = function(src) {
@@ -418,14 +386,13 @@ function playAlert(name, opt) {
     audioDict.audio_src[name] = src;
   };
   
-  playSound( audioDict.audioBuffersByName[name], opt, cb );
+  playBuffer(audioDict.audioBuffersByName[name], opt, cb);
   addStatus("Played " + name);
 }
 
 // stopSound(audioDict.audio_src[name]);
 
-function insertAudios()
-{
+function insertAudios() {
   for (var name in audioURLsByName) {
     var url = audioURLsByName[name];
     // Create an audio node
@@ -450,4 +417,9 @@ function insertAudios()
     audioDict.audioBuffersByName[name] = audio_el;
     addStatus("html5 fallback added " + name);
   }
+}
+
+function playHTML5Sound(name) {
+  audioDict.audioBuffersByName[name].play();
+  addStatus("Played HTML5 " + name);
 }
