@@ -110,7 +110,10 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
   this.tick = function() {
     // timer's actual mechanism
     time--;
-    this.warn();
+
+    // only check for time warn every 15 sec since all warnings occur at 15sec, 1min 2min, etc.
+    if (time % 15 === 0)
+      this.warn();
     // time warnings are handled inside children
 
     // parse time remaining into the divs
@@ -226,7 +229,7 @@ TeamTimer.prototype.warn = function() {
     }
   }
   else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
-    switch(time) {
+    switch(this.getTime()) {
       case 15:
         playHTML5Sound('fifteenseconds'); break;
       case 75:
@@ -292,12 +295,12 @@ var WAAPIsupport = false;
 
 if (typeof webkitAudioContext !== 'undefined') {
   var audio_ctx = new webkitAudioContext();
-  WAAPIsupport = false;
+  WAAPIsupport = true;
   addStatus("Created webkitAudioContext");
 }
 else if (typeof AudioContext !== "undefined") {
   var audio_ctx = new AudioContext();
-  WAAPIsupport = false;
+  WAAPIsupport = true;
   addStatus("Created AudioContext");
 }
 else
