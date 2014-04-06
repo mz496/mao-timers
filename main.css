@@ -141,13 +141,13 @@ summary of changes:
   .half-box.stop-button-wrapper {
     position: relative;
     float: left;
-    margin-left: -10%;
+    padding-left: -10%;
     border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     position: relative;
     float: right;
-    margin-right: -10%;
+    padding-right: -10%;
     border: 1px solid black;
   }
 
