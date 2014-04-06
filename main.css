@@ -127,15 +127,13 @@ summary of changes:
   .round-box-wrapper {
     position: relative;
     float: left;
-    margin-left: 10px;
   }
   .sec-box-wrapper {
     position: relative;
     float: right;
-    margin-right: 10px;
   }
-  .stop-button-wrapper { width: 100%; border: 1px solid black;}
-  .pause-button-wrapper { width: 125%; border: 1px solid black;}
+  .stop-button-wrapper { position: relative; border: 1px solid black;}
+  .pause-button-wrapper { position: relative; border: 1px solid black;}
 
   .generic-box {
     margin: auto;
