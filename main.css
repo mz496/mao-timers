@@ -24,9 +24,10 @@ hr {
   margin-top: 50px;
   width: 600px;
   text-align: center;
+  position: relative;
 }
 
-#team-box { display:none; }
+#team-box { display: none; }
 
 .button {
   color: #f9f6f2;
@@ -123,10 +124,18 @@ summary of changes:
     display: none;
   }
 
-  .round-box-wrapper { margin-right: 5px; }
-  .sec-box-wrapper { margin-left: 5px; }
-  .stop-button-wrapper { width: 100%; }
-  .pause-button-wrapper { width: 125%; }
+  .round-box-wrapper {
+    position: relative;
+    float: left;
+    margin-left: 10px;
+  }
+  .sec-box-wrapper {
+    position: relative;
+    float: right;
+    margin-right: 10px;
+  }
+  .stop-button-wrapper { width: 100%; border: 1px solid black;}
+  .pause-button-wrapper { width: 125%; border: 1px solid black;}
 
   .generic-box {
     margin: auto;
