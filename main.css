@@ -133,7 +133,7 @@ summary of changes:
   .sec-box-wrapper {
     position: relative;
     float: right;
-    margin-right: 20%;
+    margin-right: -20%;
   }
 
   /* float the buttons to the opposite sides within the wrappers */
@@ -141,13 +141,13 @@ summary of changes:
   .half-box.stop-button-wrapper {
     position: relative;
     float: left;
-    text-align: left;
+    margin-left: -10%;
     border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     position: relative;
     float: right;
-    text-align: right;
+    margin-right: -10%;
     border: 1px solid black;
   }
 
