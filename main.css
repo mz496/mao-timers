@@ -59,8 +59,8 @@ hr {
 }
 .round-box-wrapper { margin: 10px; }
 .sec-box-wrapper { margin: 10px; }
-.stop-button-wrapper { width: 100%; }
-.pause-button-wrapper { width: 100%; }
+.half-box.stop-button-wrapper { width: 35%; }
+.half-box.pause-button-wrapper { width: 35%; }
 .redo-button-wrapper { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
@@ -80,6 +80,7 @@ hr {
   display: inline-block;
   width: 40%;
   margin: 15px 0px 15px 0px;
+  border: 1px solid black;
 }
 
 .count-box {
@@ -114,7 +115,7 @@ summary of changes:
  - min and sec box wrappers now have 5px margin
 
 ****************************************************************/
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 601px) {
   #back-button-wrapper {
     position: absolute;
     top: 0%;
@@ -127,13 +128,28 @@ summary of changes:
   .round-box-wrapper {
     position: relative;
     float: left;
+    margin-left: -20%;
   }
   .sec-box-wrapper {
     position: relative;
     float: right;
+    margin-right: 20%;
   }
-  .stop-button-wrapper { position: relative; border: 1px solid black;}
-  .pause-button-wrapper { position: relative; border: 1px solid black;}
+
+  /* float the buttons to the opposite sides within the wrappers */
+
+  .half-box.stop-button-wrapper {
+    position: relative;
+    float: left;
+    text-align: left;
+    border: 1px solid black;
+  }
+  .half-box.pause-button-wrapper {
+    position: relative;
+    float: right;
+    text-align: right;
+    border: 1px solid black;
+  }
 
   .generic-box {
     margin: auto;
