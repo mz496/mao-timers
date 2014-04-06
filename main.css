@@ -123,10 +123,10 @@ summary of changes:
     display: none;
   }
 
-  .round-box-wrapper { margin: 5px; }
-  .sec-box-wrapper { margin: 5px; }
-  .stop-button-wrapper { width: 40%; }
-  .pause-button-wrapper { width: 50%; }
+  .round-box-wrapper { margin-right: 5px; }
+  .sec-box-wrapper { margin-left: 5px; }
+  .stop-button-wrapper { width: 100%; }
+  .pause-button-wrapper { width: 125%; }
 
   .generic-box {
     margin: auto;
