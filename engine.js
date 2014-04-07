@@ -228,7 +228,19 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     }
   };
 
-  this.warn = function() {};
+  this.warn = function() {
+    // loop through keys to see if current time matches any; if so, play that sound
+    for (var key in self.sounds) {
+      console.log(key);
+      if (key === this.getTime()) {
+        if (WAAPIsupport === true) 
+          playSound(this.sounds[key]);
+        else
+          playHTML5Sound(this.sounds[key]);
+      }
+    }
+  };
+
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
@@ -368,19 +380,6 @@ team.sounds = {
   60: "fourthminute",
   0: "time"
 }
-
-RoundTimer.prototype.warn = function () {
-  // loop through keys to see if current time matches any; if so, play that sound
-  for (var key in this.sounds) {
-    console.log(key);
-    if (key === this.getTime()) {
-      if (WAAPIsupport === true) 
-        playSound(this.sounds[key]);
-      else
-        playHTML5Sound(this.sounds[key]);
-    }
-  }
-};
 
 get("back-button").onclick = back;
 
