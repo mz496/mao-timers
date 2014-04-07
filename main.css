@@ -147,13 +147,13 @@ summary of changes:
   }
   .half-box.pause-button-wrapper {
     position: relative;
-    width: 45%;
+    width: 50%;
     float: right;
     text-align: right;
     border: 1px solid black;
   }
-  .half-box.stop-button-wrapper > a { font-size: 24px; }
-  .half-box.pause-button-wrapper > a { font-size: 24px; }
+  .half-box.stop-button-wrapper > a { font-size: 28px; }
+  .half-box.pause-button-wrapper > a { font-size: 28px; }
 
   .generic-box {
     margin: auto;

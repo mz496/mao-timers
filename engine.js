@@ -25,7 +25,7 @@ running --+       |
    +---next q.----+
 ^ (trigger
 via Start
-or Resume...)
+or Resume)
 **/
 
 function get(elem)
@@ -151,7 +151,7 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
       currentState = "paused";
       // remove interval for now, to be replaced
       clearInterval(ticking);
-      get(pauseButton).innerHTML = "Resume...";
+      get(pauseButton).innerHTML = "Resume";
     }
     
     // paused --> running section
