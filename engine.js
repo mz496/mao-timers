@@ -51,7 +51,11 @@ function back() {
   get("back-button").style.display = "none";
 }
 
-// for "round-based" schemes -- team, ciphering, relay
+/******************************************************************\
+      ROUND TIMER
+      for "round-based" schemes -- team, ciphering, relay
+\******************************************************************/
+
 function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper, soundDict) {
   var currentState = "stopped";
   var HTML5SoundInserted = false;
@@ -134,11 +138,8 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     time--;
 
     // only check for time warn every 15 sec since all warnings occur at 15sec, 1min 2min, etc.
-    if (time % 15 === 0) {
-      console.log("running warn");
+    if (time % 15 === 0)
       this.warn();
-    }
-    // time warnings are handled inside children
 
     // parse time remaining into the divs
     get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
@@ -261,10 +262,26 @@ teamSounds = {
   60: "fourthminute",
   0: "time"
 };
+cipheringSounds = {
+  15: "fifteenseconds",
+  75: "fifteenseconds",
+  135: "fifteenseconds",
+  120: "secondminute",
+  60: "thirdminute",
+  0: "time"
+};
+relaySounds = {
+  15: "fifteenseconds",
+  135: "fifteenseconds",
+  255: "fifteenseconds",
+  240: "secondminute",
+  120: "fourthminute",
+  0: "time"
+};
 
 TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
-CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
-RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
+CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper", cipheringSounds);
+RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper", relaySounds);
 
 team = new TeamTimer();
 ciphering = new CipheringTimer();
@@ -290,18 +307,17 @@ get("relay-stop-button").onclick = relay.finish;
 get("relay-pause-button").onclick = relay.pause;
 get("relay-redo-button").onclick = relay.redo;
 
-/***********************************************\
-    INDIVIDUAL
-\***********************************************/
+/******************************************************************\
+      EXTENDED TIMER
+      for extended/continuous schemes --
+      individual, speed, mental, hustle, continuous
+\******************************************************************/
 
-function indivInterface()
-{
-  
-}
 
-/***********************************************\
-    SOUND HANDLERS
-\***********************************************/
+
+/******************************************************************\
+      SOUND HANDLERS
+\******************************************************************/
 
 var audioDict = {};
 audioDict.audioBuffersByName = {};
