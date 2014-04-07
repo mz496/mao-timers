@@ -153,7 +153,10 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
      // NEW ROUND!
     if (time % secondsPerRound === 0 && time !== 0) {
       // reset colors, advance minute at secondsPerRound not minus 1
-      get(secondsElement).innerHTML = secondsPerRound;
+      if (secondsPerRound <= 60)
+        get(secondsElement).innerHTML = secondsPerRound;
+      else
+        get(secondsElement).innerHTML = parseSeconds(secondsPerRound);
       get(roundElement).innerHTML++;
       get(secondsBox).style.background = "transparent";
       get(secondsElement).style.color = "inherit";
