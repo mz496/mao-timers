@@ -52,10 +52,10 @@ function back() {
 }
 
 // for "round-based" schemes -- team, ciphering, relay
-function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper) {
+function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper, soundDict) {
   var currentState = "stopped";
   var HTML5SoundInserted = false;
-  this.sounds = {};
+  this.sounds = soundDict;
 
   this.numQuestions = numQuestions;
   var currentQnum = 1;
@@ -233,7 +233,6 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in this.sounds) {
-      console.log(key);
       if (key === this.getTime()) {
         if (WAAPIsupport === true) 
           playSound(this.sounds[key]);
@@ -246,134 +245,13 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
-  this.setSounds = function(input) { sounds = input; }
 }
 
 function TeamTimer() {};
 function CipheringTimer() {};
 function RelayTimer() {};
 
-TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
-CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
-RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
-
-/*TeamTimer.prototype.warn = function() {
-  if (WAAPIsupport === true) {
-    switch(this.getTime()) {
-      case 15:
-        playSound('fifteenseconds'); break;
-      case 75:
-        playSound('fifteenseconds'); break;
-      case 135:
-        playSound('fifteenseconds'); break;
-      case 195:
-        playSound('fifteenseconds'); break;
-      case 180:
-        playSound('secondminute'); break;
-      case 120:
-        playSound('thirdminute'); break;
-      case 60:
-        playSound('fourthminute'); break;
-      case 0:
-        playSound('time'); break;
-    }
-  }
-  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
-    switch(this.getTime()) {
-      case 15:
-        playHTML5Sound('fifteenseconds'); break;
-      case 75:
-        playHTML5Sound('fifteenseconds'); break;
-      case 135:
-        playHTML5Sound('fifteenseconds'); break;
-      case 195:
-        playHTML5Sound('fifteenseconds'); break;
-      case 180:
-        playHTML5Sound('secondminute'); break;
-      case 120:
-        playHTML5Sound('thirdminute'); break;
-      case 60:
-        playHTML5Sound('fourthminute'); break;
-      case 0:
-        playHTML5Sound('time'); break;
-    }
-  }
-};
-CipheringTimer.prototype.warn = function() {
-  if (WAAPIsupport === true) {
-    switch(this.getTime()) {
-      case 15:
-        playSound('fifteenseconds'); break;
-      case 75:
-        playSound('fifteenseconds'); break;
-      case 135:
-        playSound('fifteenseconds'); break;
-      case 120:
-        playSound('secondminute'); break;
-      case 60:
-        playSound('thirdminute'); break;
-      case 0:
-        playSound('time'); break;
-    }
-  }
-  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
-    switch(this.getTime()) {
-      case 15:
-        playHTML5Sound('fifteenseconds'); break;
-      case 75:
-        playHTML5Sound('fifteenseconds'); break;
-      case 135:
-        playHTML5Sound('fifteenseconds'); break;
-      case 120:
-        playHTML5Sound('secondminute'); break;
-      case 60:
-        playHTML5Sound('thirdminute'); break;
-      case 0:
-        playHTML5Sound('time'); break;
-    }
-  }
-};
-RelayTimer.prototype.warn = function() {
-  if (WAAPIsupport === true) {
-    switch(this.getTime()) {
-      case 15:
-        playSound('fifteenseconds'); break;
-      case 135:
-        playSound('fifteenseconds'); break;
-      case 255:
-        playSound('fifteenseconds'); break;
-      case 240:
-        playSound('secondminute'); break;
-      case 120:
-        playSound('fourthminute'); break;
-      case 0:
-        playSound('time'); break;
-    }
-  }
-  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
-    switch(this.getTime()) {
-      case 15:
-        playHTML5Sound('fifteenseconds'); break;
-      case 135:
-        playHTML5Sound('fifteenseconds'); break;
-      case 255:
-        playHTML5Sound('fifteenseconds'); break;
-      case 240:
-        playHTML5Sound('secondminute'); break;
-      case 120:
-        playHTML5Sound('fourthminute'); break;
-      case 0:
-        playHTML5Sound('time'); break;
-    }
-  }
-};*/
-
-
-team = new TeamTimer();
-ciphering = new CipheringTimer();
-relay = new RelayTimer();
-
-team.setSounds({
+teamSounds = {
   15: "fifteenseconds",
   75: "fifteenseconds",
   135: "fifteenseconds",
@@ -382,7 +260,15 @@ team.setSounds({
   120: "thirdminute",
   60: "fourthminute",
   0: "time"
-});
+};
+
+TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
+CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
+RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
+
+team = new TeamTimer();
+ciphering = new CipheringTimer();
+relay = new RelayTimer();
 
 get("back-button").onclick = back;
 
