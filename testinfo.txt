@@ -1,0 +1,38 @@
+team
+	4 minutes (4 rounds 1min each) per question
+	15 second warnings
+	2nd 3rd 4th time warnings
+
+*ciphering
+	3 minutes (3 rounds 1min each) per question
+	15 second warnings
+	2nd 3rd time warnings
+
+relay
+	6 minutes (3 rounds 2min each) per question
+	15 second warnings?
+	2nd 3rd time warnings
+
+=================================================
+
+[*continuous
+	(basically can be made 4 hours or so)
+	15 second warnings
+	new minute warnings]
+
+[hustle
+	25 minutes
+	1 minute, 15 second warnings at each round
+	2nd 3rd 4th 5th time warnings at each round]
+
+individual
+	60 minutes
+	15 minute, 5 minute, 1 minute warnings
+
+speed
+	15 minutes
+	1 minute, 15 second warnings?
+
+mental
+	8 minutes
+	1 minute, 15 second warnings
