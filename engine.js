@@ -36,9 +36,17 @@ function back() {
   get("title").innerHTML = "MA&#920; Timers";
   // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually...
   get("team-box").style.display = "none";
+  get("ciphering-box").style.display = "none";
+  get("relay-box").style.display = "none";
+
   // and pause all the timers unless they're stopped already
   if (team.currentState !== "stopped")
     team.currentState = "paused";
+  if (ciphering.currentState !== "stopped")
+    ciphering.currentState = "paused";
+  if (relay.currentState !== "stopped")
+    relay.currentState = "paused";
+
   get("button-box").style.display = "block";
   get("back-button").style.display = "none";
 }
