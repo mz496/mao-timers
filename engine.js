@@ -231,7 +231,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in this.sounds) {
-      if (key === time) {
+      if (key === this.getTime()) {
         if (WAAPIsupport === true) 
           playSound(this.sounds[key]);
         else
