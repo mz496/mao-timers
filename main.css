@@ -80,7 +80,6 @@ hr {
   display: inline-block;
   width: 40%;
   margin: 15px 0px 15px 0px;
-  border: 1px solid black;
 }
 
 .count-box {
@@ -140,20 +139,18 @@ summary of changes:
 
   .half-box.stop-button-wrapper {
     position: relative;
-    width: 45%;
+    width: 40%;
     float: left;
     text-align: left;
-    border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     position: relative;
-    width: 50%;
+    width: 55%;
     float: right;
     text-align: right;
-    border: 1px solid black;
   }
-  .half-box.stop-button-wrapper > a { font-size: 28px; }
-  .half-box.pause-button-wrapper > a { font-size: 28px; }
+  .half-box.stop-button-wrapper > a { font-size: 32px; }
+  .half-box.pause-button-wrapper > a { font-size: 32px; }
 
   .generic-box {
     margin: auto;
