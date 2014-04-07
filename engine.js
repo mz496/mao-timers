@@ -134,8 +134,10 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     time--;
 
     // only check for time warn every 15 sec since all warnings occur at 15sec, 1min 2min, etc.
-    if (time % 15 === 0)
+    if (time % 15 === 0) {
+      console.log("running warn");
       this.warn();
+    }
     // time warnings are handled inside children
 
     // parse time remaining into the divs
