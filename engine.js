@@ -207,7 +207,12 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
 }
 
 function TeamTimer() {};
+function CipheringTimer() {};
+function RelayTimer() {};
+
 TeamTimer.prototype = new RoundTimer("team-box", 240, 60, 15, "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
+CipheringTimer.prototype = new RoundTimer("ciphering-box", 240, 120, 10, "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
+
 TeamTimer.prototype.warn = function() {
   if (WAAPIsupport === true) {
     switch(this.getTime()) {
@@ -250,8 +255,44 @@ TeamTimer.prototype.warn = function() {
     }
   }
 };
+CipheringTimer.prototype.warn = function() {
+  if (WAAPIsupport === true) {
+    switch(this.getTime()) {
+      case 15:
+        playSound('fifteenseconds'); break;
+      case 75:
+        playSound('fifteenseconds'); break;
+      case 135:
+        playSound('fifteenseconds'); break;
+      case 120:
+        playSound('secondminute'); break;
+      case 60:
+        playSound('thirdminute'); break;
+      case 0:
+        playSound('time'); break;
+    }
+  }
+  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
+    switch(this.getTime()) {
+      case 15:
+        playHTML5Sound('fifteenseconds'); break;
+      case 75:
+        playHTML5Sound('fifteenseconds'); break;
+      case 135:
+        playHTML5Sound('fifteenseconds'); break;
+      case 120:
+        playHTML5Sound('secondminute'); break;
+      case 60:
+        playHTML5Sound('thirdminute'); break;
+      case 0:
+        playHTML5Sound('time'); break;
+    }
+  }
+};
+
 
 team = new TeamTimer();
+ciphering = new CipheringTimer();
 
 get("back-button").onclick = back;
 
@@ -260,6 +301,12 @@ get("team-start-button").onclick = team.start;
 get("team-stop-button").onclick = team.finish;
 get("team-pause-button").onclick = team.pause;
 get("team-redo-button").onclick = team.redo;
+
+get("ciphering-open").onclick = ciphering.makeInterface;
+get("ciphering-start-button").onclick = ciphering.start;
+get("ciphering-stop-button").onclick = ciphering.finish;
+get("ciphering-pause-button").onclick = ciphering.pause;
+get("ciphering-redo-button").onclick = ciphering.redo;
 
 /***********************************************\
     INDIVIDUAL
