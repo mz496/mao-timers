@@ -139,13 +139,11 @@ summary of changes:
   /* float the buttons to the opposite sides within the wrappers */
 
   .half-box.stop-button-wrapper {
-    position: relative;
     float: left;
     text-align: left;
     border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
-    position: relative;
     float: right;
     text-align: right;
     border: 1px solid black;
