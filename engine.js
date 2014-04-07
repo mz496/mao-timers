@@ -40,12 +40,12 @@ function back() {
   get("relay-box").style.display = "none";
 
   // and pause all the timers unless they're stopped already
-  if (team.currentState !== "stopped")
-    team.currentState = "paused";
-  if (ciphering.currentState !== "stopped")
-    ciphering.currentState = "paused";
-  if (relay.currentState !== "stopped")
-    relay.currentState = "paused";
+  if (team.getState() !== "stopped")
+    team.setState("paused");
+  if (ciphering.getState() !== "stopped")
+    ciphering.setState("paused");
+  if (relay.getState() !== "stopped")
+    relay.setState("paused");
 
   get("button-box").style.display = "block";
   get("back-button").style.display = "none";
@@ -55,6 +55,7 @@ function back() {
 function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper) {
   var currentState = "stopped";
   var HTML5SoundInserted = false;
+  this.sounds = {};
 
   this.numQuestions = numQuestions;
   var currentQnum = 1;
@@ -227,8 +228,21 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     }
   };
 
-  this.warn = function(){}; // overridden in and specific to every child
-  this.getTime = function() { return time; }
+  this.warn = function() {
+    // loop through keys to see if current time matches any; if so, play that sound
+    for (var key in this.sounds) {
+      if (key === time) {
+        if (WAAPIsupport === true) 
+          playSound(this.sounds[key]);
+        else
+          playHTML5Sound(this.sounds[key]);
+      }
+    }
+  };
+
+  this.getTime = function() { return time; };
+  this.getState = function() { return currentState; };
+  this.setState = function(state) { currentState = state; };
 }
 
 function TeamTimer() {};
@@ -239,7 +253,18 @@ TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "tea
 CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
 RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
 
-TeamTimer.prototype.warn = function() {
+TeamTimer.sounds = {
+  15: "fifteenseconds",
+  75: "fifteenseconds",
+  135: "fifteenseconds",
+  195: "fifteenseconds",
+  180: "secondminute",
+  120: "thirdminute",
+  60: "fourthminute",
+  0: "time"
+}
+
+/*TeamTimer.prototype.warn = function() {
   if (WAAPIsupport === true) {
     switch(this.getTime()) {
       case 15:
@@ -348,7 +373,7 @@ RelayTimer.prototype.warn = function() {
         playHTML5Sound('time'); break;
     }
   }
-};
+};*/
 
 
 team = new TeamTimer();
