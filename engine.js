@@ -231,6 +231,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in this.sounds) {
+      console.log(key);
       if (key === this.getTime()) {
         if (WAAPIsupport === true) 
           playSound(this.sounds[key]);
@@ -252,17 +253,6 @@ function RelayTimer() {};
 TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
 CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
 RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
-
-TeamTimer.prototype.sounds = {
-  15: "fifteenseconds",
-  75: "fifteenseconds",
-  135: "fifteenseconds",
-  195: "fifteenseconds",
-  180: "secondminute",
-  120: "thirdminute",
-  60: "fourthminute",
-  0: "time"
-}
 
 /*TeamTimer.prototype.warn = function() {
   if (WAAPIsupport === true) {
@@ -379,6 +369,17 @@ RelayTimer.prototype.warn = function() {
 team = new TeamTimer();
 ciphering = new CipheringTimer();
 relay = new RelayTimer();
+
+team.sounds = {
+  15: "fifteenseconds",
+  75: "fifteenseconds",
+  135: "fifteenseconds",
+  195: "fifteenseconds",
+  180: "secondminute",
+  120: "thirdminute",
+  60: "fourthminute",
+  0: "time"
+}
 
 get("back-button").onclick = back;
 
