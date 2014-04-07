@@ -121,6 +121,7 @@ summary of changes:
     float: left;
   }
   #back-button {
+    position: relative;
     display: none;
   }
 
