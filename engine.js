@@ -233,12 +233,11 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
-      console.log(key);
-      if (key === this.getTime()) {
+      if (key == this.getTime()) {
         if (WAAPIsupport === true) 
-          playSound(this.sounds[key]);
+          playSound(self.sounds[key]);
         else
-          playHTML5Sound(this.sounds[key]);
+          playHTML5Sound(self.sounds[key]);
       }
     }
   };
