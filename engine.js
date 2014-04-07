@@ -44,7 +44,7 @@ function back() {
 }
 
 // for "round-based" schemes -- team, ciphering, relay
-function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQuestions, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper) {
+function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper) {
   var currentState = "stopped";
   var HTML5SoundInserted = false;
 
@@ -58,7 +58,7 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
-    get("title").innerHTML = "Team Round";
+    get("title").innerHTML = title;
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
@@ -83,19 +83,29 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
   function parseSeconds(currentTime) {
     // makes a permanent min:sec timer, so only call this when the starting time is over 60
     // returns the (min):(sec) string
-    var timeThisRound = currentTime % secondsPerRound;
-    var minThisRound = Math.ceil(timeThisRound/secondsPerRound); // compare to the roundElement statement in tick
-    var secThisRound = timeThisRound - 60*minThisRound;
+    var currentTimeThisRound = currentTime % secondsPerRound;
+    if (currentTimeThisRound === 0)
+      currentTimeThisRound = secondsPerRound; // do not start at x:59 sec
+    var minThisRound = Math.floor(currentTimeThisRound/60); // compare to the roundElement statement in tick
+    var secThisRound = currentTimeThisRound - 60*minThisRound;
+    if (secThisRound < 10)
+      secThisRound = "0" + secThisRound;
     return minThisRound + ":" + secThisRound;
   };
 
   this.start = function() {
     // called upon clicking -- initialize appearances, start timer
+    var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
+    // making sizes relative for adaptation to mobile devices
     get(roundElement).innerHTML = 1;
-    if (secondsPerRound <= 60)
+    if (secondsPerRound <= 60) {
       get(secondsElement).innerHTML = secondsPerRound;
-    else
+      get(secondsElement).style.fontSize = 0.6*roundNumSize + "px";
+    }
+    else {
       get(secondsElement).innerHTML = parseSeconds(secondsPerRound);
+      get(secondsElement).style.fontSize = 0.375*roundNumSize + "px";
+    }
 
     get(roundBox).style.background = "transparent";
     get(roundElement).style.color = "inherit";
@@ -143,7 +153,10 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
   
     // TIME!
     if (time === 0) {
-      get(secondsElement).innerHTML = 0;
+      if (secondsPerRound <= 60)
+        get(secondsElement).innerHTML = 0;
+      else
+        get(secondsElement).innerHTML = "0:00";
       this.finish();
     }
   };
@@ -191,7 +204,8 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
       
       if (currentQnum < numQuestions)
       currentQnum++;
-    
+
+      // reset section
       get(startButton).style.display = "inline-block";
       get(ghostButton).style.display = "none";
       get(redoButtonWrapper).style.display = "inline-block";
@@ -210,8 +224,9 @@ function TeamTimer() {};
 function CipheringTimer() {};
 function RelayTimer() {};
 
-TeamTimer.prototype = new RoundTimer("team-box", 240, 60, 15, "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
-CipheringTimer.prototype = new RoundTimer("ciphering-box", 240, 120, 10, "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
+TeamTimer.prototype = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper");
+CipheringTimer.prototype = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper");
+RelayTimer.prototype = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper");
 
 TeamTimer.prototype.warn = function() {
   if (WAAPIsupport === true) {
@@ -289,10 +304,45 @@ CipheringTimer.prototype.warn = function() {
     }
   }
 };
+RelayTimer.prototype.warn = function() {
+  if (WAAPIsupport === true) {
+    switch(this.getTime()) {
+      case 15:
+        playSound('fifteenseconds'); break;
+      case 135:
+        playSound('fifteenseconds'); break;
+      case 255:
+        playSound('fifteenseconds'); break;
+      case 240:
+        playSound('secondminute'); break;
+      case 120:
+        playSound('fourthminute'); break;
+      case 0:
+        playSound('time'); break;
+    }
+  }
+  else { // each value for the keyed file-name is an Element, in place of the AudioBuffer that gets put in as part of Web Audio
+    switch(this.getTime()) {
+      case 15:
+        playHTML5Sound('fifteenseconds'); break;
+      case 135:
+        playHTML5Sound('fifteenseconds'); break;
+      case 255:
+        playHTML5Sound('fifteenseconds'); break;
+      case 240:
+        playHTML5Sound('secondminute'); break;
+      case 120:
+        playHTML5Sound('fourthminute'); break;
+      case 0:
+        playHTML5Sound('time'); break;
+    }
+  }
+};
 
 
 team = new TeamTimer();
 ciphering = new CipheringTimer();
+relay = new RelayTimer();
 
 get("back-button").onclick = back;
 
@@ -307,6 +357,12 @@ get("ciphering-start-button").onclick = ciphering.start;
 get("ciphering-stop-button").onclick = ciphering.finish;
 get("ciphering-pause-button").onclick = ciphering.pause;
 get("ciphering-redo-button").onclick = ciphering.redo;
+
+get("relay-open").onclick = relay.makeInterface;
+get("relay-start-button").onclick = relay.start;
+get("relay-stop-button").onclick = relay.finish;
+get("relay-pause-button").onclick = relay.pause;
+get("relay-redo-button").onclick = relay.redo;
 
 /***********************************************\
     INDIVIDUAL

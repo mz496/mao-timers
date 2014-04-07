@@ -48,6 +48,7 @@
       <p>New test types are coming... Turn up your sound to hear alerts!</p>
     </div>
 
+
     <!--======-->
     <!-- TEAM -->
     <!--======-->
@@ -100,6 +101,7 @@
       </div>
     </div>
 
+
     <!--===========-->
     <!-- CIPHERING -->
     <!--===========-->
@@ -148,6 +150,59 @@
       <div>
         <div class="redo-button-wrapper" id="ciphering-redo-button-wrapper">
           <a class="button small" id="ciphering-redo-button">Redo last question</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!--=======-->
+    <!-- RELAY -->
+    <!--=======-->
+
+    <div class="generic-box" id="relay-box">
+      <div class="start-box">
+        <a class="button" id="relay-start-button">
+          <div style="font-size: 32px;">Start</div>
+          <div class="q-number" id="relay-start-button-num">Question 1</div>
+        </a>
+        <!-- here we make a "ghost button" so we can have the nice "question # in-place" effect without having to deal with ugly margin px values that are nonconstant -->
+        <!-- potential easter eggs in place of <br>? :P -->
+        <a class="button ghost" id="relay-ghost-button">
+            <div style="font-size: 32px;"><br></div>
+            <div class="q-number" id="relay-ghost-button-num">Question 1</div>
+          </a>
+      </div>
+
+      <div class="half-box">
+        <div class="round-box-wrapper">
+          Current round
+          <div class="count-box" id="relay-round-box">
+            <div class="generic-number" id="relay-round-number"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="half-box">
+        <div class="sec-box-wrapper">
+          <div>Time remaining</div>
+          <div>in this round</div>
+          <div class="count-box" id="relay-sec-box">
+            <div class="generic-number" id="relay-sec-number"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="relay-stop-button">Stop</a>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="relay-pause-button">Pause</a>
+      </div>
+
+      <div>
+        <div class="redo-button-wrapper" id="relay-redo-button-wrapper">
+          <a class="button small" id="relay-redo-button">Redo last question</a>
         </div>
       </div>
     </div>
