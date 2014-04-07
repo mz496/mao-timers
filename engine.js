@@ -32,6 +32,8 @@ function get(elem)
 { return document.getElementById(elem); }
 
 function back() {
+  // revert title
+  get("title").innerHTML = "MA&#920; Timers";
   // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually...
   get("team-box").style.display = "none";
   // and pause all the timers unless they're stopped already
@@ -55,7 +57,8 @@ function RoundTimer(timerContainer, secondsPerQuestion, secondsPerRound, numQues
   var deltaT = 200; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
-    // triggers onclick of the test type button
+    // triggers upon click of the test type button
+    get("title").innerHTML = "Team Round";
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
