@@ -77,7 +77,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     if (currentState === "paused")
     {
       currentState = "running";
-      this.pause();
+      self.pause();
     }
     // if currentState happens to be stopped already, it was stopped before "back to menu" OR we have just started
     
