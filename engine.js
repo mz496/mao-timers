@@ -246,7 +246,18 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.setState = function(state) { currentState = state; };
 }
 
-function TeamTimer() {};
+function TeamTimer() {
+  this.sounds = {
+    15: "fifteenseconds",
+    75: "fifteenseconds",
+    135: "fifteenseconds",
+    195: "fifteenseconds",
+    180: "secondminute",
+    120: "thirdminute",
+    60: "fourthminute",
+    0: "time"
+  }
+};
 function CipheringTimer() {};
 function RelayTimer() {};
 
@@ -369,17 +380,6 @@ RelayTimer.prototype.warn = function() {
 team = new TeamTimer();
 ciphering = new CipheringTimer();
 relay = new RelayTimer();
-
-team.sounds = {
-  15: "fifteenseconds",
-  75: "fifteenseconds",
-  135: "fifteenseconds",
-  195: "fifteenseconds",
-  180: "secondminute",
-  120: "thirdminute",
-  60: "fourthminute",
-  0: "time"
-}
 
 get("back-button").onclick = back;
 
