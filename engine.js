@@ -232,7 +232,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
-    for (var key in self.sounds) {
+    for (var key in this.sounds) {
       console.log(key);
       if (key === this.getTime()) {
         if (WAAPIsupport === true) 
@@ -246,6 +246,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
+  this.setSounds = function(input) { sounds = input; }
 }
 
 function TeamTimer() {};
@@ -372,7 +373,7 @@ team = new TeamTimer();
 ciphering = new CipheringTimer();
 relay = new RelayTimer();
 
-team.sounds = {
+team.setSounds({
   15: "fifteenseconds",
   75: "fifteenseconds",
   135: "fifteenseconds",
@@ -381,7 +382,7 @@ team.sounds = {
   120: "thirdminute",
   60: "fourthminute",
   0: "time"
-}
+});
 
 get("back-button").onclick = back;
 
