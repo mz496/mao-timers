@@ -141,11 +141,15 @@ summary of changes:
   .half-box.stop-button-wrapper {
     float: left;
     text-align: left;
+    font-size: 18px;
+    margin: 5px 0px 5px 0px;
     border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     float: right;
     text-align: right;
+    font-size: 18px;
+    margin: 5px 0px 5px 0px;
     border: 1px solid black;
   }
 
