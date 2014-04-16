@@ -600,7 +600,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
-      if (key == this.getTime()%60) {
+      if (key == time%60) {
         if (WAAPIsupport === true) 
           playSound(self.sounds[key]);
         else
@@ -727,7 +727,7 @@ if (WAAPIsupport === true) {
 function playBuffer (buffer, opt, cb) {
   if (!opt) cb = opt;
   opt = opt || {};
- 
+  
   var src = audio_ctx.createBufferSource();
   src.buffer = buffer;
   
