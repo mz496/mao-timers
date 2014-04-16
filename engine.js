@@ -539,7 +539,7 @@ hustleSounds = {
 };
 continuousSounds = {
   15: "fifteenseconds",
-  0: "time"
+  0: "newminute"
 };
 
 
