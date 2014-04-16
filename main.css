@@ -31,6 +31,10 @@ hr {
 #ciphering-box { display: none; }
 #relay-box { display: none; }
 
+#indiv-box { display: none; }
+#hustle-box { display: none; }
+#continuous-box { display: none; }
+
 .button {
   color: #f9f6f2;
   font-size: 36px;
@@ -84,6 +88,16 @@ hr {
   margin: 15px 0px 15px 0px;
 }
 
+.whole-box { /* golden! */
+  width: 600px;
+  height: 371px;
+  border: 1px solid #c2b4a7;
+  border-radius: 10px;
+  margin: auto;
+  margin-top: 10px;
+  position: relative;
+}
+
 .count-box {
   height: 210px;
   width: 210px;
@@ -102,6 +116,9 @@ hr {
   height: 1em;
   margin: auto;
   margin-top: -0.75em;
+}
+.generic-number.big {
+  font-size: 200px;
 }
 
 /**************************************************************\
@@ -168,6 +185,16 @@ summary of changes:
     border: 1px solid #c2b4a7;
     border-radius: 10px;
     margin: auto;
+    position: relative;
+  }
+
+  .whole-box { /* golden! */
+    width: 220px;
+    height: 136px;
+    border: 1px solid #c2b4a7;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 10px;
     position: relative;
   }
 
