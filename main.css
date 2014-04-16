@@ -117,9 +117,7 @@ hr {
   margin: auto;
   margin-top: -0.75em;
 }
-.generic-number.big {
-  font-size: 200px;
-}
+.generic-number.big { font-size: 200px; }
 
 /**************************************************************\
 MOBILE-SPECIFIC CSS
@@ -134,6 +132,10 @@ summary of changes:
 
 ****************************************************************/
 @media only screen and (max-width: 601px) {
+  #title {
+    font-size: 40px;
+  }
+  
   #back-button-wrapper {
     position: absolute;
     top: 0%;
@@ -160,17 +162,17 @@ summary of changes:
   .half-box.stop-button-wrapper {
     position: relative;
     width: 40%;
-    float: left;
-    text-align: left;
+    float: right;
+    text-align: right;
   }
   .half-box.pause-button-wrapper {
     position: relative;
     width: 55%;
-    float: right;
-    text-align: right;
+    float: left;
+    text-align: left;
   }
-  .half-box.stop-button-wrapper > a { font-size: 32px; }
-  .half-box.pause-button-wrapper > a { font-size: 32px; }
+  .half-box.stop-button-wrapper > a { font-size: 30px; }
+  .half-box.pause-button-wrapper > a { font-size: 30px; }
 
   .generic-box {
     margin: auto;
@@ -208,4 +210,6 @@ summary of changes:
     margin: auto;
     margin-top: -0.7em;
   }
+
+  .generic-number.big { font-size: 100px; }
 }

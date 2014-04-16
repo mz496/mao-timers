@@ -470,7 +470,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
-      if (key == this.getTime()) {
+      if (this.getTime() == key) {
         if (WAAPIsupport === true) 
           playSound(self.sounds[key]);
         else
@@ -486,62 +486,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.parseSeconds_ = function(currentTime) { return parseSeconds(currentTime); };
   this.clearTicking = function() { clearInterval(ticking); };
 }
-
-teamSounds = {
-  15: "fifteenseconds",
-  75: "fifteenseconds",
-  135: "fifteenseconds",
-  195: "fifteenseconds",
-  180: "secondminute",
-  120: "thirdminute",
-  60: "fourthminute",
-  0: "time"
-};
-cipheringSounds = {
-  15: "fifteenseconds",
-  75: "fifteenseconds",
-  135: "fifteenseconds",
-  120: "secondminute",
-  60: "thirdminute",
-  0: "time"
-};
-relaySounds = {
-  15: "fifteenseconds",
-  135: "fifteenseconds",
-  255: "fifteenseconds",
-  240: "secondminute",
-  120: "fourthminute",
-  0: "time"
-};
-
-indivSounds = {
-  900: "fifteenminutes",
-  300: "fiveminutes",
-  60: "oneminute",
-  0: "time"
-};
-hustleSounds = {
-  15: "fifteenseconds",
-  315: "fifteenseconds",
-  615: "fifteenseconds",
-  915: "fifteenseconds",
-  1215: "fifteenseconds",
-  60: "oneminute",
-  360: "oneminute",
-  660: "oneminute",
-  960: "oneminute",
-  1260: "oneminute",
-  1200: "secondround",
-  900: "thirdround",
-  600: "fourthround",
-  300: "fifthround",
-  0: "time"
-};
-continuousSounds = {
-  15: "fifteenseconds",
-  0: "newminute"
-};
-
 
 function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   ExtendedTimer.call(this, title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
@@ -609,7 +553,69 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     }
   };
 };
+
 ContinuousTimer.prototype = new ExtendedTimer();
+
+var teamSounds = {
+  15: "fifteenseconds",
+  75: "fifteenseconds",
+  135: "fifteenseconds",
+  195: "fifteenseconds",
+  180: "secondminute",
+  120: "thirdminute",
+  60: "fourthminute",
+  0: "time"
+};
+var cipheringSounds = {
+  15: "fifteenseconds",
+  75: "fifteenseconds",
+  135: "fifteenseconds",
+  120: "secondminute",
+  60: "thirdminute",
+  0: "time"
+};
+var relaySounds = {
+  15: "fifteenseconds",
+  135: "fifteenseconds",
+  255: "fifteenseconds",
+  240: "endofsecondminute",
+  120: "endoffourthminute",
+  0: "time"
+};
+
+var indivSounds = {
+  900: "fifteenminutes",
+  300: "fiveminutes",
+  60: "oneminute",
+  0: "time"
+};
+var hustleSounds = {
+  15: "fifteenseconds",
+  315: "fifteenseconds",
+  615: "fifteenseconds",
+  915: "fifteenseconds",
+  1215: "fifteenseconds",
+  60: "oneminute",
+  360: "oneminute",
+  660: "oneminute",
+  960: "oneminute",
+  1260: "oneminute",
+  1200: "secondround",
+  900: "thirdround",
+  600: "fourthround",
+  300: "fifthround",
+  0: "time"
+};
+var continuousSounds = {
+  15: "fifteenseconds",
+  0: "newminute"
+};
+var speedSounds = {
+  60: "oneminute",
+  15: "fifteenseconds",
+  0: "time"
+}
+var mentalSounds = speedSounds;
 
 var team = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
 var ciphering = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper", cipheringSounds);
@@ -619,6 +625,8 @@ var msg = "You either went AFK for a really long time or are super dedicated. Pr
 var indiv = new ExtendedTimer("Individual Test", 910, "indiv-box", null, null, 0, "indiv-sec-box", "indiv-sec-number", "indiv-start-pause-button", "indiv-reset-button", indivSounds);
 var hustle = new ExtendedTimer("Hustle Test", 1500, "hustle-box", "hustle-round-box", "hustle-round-number", 300, "hustle-sec-box", "hustle-sec-number", "hustle-start-pause-button", "hustle-reset-button", hustleSounds);
 var continuous = new ContinuousTimer("Continuous Timer", 10800, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
+var speed = new ExtendedTimer("Speed Math Test", 910, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
+var mental = new ExtendedTimer("Mental Math Test", 910, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
 
 get("back-button").onclick = back;
 
@@ -652,6 +660,13 @@ get("continuous-open").onclick = continuous.makeInterface;
 get("continuous-start-pause-button").onclick = continuous.startpause;
 get("continuous-reset-button").onclick = continuous.reset;
 
+get("speed-open").onclick = speed.makeInterface;
+get("speed-start-pause-button").onclick = speed.startpause;
+get("speed-reset-button").onclick = speed.reset;
+
+get("mental-open").onclick = mental.makeInterface;
+get("mental-start-pause-button").onclick = mental.startpause;
+get("mental-reset-button").onclick = mental.reset;
 
 /******************************************************************\
       SOUND HANDLERS
