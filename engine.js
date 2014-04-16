@@ -550,10 +550,6 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
   this.tick = function() {
     var roundNumber = get(roundElement).innerHTML; // set to 1 initially
-    if (roundNumber >= 10)
-      get(roundElement).style.fontSize = 0.6*roundNumSize + "px";
-    if (roundNumber >= 100)
-      get(roundElement).style.fontSize = 0.375*roundNumSize + "px";
     time--;
     get(secondsElement).innerHTML = this.parseSeconds_(time);
 
@@ -569,6 +565,10 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
       get(roundElement).innerHTML++;
       get(secondsBox).style.background = "transparent";
       get(secondsElement).style.color = "inherit";
+      if (roundNumber >= 10)
+        get(roundElement).style.fontSize = 0.6*roundNumSize + "px";
+      if (roundNumber >= 100)
+        get(roundElement).style.fontSize = 0.375*roundNumSize + "px";
       this.warn();
     }
 
@@ -600,7 +600,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
-      if (key == time%60) {
+      if (time%60 == key) {
         if (WAAPIsupport === true) 
           playSound(self.sounds[key]);
         else
