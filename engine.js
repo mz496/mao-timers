@@ -31,21 +31,21 @@ function back() {
   // revert title
   get("title").innerHTML = "MA&#920; Timers";
   // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually... see makeInterface for behavior
-  if (team.getState() !== "stopped")
+  if (team.getState() === "running")
     team.pause();
-  if (ciphering.getState() !== "stopped")
+  if (ciphering.getState() === "running")
     ciphering.pause();
-  if (relay.getState() !== "stopped")
+  if (relay.getState() === "running")
     relay.pause();
-  if (indiv.getState() !== "stopped")
+  if (indiv.getState() === "running")
     indiv.startpause();
-  if (hustle.getState() !== "stopped")
+  if (hustle.getState() === "running")
     hustle.startpause();
-  if (continuous.getState() !== "stopped")
+  if (continuous.getState() === "running")
     continuous.startpause();
-  if (speed.getState() !== "stopped")
+  if (speed.getState() === "running")
     speed.startpause();
-  if (mental.getState() !== "stopped")
+  if (mental.getState() === "running")
     mental.startpause();
 
 
@@ -86,15 +86,6 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-    // if currentState happens to be paused already, that's because "back to menu" was pressed while running OR while paused by user
-    // pretend we were running as usual and got paused by a mysterious force
-    // under user-paused conditions, this doesn't produce any changes
-    if (currentState === "paused")
-    {
-      currentState = "running";
-      self.pause();
-    }
-    // if currentState happens to be stopped already, it was stopped before "back to menu" OR we have just started
     
     if (WAAPIsupport === true)
       playSound('silent');
@@ -152,6 +143,11 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // timer's actual mechanism
     time--;
 
+    // check warnings every 15 seconds to accommodate all test types
+    // placement of this line causes problems in offline mode, but whatever
+    if (time % 15 === 0)
+      this.warn();
+
     // parse time remaining into the divs
     get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
     get(secondsElement).innerHTML = parseSeconds(time);
@@ -176,10 +172,6 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
         get(secondsElement).innerHTML = "0:00";
       this.finish();
     }
-
-    // check warnings every 15 seconds to accommodate all test types
-    if (time % 15 === 0)
-      this.warn();
   };
 
   this.pause = function() {
@@ -278,15 +270,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-    // if currentState happens to be paused already, that's because "back to menu" was pressed while running OR while paused by user
-    // pretend we were running as usual and got paused by a mysterious force
-    // under user-paused conditions, this doesn't produce any changes
-    if (currentState === "paused")
-    {
-      currentState = "running";
-      self.startpause();
-    }
-    // if currentState happens to be stopped already, it was stopped before "back to menu" OR we have just started
     
     if (WAAPIsupport === true)
       playSound('silent');
@@ -334,6 +317,11 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.tick = function() {
     // timer's actual mechanism
     time--;
+
+    // check warnings every 15 seconds
+    // placement of this line causes problems in offline mode, but whatever
+    if (time % 15 === 0)
+      this.warn();
 
     // parse time remaining into the divs
     if (roundBox == null && roundElement == null) {
@@ -394,10 +382,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         this.finish();
       }
     }
-
-    // check warnings every 15 seconds
-    if (time % 15 === 0)
-      this.warn();
   };
 
   this.startpause = function() {
@@ -472,6 +456,8 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     currentState = "stopped";
     get(secondsBox).style.background = "transparent";
     get(secondsElement).style.color = "inherit";
+    if (roundElement != null)
+      get(roundElement).style.fontSize = roundNumSize;
   }
 
   this.warn = function() {
@@ -500,7 +486,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   var self = this;
   var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
   this.tick = function() {
-    var roundNumber = get(roundElement).innerHTML; // set to 1 initially
+    // roundNumber set to 1 initially
     time--;
     get(secondsElement).innerHTML = this.parseSeconds_(time);
 
@@ -514,6 +500,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     // NEW ROUND!
     if (time % 60 === 0 && time !== 0) {
       get(roundElement).innerHTML++;
+      var roundNumber = get(roundElement).innerHTML;
       get(secondsBox).style.background = "transparent";
       get(secondsElement).style.color = "inherit";
       if (roundNumber >= 10)
@@ -544,6 +531,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     get(secondsElement).innerHTML = self.parseSeconds_(secondsTotal);
     get(roundBox).style.background = "transparent";
     get(roundElement).style.color = "inherit";
+    get(roundElement).style.fontSize = roundNumSize;
     get(secondsBox).style.background = "transparent";
     get(secondsElement).style.color = "inherit";
   };
