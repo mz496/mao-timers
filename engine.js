@@ -43,6 +43,11 @@ function back() {
     hustle.startpause();
   if (continuous.getState() !== "stopped")
     continuous.startpause();
+  if (speed.getState() !== "stopped")
+    speed.startpause();
+  if (mental.getState() !== "stopped")
+    mental.startpause();
+
 
   get("team-box").style.display = "none";
   get("ciphering-box").style.display = "none";
@@ -50,6 +55,8 @@ function back() {
   get("indiv-box").style.display = "none";
   get("hustle-box").style.display = "none";
   get("continuous-box").style.display = "none";
+  get("speed-box").style.display = "none";
+  get("mental-box").style.display = "none";
 
   get("button-box").style.display = "block";
   get("back-button").style.display = "none";
@@ -71,7 +78,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   var self = this; // very important for setInterval
   var ticking;
   var time = secondsPerQuestion;
-  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -263,7 +270,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   var self = this; // very important for setInterval
   var ticking;
   var time = secondsTotal;
-  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -370,7 +377,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
       // 15 SECONDS!
       if (time % secondsPerRound === 15)
-        get(secondsBox).style.background = orange;
+        get(secondsBox).style.background = red;
 
       // NEW ROUND!
       if (time % secondsPerRound === 0 && time !== 0) {
@@ -578,8 +585,8 @@ var relaySounds = {
   15: "fifteenseconds",
   135: "fifteenseconds",
   255: "fifteenseconds",
-  240: "endofsecondminute",
-  120: "endoffourthminute",
+  240: "secondround",
+  120: "thirdround",
   0: "time"
 };
 
@@ -622,11 +629,11 @@ var ciphering = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", 
 var relay = new RoundTimer("Relay Test", 360, 120, 10, "relay-box", "relay-round-box", "relay-round-number", "relay-sec-box", "relay-sec-number", "relay-start-button", "relay-start-button-num", "relay-ghost-button", "relay-ghost-button-num", "relay-pause-button", "relay-stop-button", "relay-redo-button-wrapper", relaySounds);
 var msg = "You either went AFK for a really long time or are super dedicated. Props. (y)"
 
-var indiv = new ExtendedTimer("Individual Test", 910, "indiv-box", null, null, 0, "indiv-sec-box", "indiv-sec-number", "indiv-start-pause-button", "indiv-reset-button", indivSounds);
-var hustle = new ExtendedTimer("Hustle Test", 1500, "hustle-box", "hustle-round-box", "hustle-round-number", 300, "hustle-sec-box", "hustle-sec-number", "hustle-start-pause-button", "hustle-reset-button", hustleSounds);
-var continuous = new ContinuousTimer("Continuous Timer", 10800, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
-var speed = new ExtendedTimer("Speed Math Test", 910, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
-var mental = new ExtendedTimer("Mental Math Test", 910, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
+var indiv = new ExtendedTimer("Individual Test", 60*60, "indiv-box", null, null, 0, "indiv-sec-box", "indiv-sec-number", "indiv-start-pause-button", "indiv-reset-button", indivSounds);
+var hustle = new ExtendedTimer("Hustle Test", 60*25, "hustle-box", "hustle-round-box", "hustle-round-number", 300, "hustle-sec-box", "hustle-sec-number", "hustle-start-pause-button", "hustle-reset-button", hustleSounds);
+var continuous = new ContinuousTimer("Continuous Timer", 60*60*3, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
+var speed = new ExtendedTimer("Speed Math Test", 60*15, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
+var mental = new ExtendedTimer("Mental Math Test", 60*8, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
 
 get("back-button").onclick = back;
 
@@ -690,7 +697,7 @@ var audioURLsByName = {
   secondround: "sounds/secondround.mp3",
   thirdround: "sounds/thirdround.mp3",
   fourthround: "sounds/fourthround.mp3",
-  fifthround: "sounds/fifthround.mp3"
+  fifthround: "sounds/fifthround.mp3",
 };
 
 // WAAPI supported section

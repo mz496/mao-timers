@@ -34,6 +34,8 @@ hr {
 #indiv-box { display: none; }
 #hustle-box { display: none; }
 #continuous-box { display: none; }
+#speed-box { display: none; }
+#mental-box { display: none; }
 
 .button {
   color: #f9f6f2;
@@ -135,7 +137,7 @@ summary of changes:
   #title {
     font-size: 40px;
   }
-  
+
   #back-button-wrapper {
     position: absolute;
     top: 0%;
@@ -191,8 +193,8 @@ summary of changes:
   }
 
   .whole-box { /* golden! */
-    width: 220px;
-    height: 136px;
+    width: 240px;
+    height: 148px;
     border: 1px solid #c2b4a7;
     border-radius: 10px;
     margin: auto;
@@ -211,5 +213,5 @@ summary of changes:
     margin-top: -0.7em;
   }
 
-  .generic-number.big { font-size: 100px; }
+  .generic-number.big { font-size: 88px; }
 }
