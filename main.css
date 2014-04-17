@@ -129,11 +129,10 @@ summary of changes:
  - back button is no longer fixed (since it gets in the way) and is absolutely positioned at the top left corner
  - generic-box is now just 85% width
  - count-box is now 110px square
- - generic-number is now 80px
  - stop and pause button wrappers are now 40%, 55% width
  - min and sec box wrappers now have 5px margin
  - whole-box is 240px wide
- - 
+ - several numbers are smaller
 
 ****************************************************************/
 @media only screen and (max-width: 601px) {
@@ -167,14 +166,12 @@ summary of changes:
     width: 45%;
     float: right;
     text-align: right;
-    border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     position: relative;
     width: 50%;
     float: left;
     text-align: left;
-    border: 1px solid black;
   }
   .half-box.stop-button-wrapper > a { font-size: 30px; }
   .half-box.pause-button-wrapper > a { font-size: 30px; }
@@ -216,5 +213,5 @@ summary of changes:
     margin-top: -0.7em;
   }
 
-  .generic-number.big { font-size: 88px; }
+  .generic-number.big { font-size: 84px; }
 }

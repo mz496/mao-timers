@@ -334,12 +334,16 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       }
 
       // 5 MINUTES!
-      if (time === 5*60)
+      if (time === 5*60) {
         get(secondsBox).style.background = orange;
+        get(secondsElement).style.color = whitish;
+      }
 
       // 1 MINUTE!
-      if (time === 60)
+      if (time === 60) {
         get(secondsBox).style.background = red;
+        get(secondsElement).style.color = whitish;
+      }
 
       // TIME!
       if (time === 0) {
