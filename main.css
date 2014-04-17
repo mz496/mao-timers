@@ -18,6 +18,7 @@ hr {
   margin-top: 20px;
   margin-bottom: 30px;
 }
+#title { font-size: 48px; }
 
 .generic-box {
   margin: auto;
@@ -163,15 +164,17 @@ summary of changes:
 
   .half-box.stop-button-wrapper {
     position: relative;
-    width: 40%;
+    width: 45%;
     float: right;
     text-align: right;
+    border: 1px solid black;
   }
   .half-box.pause-button-wrapper {
     position: relative;
     width: 50%;
     float: left;
     text-align: left;
+    border: 1px solid black;
   }
   .half-box.stop-button-wrapper > a { font-size: 30px; }
   .half-box.pause-button-wrapper > a { font-size: 30px; }
