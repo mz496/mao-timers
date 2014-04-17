@@ -129,14 +129,14 @@ summary of changes:
  - generic-box is now just 85% width
  - count-box is now 110px square
  - generic-number is now 80px
- - stop and pause button wrappers are now 40%, 50% width
+ - stop and pause button wrappers are now 40%, 55% width
  - min and sec box wrappers now have 5px margin
+ - whole-box is 240px wide
+ - 
 
 ****************************************************************/
 @media only screen and (max-width: 601px) {
-  #title {
-    font-size: 40px;
-  }
+  #title { font-size: 40px; }
 
   #back-button-wrapper {
     position: absolute;
