@@ -136,7 +136,22 @@ summary of changes:
 
 ****************************************************************/
 @media only screen and (max-width: 601px) {
-  #title { font-size: 40px; }
+  #title {
+    font-size: 40px;
+    margin-top: 5px;
+    margin-bottom: -5px;
+  }
+
+  .button {
+  color: #f9f6f2;
+  font-size: 30px;
+  margin: 10px;
+  padding: 10px 15px 10px 15px;
+  display: inline-block;
+  background-color: #9c9086;
+  border-radius: 6px;
+  cursor: pointer;
+  }
 
   #back-button-wrapper {
     position: absolute;
@@ -173,8 +188,6 @@ summary of changes:
     float: left;
     text-align: left;
   }
-  .half-box.stop-button-wrapper > a { font-size: 30px; }
-  .half-box.pause-button-wrapper > a { font-size: 30px; }
 
   .generic-box {
     margin: auto;
