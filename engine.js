@@ -271,7 +271,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.makeInterface = function() {
     // triggers upon click of the test type button
     get("title").innerHTML = title;
+    this.fadeOut("button-box");
     get("button-box").style.display = "none";
+    this.fadeIn(timerContainer);
+    this.fadeIn("back-button");
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
     
@@ -497,6 +500,30 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     }
   };
 
+  this.fadeOut = function(elem) {
+    duration = "2s";
+    get(elem).style.webkitAnimationName = "fadeOut " + duration;
+    get(elem).style.AnimationName = "fadeOut " + duration;
+    get(elem).addEventListener('webkitAnimationEnd', function(){
+      this.style.webkitAnimationName = '';
+    }, false);
+    get(elem).addEventListener('AnimationEnd', function(){
+      this.style.AnimationName = '';
+    }, false);
+  }
+  this.fadeIn = function(elem) {
+    duration = "2s";
+    get(elem).style.webkitAnimationName = "fadeOut " + duration;
+    get(elem).style.webkitAnimationDirection = "reverse";
+    get(elem).style.AnimationName = "fadeOut " + duration;
+    get(elem).style.AnimationDirection = "reverse";
+    get(elem).addEventListener('webkitAnimationEnd', function(){
+      this.style.webkitAnimationName = '';
+    }, false);
+    get(elem).addEventListener('AnimationEnd', function(){
+      this.style.AnimationName = '';
+    }, false);
+  }
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
