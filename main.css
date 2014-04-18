@@ -258,12 +258,12 @@ summary of changes:
   #custom-sec-box { height: 84px; }
   #checkbox-box {
     text-align: left;
-    width: 80%;
+    width: 90%;
     margin: auto;
   }
   .button.numpad {
-  font-size: 14px;
-  margin: 3px;
+  font-size: 16px;
+  margin: 2px;
   padding: 3px;
   width: 1.5em;
   height: 1.5em;
