@@ -499,33 +499,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       }
     }
   };
-
-  this.fadeOut = function(elem) {
-    duration = "2s";
-    get(elem).style.webkitTransitionName = "opacity " + duration;
-    get(elem).style.TransitionName = "opacity " + duration;
-    /*get(elem).addEventListener('webkitTransitionEnd', function(){
-      this.style.webkitTransitionName = '';
-    }, false);
-    get(elem).addEventListener('TransitionEnd', function(){
-      this.style.TransitionName = '';
-    }, false);*/
-    get(elem).style.opacity = 0; // this is what actually makes it go
-  }
-  this.fadeIn = function(elem) {
-    duration = "2s";
-    get(elem).style.webkitAnimationName = "fadeOut " + duration;
-    get(elem).style.webkitAnimationDirection = "reverse";
-    get(elem).style.AnimationName = "fadeOut " + duration;
-    get(elem).style.AnimationDirection = "reverse";
-    get(elem).addEventListener('webkitAnimationEnd', function(){
-      this.style.webkitAnimationName = '';
-    }, false);
-    get(elem).addEventListener('AnimationEnd', function(){
-      this.style.AnimationName = '';
-    }, false);
-    get(elem).style.opacity = 1;
-  }
+  
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };

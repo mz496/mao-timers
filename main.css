@@ -129,17 +129,6 @@ hr {
   margin-top: -0.75em;
 }
 .generic-number.big { font-size: 200px; }
-
-@-webkit-keyframes fadeOut {
-  /* insert this into title and the timer box, since those two items are separate */
-  from  {opacity: 1;}
-  to    {opacity: 0;}
-}
-@keyframes fadeOut {
-  from  {opacity: 1;}
-  to    {opacity: 0;}
-}
-
 /**************************************************************\
 MOBILE-SPECIFIC CSS
 
