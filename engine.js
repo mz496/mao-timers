@@ -54,15 +54,11 @@ function back() {
   // find which one to fade
   boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box"];
   for (var i in boxes) {
-    if (get(boxes[i]).style.display == "block") {
-      get(boxes[i]).style.opacity = 0;
+    if (get(boxes[i]).style.display == "block")
       get(boxes[i]).style.display = "none";
-    }
   }
 
   get("button-box").style.display = "block";
-  get("button-box").style.opacity = 1;
-  get("back-button").style.opacity = 0;
   get("back-button").style.display = "none";
 }
 
@@ -271,13 +267,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.makeInterface = function() {
     // triggers upon click of the test type button
     get("title").innerHTML = title;
-    get("button-box").style.opacity = 0;
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-    get(timerContainer).style.opacity = 1;
-    get("back-button").style.opacity = 1;
-        
+
     if (WAAPIsupport === true)
       playSound('silent');
     else if (HTML5SoundInserted === false) {
@@ -499,7 +492,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       }
     }
   };
-  
+
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
