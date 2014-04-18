@@ -32,7 +32,6 @@ function get(elem)
 { return document.getElementById(elem); }
 
 function back() {
-  // revert title
   get("title").innerHTML = "MA&#920; Timers";
   // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually... see makeInterface for behavior
   if (team.getState() === "running")
@@ -52,17 +51,18 @@ function back() {
   if (mental.getState() === "running")
     mental.startpause();
 
-
-  get("team-box").style.display = "none";
-  get("ciphering-box").style.display = "none";
-  get("relay-box").style.display = "none";
-  get("indiv-box").style.display = "none";
-  get("hustle-box").style.display = "none";
-  get("continuous-box").style.display = "none";
-  get("speed-box").style.display = "none";
-  get("mental-box").style.display = "none";
-
+  // find which one to fade
+  boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box"];
+  for (var i in boxes) {
+    if (boxes[i].style.display == "block") {
+      boxes[i].style.opacity = 0;
+      boxes[i].style.display = "none";
+    }
+  }
+  
   get("button-box").style.display = "block";
+  get("button-box").style.opacity = 1;
+  get("back-button").style.opacity = 0;
   get("back-button").style.display = "none";
 }
 
@@ -273,11 +273,11 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     get("title").innerHTML = title;
     get("button-box").style.opacity = 0;
     get("button-box").style.display = "none";
-    get(timerContainer).style.opacity = 1;
-    get("back-button").style.opacity = 1;
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-    
+    get(timerContainer).style.opacity = 1;
+    get("back-button").style.opacity = 1;
+        
     if (WAAPIsupport === true)
       playSound('silent');
     else if (HTML5SoundInserted === false) {

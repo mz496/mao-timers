@@ -29,9 +29,13 @@ hr {
   -webkit-transition: opacity 2s;
   transition: opacity 2s;
   display: none;
+  opacity: 0;
 }
 
-#button-box { display: block; }
+#button-box {
+  opacity: 1;
+  display: block;
+}
 /*#team-box { display: none; }
 #ciphering-box { display: none; }
 #relay-box { display: none; }
