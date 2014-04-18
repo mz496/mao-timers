@@ -42,6 +42,7 @@
         <a class="button" id="mental-open">Mental</a>
       </div>
       <a class="button" id="continuous-open">Continuous*</a>
+      <a class="button" id="custom-open">Custom</a>
       <hr>
       <p>Turn up your sound to hear alerts!</p>
       <p>Read the timing and test rules <a href="http://floridamao.org/Downloadable/2014StateLetter.pdf">here</a>.</p>
@@ -336,6 +337,63 @@
 
       <div class="half-box stop-button-wrapper">
         <a class="button" id="mental-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--========-->
+    <!-- CUSTOM -->
+    <!--========-->
+    <div class="generic-box" id="custom-box" style="display: block;">
+      Set time remaining
+      <div class="whole-wrapper">
+        <div class="whole-box" id="custom-sec-box">
+          <div class="generic-number big" id="custom-sec-number">00:00</div>
+        </div>
+      </div>
+
+      <div class="half-box" id="numpad">
+        <div>
+          <a class="button numpad" id="numpad-1">1</a>
+          <a class="button numpad" id="numpad-2">2</a>
+          <a class="button numpad" id="numpad-3">3</a>
+        </div>
+        <div>
+          <a class="button numpad" id="numpad-4">4</a>
+          <a class="button numpad" id="numpad-5">5</a>
+          <a class="button numpad" id="numpad-6">6</a>
+        </div>
+        <div>
+          <a class="button numpad" id="numpad-7">7</a>
+          <a class="button numpad" id="numpad-8">8</a>
+          <a class="button numpad" id="numpad-9">9</a>
+        </div>
+        <div><a class="button numpad" id="numpad-0">0</a></div>
+        <div><a class="button small">Clear</a></div>
+      </div>
+
+      <div class="half-box" id="checkbox-wrapper-outer">
+        <div id="checkbox-wrapper-inner">
+          Warn when there is/are ___ remaining:
+          <hr>
+          <div id="checkbox-box">
+            <div><input type="checkbox" id="15-min-checkbox">15 minutes</div>
+            <div><input type="checkbox" id="5-min-checkbox">5 minutes</div>
+            <div><input type="checkbox" id="1-min-checkbox">1 minute</div>
+            <div><input type="checkbox" id="15-min-checkbox">15 seconds</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <a class="button" id="done-button">Done</a>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="custom-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="custom-reset-button">Reset</a>
       </div>
     </div>
 
