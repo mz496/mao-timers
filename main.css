@@ -124,12 +124,12 @@ hr {
 
 @-webkit-keyframes fadeOut {
   /* insert this into title and the timer box, since those two items are separate */
-  0%    {opacity: 100%;}
-  100%  {opacity: 0%;}
+  from  {opacity: 1;}
+  to    {opacity: 0;}
 }
 @keyframes fadeOut {
-  0%    {opacity: 100%;}
-  100%  {opacity: 0%;}
+  from  {opacity: 1;}
+  to    {opacity: 0;}
 }
 
 /**************************************************************\

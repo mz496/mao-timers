@@ -271,10 +271,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.makeInterface = function() {
     // triggers upon click of the test type button
     get("title").innerHTML = title;
-    this.fadeOut("button-box");
+    self.fadeOut("button-box");
     get("button-box").style.display = "none";
-    this.fadeIn(timerContainer);
-    this.fadeIn("back-button");
+    self.fadeIn(timerContainer);
+    self.fadeIn("back-button");
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
     
@@ -502,14 +502,15 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
   this.fadeOut = function(elem) {
     duration = "2s";
-    get(elem).style.webkitAnimationName = "fadeOut " + duration;
-    get(elem).style.AnimationName = "fadeOut " + duration;
-    get(elem).addEventListener('webkitAnimationEnd', function(){
-      this.style.webkitAnimationName = '';
+    get(elem).style.webkitTransitionName = "opacity " + duration;
+    get(elem).style.TransitionName = "opacity " + duration;
+    /*get(elem).addEventListener('webkitTransitionEnd', function(){
+      this.style.webkitTransitionName = '';
     }, false);
-    get(elem).addEventListener('AnimationEnd', function(){
-      this.style.AnimationName = '';
-    }, false);
+    get(elem).addEventListener('TransitionEnd', function(){
+      this.style.TransitionName = '';
+    }, false);*/
+    get(elem).style.opacity = 0; // this is what actually makes it go
   }
   this.fadeIn = function(elem) {
     duration = "2s";
@@ -523,6 +524,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     get(elem).addEventListener('AnimationEnd', function(){
       this.style.AnimationName = '';
     }, false);
+    get(elem).style.opacity = 1;
   }
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
