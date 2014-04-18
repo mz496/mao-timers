@@ -1,5 +1,9 @@
 // filename: root/engine.js
 
+window.onerror = function(errorMsg, url, lineNumber) {
+    console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
+};
+
 function addStatus(msg) {
   //get("status").innerHTML += "<br>" + msg;
 }
@@ -349,13 +353,13 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       }
       else {
         // 1 MINUTE!
-        if (time % secondsPerRound === 60) {
+        if (time === 60) {
           get(secondsBox).style.background = yellow;
           get(secondsElement).style.color = whitish;
         }
 
         // 15 SECONDS!
-        if (time % secondsPerRound === 15) {
+        if (time === 15) {
           get(secondsBox).style.background = red;
           get(secondsElement).style.color = whitish;
         }
