@@ -54,12 +54,12 @@ function back() {
   // find which one to fade
   boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box"];
   for (var i in boxes) {
-    if (boxes[i].style.display == "block") {
-      boxes[i].style.opacity = 0;
-      boxes[i].style.display = "none";
+    if (get(boxes[i]).style.display == "block") {
+      get(boxes[i]).style.opacity = 0;
+      get(boxes[i]).style.display = "none";
     }
   }
-  
+
   get("button-box").style.display = "block";
   get("button-box").style.opacity = 1;
   get("back-button").style.opacity = 0;
