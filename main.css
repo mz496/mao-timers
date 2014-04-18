@@ -26,9 +26,13 @@ hr {
   width: 600px;
   text-align: center;
   position: relative;
+  -webkit-transition: opacity 2s;
+  transition: opacity 2s;
+  display: none;
 }
 
-#team-box { display: none; }
+#button-box { display: block; }
+/*#team-box { display: none; }
 #ciphering-box { display: none; }
 #relay-box { display: none; }
 
@@ -36,7 +40,7 @@ hr {
 #hustle-box { display: none; }
 #continuous-box { display: none; }
 #speed-box { display: none; }
-#mental-box { display: none; }
+#mental-box { display: none; }*/
 
 .button {
   color: #f9f6f2;

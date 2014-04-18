@@ -271,10 +271,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.makeInterface = function() {
     // triggers upon click of the test type button
     get("title").innerHTML = title;
-    self.fadeOut("button-box");
+    get("button-box").style.opacity = 0;
     get("button-box").style.display = "none";
-    self.fadeIn(timerContainer);
-    self.fadeIn("back-button");
+    get(timerContainer).style.opacity = 1;
+    get("back-button").style.opacity = 1;
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
     
