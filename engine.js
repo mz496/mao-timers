@@ -565,7 +565,7 @@ function ShortExtendedTimer(title, secondsTotal, timerContainer, roundBox, round
         get(secondsElement).innerHTML = 0;
       else
         get(secondsElement).innerHTML = "00:00";
-      this.finish();
+      self.finish();
     }
   }
 }
