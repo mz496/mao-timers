@@ -327,29 +327,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     if (roundBox == null && roundElement == null) {
       get(secondsElement).innerHTML = parseSeconds(time);
 
-      // 15 MINUTES!
-      if (time === 15*60) {
-        get(secondsBox).style.background = yellow;
-        get(secondsElement).style.color = whitish;
-      }
-
-      // 5 MINUTES!
-      if (time === 5*60) {
-        get(secondsBox).style.background = orange;
-        get(secondsElement).style.color = whitish;
-      }
-
-      // 1 MINUTE!
-      if (time === 60) {
-        get(secondsBox).style.background = red;
-        get(secondsElement).style.color = whitish;
-      }
-
-      // TIME!
-      if (time === 0) {
-        get(secondsElement).innerHTML = "00:00";
-        this.finish();
-      }
+      this.warningColor();
     }
     else {
       // similar to the team timer's parsing of time
@@ -361,32 +339,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         get(roundElement).style.fontSize = 0.375*roundNumSize + "px";
       get(secondsElement).innerHTML = parseSeconds(time);
 
-      // 1 MINUTE!
-      if (time % secondsPerRound === 60) {
-        get(secondsBox).style.background = yellow;
-        get(secondsElement).style.color = whitish;
-      }
-
-      // 15 SECONDS!
-      if (time % secondsPerRound === 15) {
-        get(secondsBox).style.background = red;
-        get(secondsElement).style.color = whitish;
-      }
-
-      // NEW ROUND!
-      if (time % secondsPerRound === 0 && time !== 0) {
-        get(secondsBox).style.background = "transparent";
-        get(secondsElement).style.color = "inherit";
-      }
-
-      // TIME!
-      if (time === 0) {
-        if (secondsPerRound <= 60)
-          get(secondsElement).innerHTML = 0;
-        else
-          get(secondsElement).innerHTML = "0:00";
-        this.finish();
-      }
+      this.warningColor(); // should run overridden version
     }
   };
 
@@ -478,6 +431,33 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     }
   };
 
+  this.warningColor = function() {
+    // normal indiv-like color changes -- different for speed/mental because shorter tests
+    // 15 MINUTES!
+    if (time === 15*60) {
+      get(secondsBox).style.background = yellow;
+      get(secondsElement).style.color = whitish;
+    }
+
+    // 5 MINUTES!
+    if (time === 5*60) {
+      get(secondsBox).style.background = orange;
+      get(secondsElement).style.color = whitish;
+    }
+
+    // 1 MINUTE!
+    if (time === 60) {
+      get(secondsBox).style.background = red;
+      get(secondsElement).style.color = whitish;
+    }
+
+    // TIME!
+    if (time === 0) {
+      get(secondsElement).innerHTML = "00:00";
+      this.finish();
+    }
+  }
+
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
@@ -555,7 +535,43 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   };
 };
 
+function ShortExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
+  ExtendedTimer.call(this, title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
+  var time = this.getTime();
+  var self = this;
+
+  this.warningColor = function() {
+    // 1 MINUTE!
+    if (time % secondsPerRound === 60) {
+      get(secondsBox).style.background = yellow;
+      get(secondsElement).style.color = whitish;
+    }
+
+    // 15 SECONDS!
+    if (time % secondsPerRound === 15) {
+      get(secondsBox).style.background = red;
+      get(secondsElement).style.color = whitish;
+    }
+
+    // NEW ROUND!
+    if (time % secondsPerRound === 0 && time !== 0) {
+      get(secondsBox).style.background = "transparent";
+      get(secondsElement).style.color = "inherit";
+    }
+
+    // TIME!
+    if (time === 0) {
+      if (secondsPerRound <= 60)
+        get(secondsElement).innerHTML = 0;
+      else
+        get(secondsElement).innerHTML = "00:00";
+      this.finish();
+    }
+  }
+}
+
 ContinuousTimer.prototype = new ExtendedTimer();
+ShortExtendedTimer.prototype = new ExtendedTimer();
 
 var teamSounds = {
   15: "fifteenseconds",
@@ -626,8 +642,8 @@ var msg = "You either went AFK for a really long time or are super dedicated. Pr
 var indiv = new ExtendedTimer("Individual Test", 60*60, "indiv-box", null, null, 0, "indiv-sec-box", "indiv-sec-number", "indiv-start-pause-button", "indiv-reset-button", indivSounds);
 var hustle = new ExtendedTimer("Hustle Test", 60*25, "hustle-box", "hustle-round-box", "hustle-round-number", 300, "hustle-sec-box", "hustle-sec-number", "hustle-start-pause-button", "hustle-reset-button", hustleSounds);
 var continuous = new ContinuousTimer("Continuous Timer", 60*60*3, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
-var speed = new ExtendedTimer("Speed Math Test", 60*15, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
-var mental = new ExtendedTimer("Mental Math Test", 60*8, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
+var speed = new ShortExtendedTimer("Speed Math Test", 60*15, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
+var mental = new ShortExtendedTimer("Mental Math Test", 60*8, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
 
 get("back-button").onclick = back;
 
