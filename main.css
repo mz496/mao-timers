@@ -128,32 +128,31 @@ hr {
 #custom-start-pause-button { display: none; }
 #custom-reset-button { display: none; }
 #change-settings-button { display: none; }
-#numpad {
-  display: table-cell;
-  vertical-align: middle;
-  height: 300px;
-}
 
 #checkbox-box {
-  text-align: left;
-  width: 40%;
-  margin: auto;
-}
-#duration-box {
+  display: inline-block;
   text-align: left;
   width: 45%;
   margin: auto;
 }
 
-#checkbox-wrapper-outer {
-  display: table-cell;
-  vertical-align: middle;
-  height: 300px;
+#duration-box {
+  display: inline-block;
+  text-align: left;
+  width: 45%;
+  margin: auto;
 }
 
-#checkbox-wrapper-inner {
-  display: inline-block;
-  height: 200px;
+.vert-align-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  width: 50%;
+  height: 100px;
+}
+
+.table-wrapper {
+  display: table;
+  width: 100%;
 }
 
 /**************************************************************\

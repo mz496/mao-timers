@@ -53,7 +53,7 @@ function back() {
     custom.startpause();
 
   // find which one to hide
-  boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box"];
+  boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box", "custom-box"];
   for (var i in boxes) {
     if (get(boxes[i]).style.display == "block")
       get(boxes[i]).style.display = "none";
@@ -407,7 +407,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         if (secondsPerRound <= 60)
           get(secondsElement).innerHTML = 0;
         else
-          get(secondsElement).innerHTML = "00:00";
+          get(secondsElement).innerHTML = "0:00";
         this.finish();
       }
     }
