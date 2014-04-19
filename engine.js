@@ -1,12 +1,8 @@
 // filename: root/engine.js
 
-window.onerror = function(errorMsg, url, lineNumber) {
+/*window.onerror = function(errorMsg, url, lineNumber) {
     console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
-};
-
-function addStatus(msg) {
-  //get("status").innerHTML += "<br>" + msg;
-}
+};*/
 
 // colors
 var red = "#f72d23";
@@ -15,7 +11,9 @@ var yellow = "#f2c01b";
 var gray = "#696969";
 var whitish = "#f9f6f2";
 
-/**
+/*
+basic structure of a round timer
+
           +<--> paused (trigger via Pause or Back)
           |       |
 running --+       |
@@ -26,14 +24,15 @@ running --+       |
 ^ (trigger
 via Start
 or Resume)
-**/
+
+*/
 
 function get(elem)
 { return document.getElementById(elem); }
 
 function back() {
   get("title").innerHTML = "MA&#920; Timers";
-  // since getElementByClassName doesn't play well with the code below it, we'll have to add each test style box individually... see makeInterface for behavior
+
   if (team.getState() === "running")
     team.pause();
   if (ciphering.getState() === "running")
@@ -50,8 +49,10 @@ function back() {
     speed.startpause();
   if (mental.getState() === "running")
     mental.startpause();
+  if (custom != null && custom.getState() === "running")
+    custom.startpause();
 
-  // find which one to fade
+  // find which one to hide
   boxes = ["team-box", "ciphering-box", "relay-box", "indiv-box", "hustle-box", "continuous-box", "speed-box", "mental-box"];
   for (var i in boxes) {
     if (get(boxes[i]).style.display == "block")
@@ -63,9 +64,12 @@ function back() {
 }
 
 /******************************************************************\
+/******************************************************************
       ROUND TIMER
       for "round-based" schemes -- team, ciphering, relay
+\******************************************************************
 \******************************************************************/
+
 
 function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper, soundDict) {
   var currentState = "stopped";
@@ -75,10 +79,10 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.numQuestions = numQuestions;
   var currentQnum = 1;
 
-  var self = this; // very important for setInterval
+  var self = this;
   var ticking;
   var time = secondsPerQuestion;
-  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -95,7 +99,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     }
   };
 
-  function parseSeconds(currentTime) {
+  this.parseSeconds = function(currentTime) {
     // returns the (min):(sec) string for currentTime, or just the seconds in the minute for times less than 1 minute
     if (secondsPerRound <= 60) {
       var currentTimeThisRound = currentTime % secondsPerRound;
@@ -120,7 +124,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
     // making sizes relative for adaptation to mobile devices
     get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = parseSeconds(secondsPerRound);
+    get(secondsElement).innerHTML = self.parseSeconds(secondsPerRound);
     if (secondsPerRound <= 60)
       get(secondsElement).style.fontSize = 0.6*roundNumSize + "px";
     else
@@ -150,7 +154,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
     // parse time remaining into the divs
     get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
-    get(secondsElement).innerHTML = parseSeconds(time);
+    get(secondsElement).innerHTML = this.parseSeconds(time);
     
     // 15 SECONDS!
     if (time % secondsPerRound === 15) {
@@ -247,10 +251,13 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 }
 
 /******************************************************************\
+/******************************************************************
       EXTENDED TIMER
       for extended/continuous schemes --
       individual, speed, mental, hustle, continuous
+\******************************************************************
 \******************************************************************/
+
 
 function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   // roundBox and roundElement only apply to hustle and continuous, else those arguments are null
@@ -262,7 +269,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   var self = this; // very important for setInterval
   var ticking;
   var time = secondsTotal;
-  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -279,7 +286,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     }
   };
 
-  function parseSeconds(currentTime) {
+  this.parseSeconds = function(currentTime) {
     // returns the (min):(sec) string for currentTime; for times over 10 minutes
     if (roundBox == null && roundElement == null) {
       var min = Math.floor(currentTime/60);
@@ -325,7 +332,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
     // parse time remaining into the divs
     if (roundBox == null && roundElement == null) {
-      get(secondsElement).innerHTML = parseSeconds(time);
+      get(secondsElement).innerHTML = this.parseSeconds(time);
 
       // normal indiv-like color changes -- different for speed/mental because shorter tests
       // 15 MINUTES!
@@ -375,7 +382,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         get(roundElement).style.fontSize = 0.6*roundNumSize + "px";
       if (roundNumber >= 100)
         get(roundElement).style.fontSize = 0.375*roundNumSize + "px";
-      get(secondsElement).innerHTML = parseSeconds(time);
+      get(secondsElement).innerHTML = this.parseSeconds(time);
 
       // 1 MINUTE!
       if (time % secondsPerRound === 60) {
@@ -434,7 +441,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       else {
         // making sizes relative for adaptation to mobile devices
         get(roundElement).innerHTML = 1;
-        get(secondsElement).innerHTML = parseSeconds(secondsPerRound);
+        get(secondsElement).innerHTML = self.parseSeconds(secondsPerRound);
 
         if (secondsPerRound <= 60)
           get(secondsElement).style.fontSize = 0.6*roundNumSize + "px";
@@ -454,7 +461,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.finish = function() {
     // only triggered upon running out of time (OoT)
     clearInterval(ticking);
-    // now only reset once
     get(secondsBox).style.background = gray;
     get(secondsElement).style.color = whitish;
     if (roundBox != null) {
@@ -472,7 +478,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     clearInterval(ticking);
     get(startPauseButton).innerHTML = "Start";
     get(startPauseButton).style.display = "inline-block";
-    get(secondsElement).innerHTML = parseSeconds(secondsTotal);
+    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
     time = secondsTotal;
     currentState = "stopped";
     get(secondsBox).style.background = "transparent";
@@ -496,10 +502,18 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.getTime = function() { return time; };
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
-  // these methods are for inherited continuousTimer
-  this.parseSeconds_ = function(currentTime) { return parseSeconds(currentTime); };
+  // these methods are for inherited continuous and custom
   this.clearTicking = function() { clearInterval(ticking); };
+  this.getHTML5SoundInserted = function() { return HTML5SoundInserted; };
+  this.setHTML5SoundInserted = function(val) { HTML5SoundInserted = val; };
 }
+
+/******************************************************************\
+/******************************************************************
+      CONTINUOUS TIMER
+      is-a ExtendedTimer
+\******************************************************************
+\******************************************************************/
 
 function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   ExtendedTimer.call(this, title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
@@ -509,7 +523,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   this.tick = function() {
     // roundNumber set to 1 initially
     time--;
-    get(secondsElement).innerHTML = this.parseSeconds_(time);
+    get(secondsElement).innerHTML = this.parseSeconds(time);
 
     // 15 SECONDS!
     if (time % 60 === 15) {
@@ -549,7 +563,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     time = secondsTotal;
     self.setState("stopped");
     get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = self.parseSeconds_(secondsTotal);
+    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
     get(roundBox).style.background = "transparent";
     get(roundElement).style.color = "inherit";
     get(roundElement).style.fontSize = roundNumSize;
@@ -572,77 +586,55 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
 
 ContinuousTimer.prototype = new ExtendedTimer();
 
-function changeCustomInterface() {
-  var timeParts = { h:0, m:0, s:0 };
-  var warnings = [false, false, false, false];
-  var warningColors = [null, null, null, null];
-  var secondsTotal = 0;
+/******************************************************************\
+/******************************************************************
+      CUSTOM TIMER
+      is-a ExtendedTimer
+\******************************************************************
+\******************************************************************/
 
-  // do not let user proceed if the time reads 0
-  if (!(get("hour-field").value === 0 && get("min-field").value === 0 && get("sec-field").value === 0 )) {
-    // fill timeParts
-    timeParts.h = get("hour-field").value;
-    timeParts.m = get("min-field").value;
-    timeParts.s = get("sec-field").value;
+var custom = null;
 
-    // fill warnings
-    if (get("15-min-checkbox").checked === true)
-      warnings[0] = true;
-    if (get("5-min-checkbox").checked === true)
-      warnings[1] = true;
-    if (get("1-min-checkbox").checked === true)
-      warnings[2] = true;
-    if (get("15-sec-checkbox").checked === true)
-      warnings[3] = true;
+var fourDigitSize = parseFloat(window.getComputedStyle(get("custom-sec-number"), null).getPropertyValue("font-size")); // should be a constant #sorrynotsorryglobalscope #ggnore
 
-    // assign colors
-    var colorsTaken = 0;
-    colors = [yellow, orange, red];
-    for (var i in warnings) {
-      if (warnings[i] === true) {
-        warningColors[i] = colors[colorsTaken];
-        if (colorsTaken < 2)
-          colorsTaken++; // if all 4 marked, then the last 2 are both red
-      }
-    }
-    // final pass: make the last warning red
-    for (var j = 3; j>=0; j--) {
-      if (warnings[j] === true)
-        warningColors[j] = red;
-      break;
-    }
-    // this should leave all the false ones with null colors since we don't use them, so it won't be a problem
-    console.log(timeParts);
-    console.log(warnings);
-    console.log(warningColors);
+function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
+  // data is a list [secondsTotal, warnings, warningColors]
+  var self = this;
+  var secondsTotal = data[0]; // this is mostly so we can keep the previous syntax though we could have done var time = data[0]
+  var time = secondsTotal;
+  var warnings = data[1];
+  var warningColors = data[2];
 
-    secondsTotal = parseInt(timeParts.h*3600) + parseInt(timeParts.m*60) + parseInt(timeParts.s);
-    console.log(secondsTotal);
-    
-    // change interface
-    get("custom-head").style.fontSize = "18px";
-    get("custom-head").innerHTML = "Time remaining";
-    get("custom-sec-box").style.display = "block";
-    get("custom-start-pause-button").style.display = "inline-block";
-    get("custom-reset-button").style.display = "inline-block";
-    get("change-settings-button").style.display = "inline-block";
-    get("numpad").style.display = "none";
-    get("checkbox-wrapper-outer").style.display = "none";
-    get("done-button").style.display = "none";
-    return secondsTotal;
-  }
-}
-
-function CustomTimer(title, secondsTotal, timerContainer, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   ExtendedTimer.call(this, title, secondsTotal, timerContainer, null, null, 0, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
-  var time = this.getTime();
-  get("custom-sec-number").innerHTML = this.parseSeconds_(secondsTotal);
+  this.sounds = soundDict;
+
+  this.parseSeconds = function(currentTime) {
+    var hr = Math.floor(currentTime/3600);
+    var min = Math.floor((currentTime - 3600*hr)/60);
+    var sec = currentTime % 60;
+    if (min < 10)
+      min = "0" + min;
+    if (sec < 10)
+      sec = "0" + sec;
+    if (hr > 0) {
+      get(secondsElement).style.fontSize = fourDigitSize*0.75 + "px";
+      return hr + ":" + min + ":" + sec;
+    }
+    else {
+      get(secondsElement).style.fontSize = fourDigitSize + "px";
+      return min + ":" + sec;
+    }
+  }
+
+  get(secondsElement).innerHTML = this.parseSeconds(secondsTotal);
 
   this.tick = function() {
-    // timer's actual mechanism
-    time--;
+    if (time > 0)
+      time--;
+    else
+      time = 0; // noobproofing against anyone who tries to make a timer of 00:00:00... or failproofing against if time happens to go negative
 
-    get(secondsElement).innerHTML = this.parseSeconds_(time);
+    get(secondsElement).innerHTML = this.parseSeconds(time);
 
     // 15 MINUTES!
     if (warnings[0] === true && time === 15*60) {
@@ -679,25 +671,139 @@ function CustomTimer(title, secondsTotal, timerContainer, secondsBox, secondsEle
       this.finish();
     }
   }
+
+  this.reset = function() {
+    // reset section formerly in finish()
+    // simply make it look like it did when just opened
+    self.clearTicking();
+    get(startPauseButton).innerHTML = "Start";
+    get(startPauseButton).style.display = "inline-block";
+    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
+    time = secondsTotal;
+    self.setState("stopped");
+    get(secondsBox).style.background = "transparent";
+    get(secondsElement).style.color = "inherit";
+  }
+
+  this.warn = function() {
+    // loop through keys to see if current time matches any; if so, play that sound
+    for (var key in self.sounds) {
+      if (time == key) {
+        if (WAAPIsupport === true) 
+          playSound(self.sounds[key]);
+        else
+          playHTML5Sound(self.sounds[key]);
+      }
+    }
+  };
 }
 
 CustomTimer.prototype = new ExtendedTimer();
 
-/*function isNumber(evt) {
-  evt = (evt) ? evt : window.event;
-  var charCode = (evt.which) ? evt.which : evt.keyCode;
-  if (!(charCode >= 48 && charCode <= 57))
-      return false;
-  return true;
-}*/
+function changeCustomSettings() {
+  var timeParts = { h:0, m:0, s:0 };
+  var warnings = [false, false, false, false];
+  var warningColors = [null, null, null, null];
+  var secondsTotal = 0;
+
+  // fill timeParts
+  timeParts.h = get("hour-field").value;
+  timeParts.m = get("min-field").value;
+  timeParts.s = get("sec-field").value;
+
+  // fill warnings
+  if (get("15-min-checkbox").checked === true)
+    warnings[0] = true;
+  if (get("5-min-checkbox").checked === true)
+    warnings[1] = true;
+  if (get("1-min-checkbox").checked === true)
+    warnings[2] = true;
+  if (get("15-sec-checkbox").checked === true)
+    warnings[3] = true;
+
+  // assign colors
+  var colorsTaken = 0;
+  colors = [yellow, orange, red];
+  for (var i = 0; i<=3; i++) {
+    if (warnings[i] === true) {
+      warningColors[i] = colors[colorsTaken];
+      if (colorsTaken < 2)
+        colorsTaken++; // if all 4 marked, then the last 2 are both red
+    }
+  }
+  // final pass: make the last warning red
+  for (var j = 3; j>=0; j--) {
+    if (warnings[j] === true) {
+      warningColors[j] = red;
+      break;
+    }
+  }
+  // this should leave all the false ones with null colors since we don't use them, so it won't be a problem
+  //console.log(timeParts);
+  //console.log(warnings);
+  //console.log(warningColors);
+
+  secondsTotal = parseInt(timeParts.h*3600) + parseInt(timeParts.m*60) + parseInt(timeParts.s);
+  
+  // change interface
+  get("custom-head").style.fontSize = "18px";
+  get("custom-head").innerHTML = "Time remaining";
+  get("custom-sec-box").style.display = "block";
+  get("custom-start-pause-button").style.display = "inline-block";
+  get("custom-reset-button").style.display = "inline-block";
+  get("change-settings-button").style.display = "inline-block";
+  get("numpad").style.display = "none";
+  get("checkbox-wrapper-outer").style.display = "none";
+  get("done-button").style.display = "none";
+  return [secondsTotal, warnings, warningColors];
+}
+
+function openCustomSettings() {
+  // break everything down so it looks like when we started
+  custom.reset();
+  get("custom-head").style.fontSize = "26px";
+  get("custom-head").innerHTML = "Change settings";
+  get("custom-sec-box").style.display = "none";
+  get("custom-start-pause-button").style.display = "none";
+  get("custom-reset-button").style.display = "none";
+  get("change-settings-button").style.display = "none";
+  get("numpad").style.display = "table-cell";
+  get("checkbox-wrapper-outer").style.display = "table-cell";
+  get("done-button").style.display = "inline-block";
+}
 
 function makeCustom() {
-  var custom = new CustomTimer("Custom", changeCustomInterface(), "custom-box", "custom-sec-box", "custom-sec-number", "custom-start-pause-button", "custom-reset-button", customSounds);
+  custom = new CustomTimer("Custom", changeCustomSettings(), "custom-box", "custom-sec-box", "custom-sec-number", "custom-start-pause-button", "custom-reset-button", customSounds);
   get("custom-start-pause-button").onclick = custom.startpause;
   get("custom-reset-button").onclick = custom.reset;
+
+  if (WAAPIsupport === true)
+    playSound('silent');
+  else if (custom.getHTML5SoundInserted() === false) {
+    insertAudios();
+    custom.setHTML5SoundInserted(true);
+  }
 }
+
+// we need this global because we need to change custom interface before we make the object, and also changeCustomInterface can't be inside the object
 get("done-button").onclick = makeCustom;
-//get("change-settings-button").onclick = editCustom;
+get("change-settings-button").onclick = openCustomSettings;
+// manually code this because the custom object doesn't exist at the time of opening the settings panel the first time -- this is basically just makeInterface broken up, the rest is inside makeCuston
+get("custom-open").onclick = function() {
+  get("title").innerHTML = "Custom";
+  get("button-box").style.display = "none";
+  get("custom-box").style.display = "block";
+  get("back-button").style.display = "inline-block";
+};
+var customSounds = {
+  900: "fifteenminutes",
+  300: "fiveminutes",
+  60: "oneminute",
+  15: "fifteenseconds",
+  0: "time"
+};
+
+// and all the rest of the timers:
 
 var teamSounds = {
   15: "fifteenseconds",
@@ -759,13 +865,6 @@ var speedSounds = {
   0: "time"
 };
 var mentalSounds = speedSounds;
-var customSounds = {
-  900: "fifteenminutes",
-  300: "fiveminutes",
-  60: "oneminute",
-  15: "fifteenseconds",
-  0: "time"
-};
 
 var team = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
 var ciphering = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper", cipheringSounds);
@@ -774,7 +873,7 @@ var msg = "You either went AFK for a really long time or are super dedicated. Pr
 
 var indiv = new ExtendedTimer("Individual Round", 60*60, "indiv-box", null, null, 0, "indiv-sec-box", "indiv-sec-number", "indiv-start-pause-button", "indiv-reset-button", indivSounds);
 var hustle = new ExtendedTimer("Hustle Test", 60*25, "hustle-box", "hustle-round-box", "hustle-round-number", 300, "hustle-sec-box", "hustle-sec-number", "hustle-start-pause-button", "hustle-reset-button", hustleSounds);
-var continuous = new ContinuousTimer("Continuous", 60*60*3, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
+var continuous = new ContinuousTimer("Continuous", 60*60*6, "continuous-box", "continuous-min-box", "continuous-min-number", 60, "continuous-sec-box", "continuous-sec-number", "continuous-start-pause-button", "continuous-reset-button", continuousSounds);
 var speed = new ExtendedTimer("Speed Math", 60*15, "speed-box", null, null, 0, "speed-sec-box", "speed-sec-number", "speed-start-pause-button", "speed-reset-button", speedSounds);
 var mental = new ExtendedTimer("Mental Math", 60*8, "mental-box", null, null, 0, "mental-sec-box", "mental-sec-number", "mental-start-pause-button", "mental-reset-button", mentalSounds);
 
@@ -849,15 +948,13 @@ var WAAPIsupport = false;
 if (typeof webkitAudioContext !== 'undefined') {
   var audio_ctx = new webkitAudioContext();
   WAAPIsupport = true;
-  addStatus("Created webkitAudioContext");
 }
 else if (typeof AudioContext !== "undefined") {
   var audio_ctx = new AudioContext();
   WAAPIsupport = true;
-  addStatus("Created AudioContext");
 }
 else
-  addStatus("No Web Audio support");
+  console.log("No Web Audio support");
    
 function loadMusic(url, cb) {
   var req = new XMLHttpRequest();
@@ -884,7 +981,6 @@ if (WAAPIsupport === true) {
   for (var name in audioURLsByName) {
     var url = audioURLsByName[name];
     loadAudioData(name, url);
-    addStatus("Loaded " + name);
   }
 }
 
@@ -943,7 +1039,6 @@ function playSound(name, opt) {
   };
   
   playBuffer(audioDict.audioBuffersByName[name], opt, cb);
-  addStatus("Played " + name);
 }
 
 // stopSound(audioDict.audio_src[name]);
@@ -971,11 +1066,9 @@ function insertAudios() {
     document.body.appendChild(audio_el);
 
     audioDict.audioBuffersByName[name] = audio_el;
-    addStatus("html5 fallback added " + name);
   }
 }
 
 function playHTML5Sound(name) {
   audioDict.audioBuffersByName[name].play();
-  addStatus("Played HTML5 " + name);
 }
