@@ -123,9 +123,11 @@ hr {
 }
 .generic-number.big { font-size: 200px; }
 
-#custom-sec-box { height: 200px; }
+#custom-head { font-size: 26px; }
+#custom-sec-box { display: none; }
 #custom-start-pause-button { display: none; }
 #custom-reset-button { display: none; }
+#change-settings-button { display: none; }
 #numpad {
   display: table-cell;
   vertical-align: middle;
@@ -135,6 +137,11 @@ hr {
 #checkbox-box {
   text-align: left;
   width: 40%;
+  margin: auto;
+}
+#duration-box {
+  text-align: left;
+  width: 45%;
   margin: auto;
 }
 
@@ -255,7 +262,6 @@ summary of changes:
 
   .generic-number.big { font-size: 84px; }
 
-  #custom-sec-box { height: 84px; }
   #checkbox-box {
     text-align: left;
     width: 90%;

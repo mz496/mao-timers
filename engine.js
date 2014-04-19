@@ -572,7 +572,132 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
 
 ContinuousTimer.prototype = new ExtendedTimer();
 
+function changeCustomInterface() {
+  var timeParts = { h:0, m:0, s:0 };
+  var warnings = [false, false, false, false];
+  var warningColors = [null, null, null, null];
+  var secondsTotal = 0;
 
+  // do not let user proceed if the time reads 0
+  if (!(get("hour-field").value === 0 && get("min-field").value === 0 && get("sec-field").value === 0 )) {
+    // fill timeParts
+    timeParts.h = get("hour-field").value;
+    timeParts.m = get("min-field").value;
+    timeParts.s = get("sec-field").value;
+
+    // fill warnings
+    if (get("15-min-checkbox").checked === true)
+      warnings[0] = true;
+    if (get("5-min-checkbox").checked === true)
+      warnings[1] = true;
+    if (get("1-min-checkbox").checked === true)
+      warnings[2] = true;
+    if (get("15-sec-checkbox").checked === true)
+      warnings[3] = true;
+
+    // assign colors
+    var colorsTaken = 0;
+    colors = [yellow, orange, red];
+    for (var i in warnings) {
+      if (warnings[i] === true) {
+        warningColors[i] = colors[colorsTaken];
+        if (colorsTaken < 2)
+          colorsTaken++; // if all 4 marked, then the last 2 are both red
+      }
+    }
+    // final pass: make the last warning red
+    for (var j = 3; j>=0; j--) {
+      if (warnings[j] === true)
+        warningColors[j] = red;
+      break;
+    }
+    // this should leave all the false ones with null colors since we don't use them, so it won't be a problem
+    console.log(timeParts);
+    console.log(warnings);
+    console.log(warningColors);
+
+    secondsTotal = parseInt(timeParts.h*3600) + parseInt(timeParts.m*60) + parseInt(timeParts.s);
+    console.log(secondsTotal);
+    
+    // change interface
+    get("custom-head").style.fontSize = "18px";
+    get("custom-head").innerHTML = "Time remaining";
+    get("custom-sec-box").style.display = "block";
+    get("custom-start-pause-button").style.display = "inline-block";
+    get("custom-reset-button").style.display = "inline-block";
+    get("change-settings-button").style.display = "inline-block";
+    get("numpad").style.display = "none";
+    get("checkbox-wrapper-outer").style.display = "none";
+    get("done-button").style.display = "none";
+    return secondsTotal;
+  }
+}
+
+function CustomTimer(title, secondsTotal, timerContainer, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
+  ExtendedTimer.call(this, title, secondsTotal, timerContainer, null, null, 0, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
+  var time = this.getTime();
+  get("custom-sec-number").innerHTML = this.parseSeconds_(secondsTotal);
+
+  this.tick = function() {
+    // timer's actual mechanism
+    time--;
+
+    get(secondsElement).innerHTML = this.parseSeconds_(time);
+
+    // 15 MINUTES!
+    if (warnings[0] === true && time === 15*60) {
+      get(secondsBox).style.background = warningColors[0];
+      get(secondsElement).style.color = whitish;
+      this.warn();
+    }
+
+    // 5 MINUTES!
+    if (warnings[1] === true && time === 5*60) {
+      get(secondsBox).style.background = warningColors[1];
+      get(secondsElement).style.color = whitish;
+      this.warn();
+    }
+
+    // 1 MINUTE!
+    if (warnings[2] === true && time === 60) {
+      get(secondsBox).style.background = warningColors[2];
+      get(secondsElement).style.color = whitish;
+      this.warn();
+    }
+
+    // 15 SECONDS!
+    if (warnings[3] === true && time === 15) {
+      get(secondsBox).style.background = warningColors[3];
+      get(secondsElement).style.color = whitish;
+      this.warn();
+    }
+
+    // TIME!
+    if (time === 0) {
+      get(secondsElement).innerHTML = "00:00";
+      this.warn();
+      this.finish();
+    }
+  }
+}
+
+CustomTimer.prototype = new ExtendedTimer();
+
+/*function isNumber(evt) {
+  evt = (evt) ? evt : window.event;
+  var charCode = (evt.which) ? evt.which : evt.keyCode;
+  if (!(charCode >= 48 && charCode <= 57))
+      return false;
+  return true;
+}*/
+
+function makeCustom() {
+  var custom = new CustomTimer("Custom", changeCustomInterface(), "custom-box", "custom-sec-box", "custom-sec-number", "custom-start-pause-button", "custom-reset-button", customSounds);
+  get("custom-start-pause-button").onclick = custom.startpause;
+  get("custom-reset-button").onclick = custom.reset;
+}
+get("done-button").onclick = makeCustom;
+//get("change-settings-button").onclick = editCustom;
 
 var teamSounds = {
   15: "fifteenseconds",
@@ -632,9 +757,15 @@ var speedSounds = {
   60: "oneminute",
   15: "fifteenseconds",
   0: "time"
-}
+};
 var mentalSounds = speedSounds;
-var customSounds;
+var customSounds = {
+  900: "fifteenminutes",
+  300: "fiveminutes",
+  60: "oneminute",
+  15: "fifteenseconds",
+  0: "time"
+};
 
 var team = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
 var ciphering = new RoundTimer("Ciphering Round", 180, 60, 10, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper", cipheringSounds);
