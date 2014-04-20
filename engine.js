@@ -710,15 +710,16 @@ function changeCustomSettings() {
   timeParts.h = get("hour-field").value;
   timeParts.m = get("min-field").value;
   timeParts.s = get("sec-field").value;
+  secondsTotal = parseInt(timeParts.h*3600) + parseInt(timeParts.m*60) + parseInt(timeParts.s);
 
   // fill warnings
-  if (get("15-min-checkbox").checked === true)
+  if (get("15-min-checkbox").checked === true && secondsTotal > 15*60)
     warnings[0] = true;
-  if (get("5-min-checkbox").checked === true)
+  if (get("5-min-checkbox").checked === true && secondsTotal > 5*60)
     warnings[1] = true;
-  if (get("1-min-checkbox").checked === true)
+  if (get("1-min-checkbox").checked === true && secondsTotal > 60)
     warnings[2] = true;
-  if (get("15-sec-checkbox").checked === true)
+  if (get("15-sec-checkbox").checked === true && secondsTotal > 15)
     warnings[3] = true;
 
   // assign colors
@@ -739,11 +740,9 @@ function changeCustomSettings() {
     }
   }
   // this should leave all the false ones with null colors since we don't use them, so it won't be a problem
-  //console.log(timeParts);
-  //console.log(warnings);
-  //console.log(warningColors);
-
-  secondsTotal = parseInt(timeParts.h*3600) + parseInt(timeParts.m*60) + parseInt(timeParts.s);
+  console.log(timeParts);
+  console.log(warnings);
+  console.log(warningColors);
   
   // change interface
   get("custom-head").style.fontSize = "18px";
