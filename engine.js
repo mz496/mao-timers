@@ -82,7 +82,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   var self = this;
   var ticking;
   var time = secondsPerQuestion;
-  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -269,7 +269,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   var self = this; // very important for setInterval
   var ticking;
   var time = secondsTotal;
-  var deltaT = 50; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -566,7 +566,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
     get(roundBox).style.background = "transparent";
     get(roundElement).style.color = "inherit";
-    get(roundElement).style.fontSize = roundNumSize;
+    get(roundElement).style.fontSize = roundNumSize + "px";
     get(secondsBox).style.background = "transparent";
     get(secondsElement).style.color = "inherit";
   };
@@ -595,7 +595,7 @@ ContinuousTimer.prototype = new ExtendedTimer();
 
 var custom = null;
 
-var fourDigitSize = parseFloat(window.getComputedStyle(get("custom-sec-number"), null).getPropertyValue("font-size")); // should be a constant #sorrynotsorryglobalscope #ggnore
+var fourDigitSize = parseFloat(window.getComputedStyle(get("custom-sec-number"), null).getPropertyValue("font-size")); // should be a constant or otherwise it gets constantly overwritten when the custom object is updated #sorrynotsorryglobalscope #ggnore
 
 function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   // data is a list [secondsTotal, warnings, warningColors]
