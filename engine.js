@@ -752,8 +752,7 @@ function changeCustomSettings() {
   get("custom-start-pause-button").style.display = "inline-block";
   get("custom-reset-button").style.display = "inline-block";
   get("change-settings-button").style.display = "inline-block";
-  get("numpad").style.display = "none";
-  get("checkbox-wrapper-outer").style.display = "none";
+  get("settings-box").style.display = "none";
   get("done-button").style.display = "none";
   return [secondsTotal, warnings, warningColors];
 }
@@ -767,8 +766,7 @@ function openCustomSettings() {
   get("custom-start-pause-button").style.display = "none";
   get("custom-reset-button").style.display = "none";
   get("change-settings-button").style.display = "none";
-  get("numpad").style.display = "table-cell";
-  get("checkbox-wrapper-outer").style.display = "table-cell";
+  get("settings-box").style.display = "block";
   get("done-button").style.display = "inline-block";
 }
 

@@ -50,14 +50,6 @@ hr {
   font-size: 18px;
 }
 
-.button.numpad {
-  font-size: 24px;
-  margin: 5px;
-  padding: 5px;
-  width: 1.5em;
-  height: 1.5em;
-}
-
 #back-button-wrapper {
   position: absolute;
   top: 0%;
@@ -129,14 +121,7 @@ hr {
 #custom-reset-button { display: none; }
 #change-settings-button { display: none; }
 
-#checkbox-box {
-  display: inline-block;
-  text-align: left;
-  width: 45%;
-  margin: auto;
-}
-
-#duration-box {
+.input-box {
   display: inline-block;
   text-align: left;
   width: 45%;
@@ -261,16 +246,10 @@ summary of changes:
 
   .generic-number.big { font-size: 84px; }
 
-  #checkbox-box {
+  .input-box {
+    display: inline-block;
     text-align: left;
-    width: 90%;
+    width: 100%;
     margin: auto;
-  }
-  .button.numpad {
-  font-size: 16px;
-  margin: 2px;
-  padding: 3px;
-  width: 1.5em;
-  height: 1.5em;
   }
 }
