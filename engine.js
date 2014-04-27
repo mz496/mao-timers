@@ -63,6 +63,26 @@ function back() {
   get("back-button").style.display = "none";
 }
 
+// revised setInterval; use obj.cancel() instead of clearInterval(obj)
+var accurateInterval = function(fn, time) {
+  var cancel, nextAt, timeout, wrapper, _ref;
+  nextAt = new Date().getTime() + time;
+  timeout = null;
+  if (typeof time === 'function') _ref = [time, fn], fn = _ref[0], time = _ref[1];
+  wrapper = function() {
+    nextAt += time;
+    timeout = setTimeout(wrapper, nextAt - new Date().getTime());
+    return fn();
+  };
+  cancel = function() {
+    return clearTimeout(timeout);
+  };
+  timeout = setTimeout(wrapper, nextAt - new Date().getTime());
+  return {
+    cancel: cancel
+  };
+};
+
 /******************************************************************\
 /******************************************************************
       ROUND TIMER
@@ -140,7 +160,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" here
 
     currentState = "running";
-    ticking = setInterval(function() { self.tick() }, deltaT);
+    ticking = accurateInterval(function() { self.tick() }, deltaT);
   };
 
   this.tick = function() {
@@ -183,7 +203,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     if (currentState === "running") {
       currentState = "paused";
       // remove interval for now, to be replaced
-      clearInterval(ticking);
+      ticking.cancel();
       get(pauseButton).innerHTML = "Resume";
     }
     
@@ -191,7 +211,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     else if (currentState === "paused") {
       currentState = "running";
       // remake interval
-      ticking = setInterval(function() { self.tick() }, deltaT);
+      ticking = accurateInterval(function() { self.tick() }, deltaT);
       get(pauseButton).innerHTML = "Pause";
     }
   };
@@ -208,7 +228,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
   this.finish = function() {
     // can be user initiated stop, or out of time (OoT)
-    clearInterval(ticking);
+    ticking.cancel();
     // now only reset once
     if (currentState === "running" || currentState === "paused") {
       get(roundBox).style.background = gray;
@@ -266,7 +286,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   var HTML5SoundInserted = false;
   this.sounds = soundDict;
 
-  var self = this; // very important for setInterval
+  var self = this; // very important for accurateInterval
   var ticking;
   var time = secondsTotal;
   var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
@@ -419,14 +439,14 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     if (currentState === "running") {
       currentState = "paused";
       // remove interval for now, to be replaced
-      clearInterval(ticking);
+      ticking.cancel();
       get(startPauseButton).innerHTML = "Resume";
     }
     // paused --> running section
     else if (currentState === "paused") {
       currentState = "running";
       // remake interval
-      ticking = setInterval(function() { self.tick() }, deltaT);
+      ticking = accurateInterval(function() { self.tick() }, deltaT);
       get(startPauseButton).innerHTML = "Pause";
     }
 
@@ -436,7 +456,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         get(startPauseButton).innerHTML = "Pause";
 
         currentState = "running";
-        ticking = setInterval(function() { self.tick() }, deltaT);
+        ticking = accurateInterval(function() { self.tick() }, deltaT);
       }
       else {
         // making sizes relative for adaptation to mobile devices
@@ -452,7 +472,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         get(roundElement).style.color = "inherit";
 
         currentState = "running";
-        ticking = setInterval(function() { self.tick() }, deltaT);
+        ticking = accurateInterval(function() { self.tick() }, deltaT);
         get(startPauseButton).innerHTML = "Pause";
       }
     }
@@ -460,7 +480,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
   this.finish = function() {
     // only triggered upon running out of time (OoT)
-    clearInterval(ticking);
+    ticking.cancel();
     get(secondsBox).style.background = gray;
     get(secondsElement).style.color = whitish;
     if (roundBox != null) {
@@ -475,7 +495,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    clearInterval(ticking);
+    ticking.cancel();
     get(startPauseButton).innerHTML = "Start";
     get(startPauseButton).style.display = "inline-block";
     get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
@@ -503,7 +523,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
   // these methods are for inherited continuous and custom
-  this.clearTicking = function() { clearInterval(ticking); };
+  this.clearTicking = function() { ticking.cancel(); };
   this.getHTML5SoundInserted = function() { return HTML5SoundInserted; };
   this.setHTML5SoundInserted = function(val) { HTML5SoundInserted = val; };
 }
