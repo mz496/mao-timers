@@ -523,7 +523,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
   // these methods are for inherited continuous and custom
-  this.clearTicking = function() { ticking.cancel(); };
+  this.clearTicking = function() { if (ticking != null) {ticking.cancel();} };
   this.getHTML5SoundInserted = function() { return HTML5SoundInserted; };
   this.setHTML5SoundInserted = function(val) { HTML5SoundInserted = val; };
 }
