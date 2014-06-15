@@ -141,14 +141,18 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   };
 
   this.countdown = function() {
-    get(roundElement).style.opacity = 0.5;
-    get(secondsElement).style.opacity = 0.5;
-    // "Question X. Begin!"
-    // chain of callbacks...
-    playSoundUniversal("question", null);
-    playSoundUniversal(currentQnum, null);
-    playSoundUniversal("silent", null);
-    playSoundUniversal("begin", null);
+    setOpacity = function(val) {
+      get(roundElement).style.opacity = val;
+      get(secondsElement).style.opacity = val;
+    }
+
+    setOpacity(0.5);
+    // "Question N. Begin!"
+    // reverse chain of callbacks...
+    var begin = playSoundUniversal("begin", setOpacity(1));
+    var silent = playSoundUniversal("silent", begin);
+    var N = playSoundUniversal(currentQnum, silent);
+    var questionCallout = playSoundUniversal("question", N);
   };
 
   this.start = function() {
