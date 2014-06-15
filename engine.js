@@ -14,11 +14,11 @@ var whitish = "#f9f6f2";
 /*
 basic structure of a round timer
 
-          +<--> paused (trigger via Pause or Back)
-          |       |
-running --+       |
-   ^      |       v
-   |      +---> stopped (trigger via OoT or Stop)
+           +<--> paused (trigger via Pause or Back)
+           |       |
+running ---+       |
+   ^       |       v
+countdown  +---> stopped (trigger via OoT or Stop)
    |              |
    +---next q.----+
 ^ (trigger
@@ -63,7 +63,8 @@ function back() {
   get("back-button").style.display = "none";
 }
 
-// revised setInterval; use obj.cancel() instead of clearInterval(obj)
+// from stackoverflow: revised setInterval; use obj.cancel() instead of clearInterval(obj)
+// this re-calibrates time at each tick
 var accurateInterval = function(fn, time) {
   var cancel, nextAt, timeout, wrapper, _ref;
   nextAt = new Date().getTime() + time;
@@ -139,6 +140,17 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     }
   };
 
+  this.countdown = function() {
+    get(roundElement).style.opacity = 0.5;
+    get(secondsElement).style.opacity = 0.5;
+    // "Question X. Begin!"
+    // chain of callbacks...
+    playSoundUniversal("question", null);
+    playSoundUniversal(currentQnum, null);
+    playSoundUniversal("silent", null);
+    playSoundUniversal("begin", null);
+  };
+
   this.start = function() {
     // called upon clicking -- initialize appearances, start timer
     var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
@@ -157,8 +169,10 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
     get(startButton).style.display = "none";
     get(ghostButton).style.display = "inline-block";
-    get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" here
+    get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" for the specific elem here
 
+    currentState = "countdown";
+    self.countdown();
     currentState = "running";
     ticking = accurateInterval(function() { self.tick() }, deltaT);
   };
@@ -199,6 +213,11 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   };
 
   this.pause = function() {
+    // countdown --> paused section
+    if (currentState === "countdown") {
+      currentState = "paused";
+      // set colors back to normal, as if countdown never happened
+    }
     // running --> paused section
     if (currentState === "running") {
       currentState = "paused";
@@ -257,10 +276,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (key == this.getTime()) {
-        if (WAAPIsupport === true) 
-          playSound(self.sounds[key]);
-        else
-          playHTML5Sound(self.sounds[key]);
+        playAnySound(self.sounds[key]);
       }
     }
   };
@@ -511,10 +527,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (this.getTime() == key) {
-        if (WAAPIsupport === true) 
-          playSound(self.sounds[key]);
-        else
-          playHTML5Sound(self.sounds[key]);
+        playSoundUniversal(self.sounds[key]);
       }
     }
   };
@@ -595,10 +608,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (time%60 == key) {
-        if (WAAPIsupport === true) 
-          playSound(self.sounds[key]);
-        else
-          playHTML5Sound(self.sounds[key]);
+        playSoundUniversal(self.sounds[key]);
       }
     }
   };
@@ -709,10 +719,7 @@ function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, st
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (time == key) {
-        if (WAAPIsupport === true) 
-          playSound(self.sounds[key]);
-        else
-          playHTML5Sound(self.sounds[key]);
+        playSoundUniversal(self.sounds[key]);
       }
     }
   };
@@ -805,7 +812,7 @@ function makeCustom() {
 // we need this global because we need to change custom interface before we make the object, and also changeCustomInterface can't be inside the object
 get("done-button").onclick = makeCustom;
 get("change-settings-button").onclick = openCustomSettings;
-// manually code this because the custom object doesn't exist at the time of opening the settings panel the first time -- this is basically just makeInterface broken up, the rest is inside makeCuston
+// manually code this because the custom object doesn't exist at the time of opening the settings panel the first time -- this is basically just makeInterface broken up, the rest is inside makeCustom
 get("custom-open").onclick = function() {
   get("title").innerHTML = "Custom";
   get("button-box").style.display = "none";
@@ -957,6 +964,24 @@ var audioURLsByName = {
   thirdround: "sounds/thirdround.mp3",
   fourthround: "sounds/fourthround.mp3",
   fifthround: "sounds/fifthround.mp3",
+  ready: "sounds/ready.mp3",
+  begin: "sounds/begin.mp3",
+  question: "sounds/question.mp3",
+  1: "sounds/numbers/1.mp3",
+  2: "sounds/numbers/2.mp3",
+  3: "sounds/numbers/3.mp3",
+  4: "sounds/numbers/4.mp3",
+  5: "sounds/numbers/5.mp3",
+  6: "sounds/numbers/6.mp3",
+  7: "sounds/numbers/7.mp3",
+  8: "sounds/numbers/8.mp3",
+  9: "sounds/numbers/9.mp3",
+  10: "sounds/numbers/10.mp3",
+  11: "sounds/numbers/11.mp3",
+  12: "sounds/numbers/12.mp3",
+  13: "sounds/numbers/13.mp3",
+  14: "sounds/numbers/14.mp3",
+  15: "sounds/numbers/15.mp3"
 };
 
 // WAAPI supported section
@@ -1088,4 +1113,17 @@ function insertAudios() {
 
 function playHTML5Sound(name) {
   audioDict.audioBuffersByName[name].play();
+}
+
+function playSoundUniversal(name, cb) {
+  if (WAAPIsupport === true) {
+    playSound(name);
+    if (cb != null)
+      cb();
+  }
+  else {
+    playHTML5Sound(name);
+    if (cb != null)
+      cb();
+  }
 }
