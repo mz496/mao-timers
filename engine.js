@@ -186,7 +186,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(roundElement).style.opacity = 0.5;
     get(secondsElement).style.opacity = 0.5;
     get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = this.parseSeconds(time);
+    get(secondsElement).innerHTML = self.parseSeconds(time);
     self.countdown();
     get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
