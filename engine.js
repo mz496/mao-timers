@@ -84,6 +84,16 @@ var accurateInterval = function(fn, time) {
   };
 };
 
+// from phpied
+var sleep = function(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 /******************************************************************\
 /******************************************************************
       ROUND TIMER
@@ -141,18 +151,21 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   };
 
   this.countdown = function() {
-    setOpacity = function(val) {
+    var setOpacity = function(val) {
       get(roundElement).style.opacity = val;
       get(secondsElement).style.opacity = val;
     }
 
     setOpacity(0.5);
     // "Question N. Begin!"
-    // reverse chain of callbacks...
-    var begin = playSoundUniversal("begin", setOpacity(1));
-    var silent = playSoundUniversal("silent", begin);
-    var N = playSoundUniversal(currentQnum, silent);
-    var questionCallout = playSoundUniversal("question", N);
+    // numbers determined from length of audio files
+    playSoundUniversal("question");
+    sleep(450);
+    playSoundUniversal(currentQnum);
+    sleep(1200); // arbitrarily long enough to wait out any number
+    playSoundUniversal("begin");
+    sleep(480);
+    setOpacity(1);
   };
 
   this.start = function() {
@@ -1119,15 +1132,9 @@ function playHTML5Sound(name) {
   audioDict.audioBuffersByName[name].play();
 }
 
-function playSoundUniversal(name, cb) {
-  if (WAAPIsupport === true) {
+function playSoundUniversal(name) {
+  if (WAAPIsupport === true)
     playSound(name);
-    if (cb != null)
-      cb();
-  }
-  else {
+  else
     playHTML5Sound(name);
-    if (cb != null)
-      cb();
-  }
 }
