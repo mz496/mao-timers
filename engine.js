@@ -151,24 +151,14 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   };
 
   this.countdown = function() {
-    var setOpacity = function(val) {
-      get(roundElement).style.opacity = val;
-      get(secondsElement).style.opacity = val;
-    }
-
-    // at this point we will be putting in the starting values
-    setOpacity(0.5);
-    get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
-    get(secondsElement).innerHTML = this.parseSeconds(time);
     // "Question N. Begin!"
     // numbers determined from length of audio files + trial and error
     playSoundUniversal("question");
-    sleep(440);
+    sleep(430);
     playSoundUniversal(currentQnum);
     sleep(1200); // arbitrarily long enough to wait out any number
     playSoundUniversal("begin");
     sleep(480);
-    setOpacity(1);
   };
 
   this.start = function() {
@@ -192,7 +182,15 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" for the specific elem here
 
     currentState = "countdown";
+    // at this point we will be putting in the starting values
+    get(roundElement).style.opacity = 0.5;
+    get(secondsElement).style.opacity = 0.5;
+    get(roundElement).innerHTML = 1;
+    get(secondsElement).innerHTML = this.parseSeconds(time);
     self.countdown();
+    get(roundElement).style.opacity = 1;
+    get(secondsElement).style.opacity = 1;
+
     currentState = "running";
     ticking = accurateInterval(function() { self.tick() }, deltaT);
   };
