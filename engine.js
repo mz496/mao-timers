@@ -153,12 +153,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.countdown = function() {
     // "Question N. Begin!"
     // numbers determined from length of audio files + trial and error
-    playSoundUniversal("question");
-    sleep(430);
-    playSoundUniversal(currentQnum);
-    sleep(1200); // arbitrarily long enough to wait out any number
-    playSoundUniversal("begin");
-    sleep(480);
+
   };
 
   this.start = function() {
@@ -294,7 +289,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (key == this.getTime()) {
-        playAnySound(self.sounds[key]);
+        playHowl(self.sounds[key]);
       }
     }
   };
@@ -545,7 +540,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (this.getTime() == key) {
-        playSoundUniversal(self.sounds[key]);
+        playHowl(self.sounds[key]);
       }
     }
   };
@@ -626,7 +621,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (time%60 == key) {
-        playSoundUniversal(self.sounds[key]);
+        playHowl(self.sounds[key]);
       }
     }
   };
@@ -1002,140 +997,8 @@ var audioURLsByName = {
   15: "sounds/numbers/15.mp3"
 };
 
-// WAAPI supported section
-var WAAPIsupport = false;
-
-if (typeof webkitAudioContext !== 'undefined') {
-  var audio_ctx = new webkitAudioContext();
-  WAAPIsupport = true;
-}
-else if (typeof AudioContext !== "undefined") {
-  var audio_ctx = new AudioContext();
-  WAAPIsupport = true;
-}
-else
-  console.log("No Web Audio support");
-   
-function loadMusic(url, cb) {
-  var req = new XMLHttpRequest();
-  req.open('GET', url, true);
-  // XHR2
-  req.responseType = 'arraybuffer';
- 
-  req.onload = function() {
-    audio_ctx.decodeAudioData(req.response, cb);
-  };
- 
-  req.send();
-}
-
-var loadAudioData = function(name, url) {
-  // Async
-  loadMusic(url, function(buffer) {
-    audioDict.audioBuffersByName[name] = buffer;
-  });
-};
-
-// audioURLsByName is the one storing the names vs urls
-if (WAAPIsupport === true) {
-  for (var name in audioURLsByName) {
-    var url = audioURLsByName[name];
-    loadAudioData(name, url);
-  }
-}
-
-
-function playBuffer (buffer, opt, cb) {
-  if (!opt) cb = opt;
-  opt = opt || {};
-  
-  var src = audio_ctx.createBufferSource();
-  src.buffer = buffer;
-  
-  // for firefox -- make gain_node global w/in this function
-  try { gain_node = audio_ctx.createGainNode(); }
-  catch (e) {
-    if (e instanceof TypeError)
-      gain_node = audio_ctx.createGain();
-  }
-  src.connect(gain_node);
-   
-  gain_node.connect(audio_ctx.destination);
-  //console.log(gain_node);
- 
-  if (typeof opt.sound !== 'undefined')
-    gain_node.gain.value = opt.sound;
-  else
-    gain_node.gain.value = 1;
- 
-  // Options
-  if (opt.loop)
-    src.loop = true;
-  
-  // for the old browsers
-  try { src.start(0); }
-  catch (e) {
-    if (e instanceof TypeError)
-      src.noteOn(0);
-  }
- 
-  cb(src);
-}
- 
-function stopSound (src) {
-try { src.stop(0); }
-  catch (e) {
-    if (e instanceof TypeError)
-      src.noteOff(0);
-  }
-}
-
-function playSound(name, opt) {
-  opt = opt || {};
- 
-  var cb = function(src) {
-    audioDict.audio_src[name] = {};
-    audioDict.audio_src[name] = src;
-  };
-  
-  playBuffer(audioDict.audioBuffersByName[name], opt, cb);
-}
-
-// stopSound(audioDict.audio_src[name]);
-
-function insertAudios() {
-  for (var name in audioURLsByName) {
-    var url = audioURLsByName[name];
-    // Create an audio node
-    var audio_el = document.createElement('audio');
-    // Source nodes for mp3 and ogg
-    var src1_el = document.createElement('source');
-    //var src2_el = document.createElement('source');
-
-    audio_el.id = name;
-    src1_el.src = url;
-    src1_el.type = 'audio/mp3';
-    //src2_el.src = url.replace('.mp3', '.ogg');
-    //src2_el.type = 'audio/ogg';
-
-    // Append OGG first (else firefox cries)
-    //audio_el.appendChild(src2_el);
-    // Append MP3 second/next
-    audio_el.appendChild(src1_el);
-
-    document.body.appendChild(audio_el);
-
-    audioDict.audioBuffersByName[name] = audio_el;
-  }
-}
-
-function playHTML5Sound(name) {
-  audioDict.audioBuffersByName[name].play();
-}
-
-function playSoundUniversal(name) {
-  if (WAAPIsupport === true)
-    playSound(name);
-  else
-    playHTML5Sound(name);
+// structure is: for each timer, check the time until we match to { time:dictKey }, for reference in the master dictionary that has { dictKey:URLtoPlay }
+var playHowl = function(key) {
+  var sound = new Howl({ urls: [audioURLsByName[key]] });
+  sound.play();
 }
