@@ -156,11 +156,14 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
       get(secondsElement).style.opacity = val;
     }
 
+    // at this point we will be putting in the starting values
     setOpacity(0.5);
+    get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
+    get(secondsElement).innerHTML = this.parseSeconds(time);
     // "Question N. Begin!"
-    // numbers determined from length of audio files
+    // numbers determined from length of audio files + trial and error
     playSoundUniversal("question");
-    sleep(450);
+    sleep(440);
     playSoundUniversal(currentQnum);
     sleep(1200); // arbitrarily long enough to wait out any number
     playSoundUniversal("begin");
