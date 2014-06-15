@@ -144,10 +144,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // making the starting values
     get(roundElement).innerHTML = 1;
     get(secondsElement).innerHTML = self.parseSeconds(time);
-    var begin = playHowlCallback("begin", setOpacity(1));
-    var silent = playHowlCallback("silent", begin);
-    var N = playHowlCallback(currentQnum, silent);
-    playHowlCallback("question", N);
+    playHowlCallback("question", playHowlCallback(currentQnum, playHowlCallback("silent", playHowlCallback("begin", setOpacity(1)))));
   };
 
   this.start = function() {
