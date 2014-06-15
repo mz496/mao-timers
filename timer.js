@@ -1,4 +1,4 @@
-// filename: root/engine.js
+// filename: root/timer.js
 
 /*window.onerror = function(errorMsg, url, lineNumber) {
     console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
@@ -84,16 +84,6 @@ var accurateInterval = function(fn, time) {
   };
 };
 
-// from phpied
-var sleep = function(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
-
 /******************************************************************\
 /******************************************************************
       ROUND TIMER
@@ -101,10 +91,8 @@ var sleep = function(milliseconds) {
 \******************************************************************
 \******************************************************************/
 
-
 function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper, soundDict) {
   var currentState = "stopped";
-  var HTML5SoundInserted = false;
   this.sounds = soundDict;
 
   this.numQuestions = numQuestions;
@@ -121,13 +109,6 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-    
-    if (WAAPIsupport === true)
-      playSound('silent');
-    else if (HTML5SoundInserted === false) {
-      insertAudios();
-      HTML5SoundInserted = true;
-    }
   };
 
   this.parseSeconds = function(currentTime) {
@@ -151,9 +132,22 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   };
 
   this.countdown = function() {
-    // "Question N. Begin!"
-    // numbers determined from length of audio files + trial and error
+    var setOpacity = function(val) {
+      get(roundElement).style.opacity = val;
+      get(secondsElement).style.opacity = val;
+    }
 
+    // "Question N. Begin!"
+    // reverse chain of callbacks...
+
+    setOpacity(0.5);
+    // making the starting values
+    get(roundElement).innerHTML = 1;
+    get(secondsElement).innerHTML = self.parseSeconds(time);
+    var begin = playHowlCallback("begin", setOpacity(1));
+    var silent = playHowlCallback("silent", begin);
+    var N = playHowlCallback(currentQnum, silent);
+    playHowlCallback("question", N);
   };
 
   this.start = function() {
@@ -177,14 +171,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" for the specific elem here
 
     currentState = "countdown";
-    // at this point we will be putting in the starting values
-    get(roundElement).style.opacity = 0.5;
-    get(secondsElement).style.opacity = 0.5;
-    get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = self.parseSeconds(time);
     self.countdown();
-    get(roundElement).style.opacity = 1;
-    get(secondsElement).style.opacity = 1;
 
     currentState = "running";
     ticking = accurateInterval(function() { self.tick() }, deltaT);
@@ -312,7 +299,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   // roundBox and roundElement only apply to hustle and continuous, else those arguments are null
   // secondsPerRound is only taken into account if roundBox and roundElement are
   var currentState = "stopped";
-  var HTML5SoundInserted = false;
   this.sounds = soundDict;
 
   var self = this; // very important for accurateInterval
@@ -326,13 +312,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     get("button-box").style.display = "none";
     get(timerContainer).style.display = "block";
     get("back-button").style.display = "inline-block";
-
-    if (WAAPIsupport === true)
-      playSound('silent');
-    else if (HTML5SoundInserted === false) {
-      insertAudios();
-      HTML5SoundInserted = true;
-    }
   };
 
   this.parseSeconds = function(currentTime) {
@@ -365,7 +344,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         return minThisRound + ":" + secThisRound;
       }
     }
-  }
+  };
 
   if (roundElement != null)
     var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
@@ -534,7 +513,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     get(secondsElement).style.color = "inherit";
     if (roundElement != null)
       get(roundElement).style.fontSize = roundNumSize;
-  }
+  };
 
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
@@ -550,8 +529,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.setState = function(state) { currentState = state; };
   // these methods are for inherited continuous and custom
   this.clearTicking = function() { if (ticking != null) {ticking.cancel();} };
-  this.getHTML5SoundInserted = function() { return HTML5SoundInserted; };
-  this.setHTML5SoundInserted = function(val) { HTML5SoundInserted = val; };
 }
 
 /******************************************************************\
@@ -667,7 +644,7 @@ function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, st
       get(secondsElement).style.fontSize = fourDigitSize + "px";
       return min + ":" + sec;
     }
-  }
+  };
 
   get(secondsElement).innerHTML = this.parseSeconds(secondsTotal);
 
@@ -713,7 +690,7 @@ function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, st
       this.warn();
       this.finish();
     }
-  }
+  };
 
   this.reset = function() {
     // reset section formerly in finish()
@@ -726,17 +703,17 @@ function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, st
     self.setState("stopped");
     get(secondsBox).style.background = "transparent";
     get(secondsElement).style.color = "inherit";
-  }
+  };
 
   this.warn = function() {
     // loop through keys to see if current time matches any; if so, play that sound
     for (var key in self.sounds) {
       if (time == key) {
-        playSoundUniversal(self.sounds[key]);
+        playHowl(self.sounds[key]);
       }
     }
   };
-}
+};
 
 CustomTimer.prototype = new ExtendedTimer();
 
@@ -813,13 +790,6 @@ function makeCustom() {
   custom = new CustomTimer("Custom", changeCustomSettings(), "custom-box", "custom-sec-box", "custom-sec-number", "custom-start-pause-button", "custom-reset-button", customSounds);
   get("custom-start-pause-button").onclick = custom.startpause;
   get("custom-reset-button").onclick = custom.reset;
-
-  if (WAAPIsupport === true)
-    playSound('silent');
-  else if (custom.getHTML5SoundInserted() === false) {
-    insertAudios();
-    custom.setHTML5SoundInserted(true);
-  }
 }
 
 // we need this global because we need to change custom interface before we make the object, and also changeCustomInterface can't be inside the object
@@ -997,8 +967,20 @@ var audioURLsByName = {
   15: "sounds/numbers/15.mp3"
 };
 
-// structure is: for each timer, check the time until we match to { time:dictKey }, for reference in the master dictionary that has { dictKey:URLtoPlay }
-var playHowl = function(key) {
-  var sound = new Howl({ urls: [audioURLsByName[key]] });
+// structure is: for each timer, check the time until we match to { time:mainDictKey } inside the subset dictionary, for reference in the master dictionary that has { mainDictKey:URLtoPlay }
+// can also refer to other sounds by name e.g. "question", "begin"
+var playHowl = function(mainDictKey) {
+  var sound = new Howl({ urls: [audioURLsByName[mainDictKey]] });
+  sound.play();
+}
+
+var playHowlCallback = function(mainDictKey, cb) {
+  var sound = new Howl({
+    urls: [audioURLsByName[mainDictKey]],
+    onend: function() {
+      console.log("going to cb");
+      cb;
+    }
+  })
   sound.play();
 }
