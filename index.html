@@ -41,16 +41,17 @@
         <a class="button" id="speed-open">Speed</a>
         <a class="button" id="mental-open">Mental</a>
       </div>
-      <a class="button" id="continuous-open">Continuous*</a>
+      <a class="button" id="continuous-open">Continuous</a>
       <a class="button" id="custom-open">Custom</a>
       <hr>
-      <p>Turn up your sound to hear alerts!</p>
-      <p>Read the timing and test rules <a href="http://floridamao.org/Downloadable/2014StateLetter.pdf">here</a>.</p>
-      <p style="font-size: 14px">*Continuous is an unofficial, general-purpose, self-paced style for assessing speed without having to stop/restart the timer.</p>
+      <p>The purpose of these timers is to make the timing process in Mu Alpha Theta easier and less prone to error. That means no more fuss with stopwatches and saying the right minute, missing the time warning marks, etc.</p> 
+      <p>All behaviors are based on the most recent official Mu Alpha Theta rules, which can be found starting on page 4 of <a href="http://www.mualphatheta.org/National_Convention/2014/2014%20OrlandoPacket.pdf">this document</a>.</p>
+      <p>*Note: Continuous (or "Death March") is an unofficial, general-purpose, self-paced style for assessing speed on any number of questions without having to stop/restart the timer.</p>
       <hr>
-      <p>Created by Matthew Zhu. Formatting completely not ripped off of <strong><a href="http://git.io/2048">2048 by Gabriele Cirulli</a></strong> and conceptually similar to every <strong><a href="http://www.online-stopwatch.com/">stopwatch</a></strong> ever created.</p>
-      <p style="font-size: 14px">Email bug reports and suggestions to</p>
-      <img src="images/email1.png" /> | <img src="images/email2.png" />
+      <p>You can use the timers on a smartphone or tablet.<br>You can also use the shortlink <strong><a href="http://git.io/mao-timers">git.io/mao-timers</a></strong>.
+      <hr>
+      <p>Created by Matthew Zhu. Formatting overtly inspired by <strong><a href="http://git.io/2048">2048 by Gabriele Cirulli</a></strong> and conceptually similar to every <strong><a href="http://www.online-stopwatch.com/">stopwatch</a></strong> ever created.</p>
+      <span style="font-size: 16px">Email bug reports and suggestions to </span><img style="margin-bottom: -3px" src="images/email2.png" />
     </div>
 
 
@@ -72,23 +73,19 @@
         </a>
       </div>
 
-      <div class="half-box">
-        <div class="round-box-wrapper">
+      <div class="half-box round-box-wrapper">
           Current minute
           <div class="count-box" id="team-min-box">
             <div class="generic-number" id="team-min-number"></div>
           </div>
-        </div>
       </div>
 
-      <div class="half-box">
-        <div class="sec-box-wrapper">
+      <div class="half-box sec-box-wrapper">
           <div>Seconds remaining</div>
           <div>in this minute</div>
           <div class="count-box" id="team-sec-box">
             <div class="generic-number" id="team-sec-number"></div>
           </div>
-        </div>
       </div>
 
       <div class="half-box pause-button-wrapper">

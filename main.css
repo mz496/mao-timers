@@ -16,7 +16,7 @@ hr {
   border: none;
   border-bottom: 1px solid #d8d4d0;
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 #title { font-size: 48px; }
 
@@ -59,10 +59,10 @@ hr {
   position: fixed;
   display: none;
 }
-.round-box-wrapper { margin: 10px; }
-.sec-box-wrapper { margin: 10px; }
-.half-box.stop-button-wrapper { width: 35%; }
-.half-box.pause-button-wrapper { width: 35%; }
+.half-box.round-box-wrapper { margin-right: 25px; }
+.half-box.sec-box-wrapper { margin-left: 25px; }
+.half-box.stop-button-wrapper { width: 30%; }
+.half-box.pause-button-wrapper { width: 30%; }
 .redo-button-wrapper { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
