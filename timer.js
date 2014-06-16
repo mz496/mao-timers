@@ -131,22 +131,6 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     }
   };
 
-  this.countdown = function() {
-    var setOpacity = function(val) {
-      get(roundElement).style.opacity = val;
-      get(secondsElement).style.opacity = val;
-    }
-
-    // "Question N. Begin!"
-    // reverse chain of callbacks...
-
-    setOpacity(0.5);
-    // making the starting values
-    get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = self.parseSeconds(time);
-    playHowlCallback("question", playHowlCallback(currentQnum, playHowlCallback("silent", playHowlCallback("begin", setOpacity(1)))));
-  };
-
   this.start = function() {
     // called upon clicking -- initialize appearances, start timer
     var roundNumSize = parseFloat(window.getComputedStyle(get(roundElement), null).getPropertyValue("font-size"));
@@ -167,11 +151,34 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(ghostButton).style.display = "inline-block";
     get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" for the specific elem here
 
+    // COUNTDOWN
     currentState = "countdown";
-    self.countdown();
 
-    currentState = "running";
-    ticking = accurateInterval(function() { self.tick() }, deltaT);
+    // "Question N. Begin!"
+    // reverse chain of callbacks...
+
+    get(roundElement).style.opacity = 0.5;
+    get(secondsElement).style.opacity = 0.5;
+    // making the starting values
+    get(roundElement).innerHTML = 1;
+    get(secondsElement).innerHTML = self.parseSeconds(time);
+    var startCountdown = function() { playHowlCallback("question", N); };
+    var N = function() { playHowlCallback(currentQnum, silence); };
+    var silence = function() { playHowlCallback("silent", begin); };
+    var begin = function() { playHowlCallback("begin", self.startTicking); };
+    
+    startCountdown();
+  };
+
+  this.startTicking = function() {
+    get(roundElement).style.opacity = 1;
+    get(secondsElement).style.opacity = 1;
+    // if someone paused by clicking Pause or Back
+    console.log(currentState);
+    if (currentState !== "paused") {
+      currentState = "running";
+      ticking = accurateInterval(function() { self.tick() }, deltaT);
+    }
   };
 
   this.tick = function() {
@@ -211,10 +218,13 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
   this.pause = function() {
     // countdown --> paused section
+    // the interface changes are handled in startTicking()
     if (currentState === "countdown") {
+      console.log("countdown-pause");
       currentState = "paused";
-      // set colors back to normal, as if countdown never happened
+      get(pauseButton).innerHTML = "Resume";
     }
+
     // running --> paused section
     if (currentState === "running") {
       currentState = "paused";
@@ -974,10 +984,7 @@ var playHowl = function(mainDictKey) {
 var playHowlCallback = function(mainDictKey, cb) {
   var sound = new Howl({
     urls: [audioURLsByName[mainDictKey]],
-    onend: function() {
-      console.log("going to cb");
-      cb;
-    }
+    onend: cb
   })
   sound.play();
 }
