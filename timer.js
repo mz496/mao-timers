@@ -590,7 +590,8 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.getState = function() { return currentState; };
   this.setState = function(state) { currentState = state; };
   // these methods are for inherited continuous and custom
-  this.clearTicking = function() { if (ticking != null) {ticking.cancel();} };
+  this.tickingExists = function() { if (ticking != null) {return true;} };
+  this.clearTicking = function() { ticking.cancel(); }
 }
 
 /******************************************************************\
@@ -641,19 +642,21 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    self.clearTicking();
-    get("title").innerHTML = "Continuous Timer";
-    get(startPauseButton).innerHTML = "Start";
-    get(startPauseButton).style.display = "inline-block";
-    time = secondsTotal;
-    self.setState("stopped");
-    get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
-    get(roundBox).style.background = "transparent";
-    get(roundElement).style.color = "inherit";
-    get(roundElement).style.fontSize = roundNumSize + "px";
-    get(secondsBox).style.background = "transparent";
-    get(secondsElement).style.color = "inherit";
+    if (self.tickingExists()) { // can be null if trying to reset during/before countdown
+      self.clearTicking();
+      get("title").innerHTML = "Continuous";
+      get(startPauseButton).innerHTML = "Start";
+      get(startPauseButton).style.display = "inline-block";
+      time = secondsTotal;
+      self.setState("stopped");
+      get(roundElement).innerHTML = 1;
+      get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
+      get(roundBox).style.background = "transparent";
+      get(roundElement).style.color = "inherit";
+      get(roundElement).style.fontSize = roundNumSize + "px";
+      get(secondsBox).style.background = "transparent";
+      get(secondsElement).style.color = "inherit";
+    }
   };
 
   this.warn = function() {
@@ -757,14 +760,16 @@ function CustomTimer(title, data, timerContainer, secondsBox, secondsElement, st
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    self.clearTicking();
-    get(startPauseButton).innerHTML = "Start";
-    get(startPauseButton).style.display = "inline-block";
-    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
-    time = secondsTotal;
-    self.setState("stopped");
-    get(secondsBox).style.background = "transparent";
-    get(secondsElement).style.color = "inherit";
+    if (self.tickingExists()) {
+      self.clearTicking();
+      get(startPauseButton).innerHTML = "Start";
+      get(startPauseButton).style.display = "inline-block";
+      get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
+      time = secondsTotal;
+      self.setState("stopped");
+      get(secondsBox).style.background = "transparent";
+      get(secondsElement).style.color = "inherit";
+    }
   };
 
   this.warn = function() {
