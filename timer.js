@@ -151,29 +151,32 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     get(ghostButton).style.display = "inline-block";
     get(redoButtonWrapper).style.display = "none"; // we use the wrapper so we can have css for the CLASS of all redo wrappers but get the "ID" for the specific elem here
 
-    // COUNTDOWN
-    currentState = "countdown";
+    if (get("toggleUseCountdown").checked === true) {
+      // COUNTDOWN
+      currentState = "countdown";
 
-    // "Question N. Begin!"
-    // reverse chain of callbacks...
+      // "Question N. Begin!"
+      // reverse chain of callbacks...
 
-    get(roundElement).style.opacity = 0.5;
-    get(secondsElement).style.opacity = 0.5;
-    // making the starting values
-    get(roundElement).innerHTML = 1;
-    get(secondsElement).innerHTML = self.parseSeconds(time);
-    var countdown = function() { playHowlCallback("question", N); };
-    var N = function() { playHowlCallback(currentQnum, silence); };
-    var silence = function() { playHowlCallback("silent", begin); };
-    var begin = function() { playHowlCallback("begin", self.startTicking); };
-    
-    countdown();
+      get(roundElement).style.opacity = 0.5;
+      get(secondsElement).style.opacity = 0.5;
+      // making the starting values
+      get(roundElement).innerHTML = 1;
+      get(secondsElement).innerHTML = self.parseSeconds(time);
+      var countdown = function() { playHowlCallback("question", N); };
+      var N = function() { playHowlCallback(currentQnum, silence); };
+      var silence = function() { playHowlCallback("silent", begin); };
+      var begin = function() { playHowlCallback("begin", self.startTicking); };
+      
+      countdown();
+    }
+    else { self.startTicking(); }
   };
 
   this.startTicking = function() {
     get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
-    // if someone paused by clicking Pause or Back
+    // if someone paused by clicking Pause or Back, do not run once the voice has finished counting down, instead pause at full time
     if (currentState !== "paused") {
       currentState = "running";
       ticking = accurateInterval(function() { self.tick() }, deltaT);
@@ -478,7 +481,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       if (roundBox == null && roundElement == null) {
         get(startPauseButton).innerHTML = "Pause";
         
-        self.startCountdown();
+        if (get("toggleUseCountdown").checked === true)
+          self.startCountdown();
+        else
+          self.startTicking();
       }
       // round-like start
       // hustle, continuous
@@ -496,7 +502,10 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         get(roundElement).style.color = "inherit";
         get(startPauseButton).innerHTML = "Pause";
 
-        self.startCountdown();
+        if (get("toggleUseCountdown").checked === true)
+          self.startCountdown();
+        else
+          self.startTicking();
       }
     }
   };
@@ -530,7 +539,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     if (roundElement != null)
       get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
-    // if someone paused by clicking Pause or Back
+    // if someone paused by clicking Pause or Back, do not run once the voice has finished counting down, instead pause at full time
     if (currentState !== "paused") {
       currentState = "running";
       ticking = accurateInterval(function() { self.tick() }, deltaT);
