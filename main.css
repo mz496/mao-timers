@@ -66,6 +66,14 @@ hr {
 .redo-button-wrapper { display: none; }
 
 .q-number { font-size: 32px; font-weight: bold; }
+.pound {
+  font-size: 48px;
+  height: 0;
+  font-weight: bold;
+  position: absolute;
+  margin-top: 1.3em;
+  margin-left: 0.5em;
+}
 
 .button.ghost {
   background-color: transparent;
