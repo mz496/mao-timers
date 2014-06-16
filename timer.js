@@ -33,23 +33,23 @@ function get(elem)
 function back() {
   get("title").innerHTML = "MA&#920; Timers";
 
-  if (team.getState() === "running")
+  if (team.getState() !== ("stopped" || "paused"))
     team.pause();
-  if (ciphering.getState() === "running")
+  if (ciphering.getState() !== ("stopped" || "paused"))
     ciphering.pause();
-  if (relay.getState() === "running")
+  if (relay.getState() !== ("stopped" || "paused"))
     relay.pause();
-  if (indiv.getState() === "running")
+  if (indiv.getState() !== ("stopped" || "paused"))
     indiv.startpause();
-  if (hustle.getState() === "running")
+  if (hustle.getState() !== ("stopped" || "paused"))
     hustle.startpause();
-  if (continuous.getState() === "running")
+  if (continuous.getState() !== ("stopped" || "paused"))
     continuous.startpause();
-  if (speed.getState() === "running")
+  if (speed.getState() !== ("stopped" || "paused"))
     speed.startpause();
-  if (mental.getState() === "running")
+  if (mental.getState() !== ("stopped" || "paused"))
     mental.startpause();
-  if (custom != null && custom.getState() === "running")
+  if (custom != null && custom.getState() !== ("stopped" || "paused"))
     custom.startpause();
 
   // find which one to hide
@@ -162,19 +162,18 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // making the starting values
     get(roundElement).innerHTML = 1;
     get(secondsElement).innerHTML = self.parseSeconds(time);
-    var startCountdown = function() { playHowlCallback("question", N); };
+    var countdown = function() { playHowlCallback("question", N); };
     var N = function() { playHowlCallback(currentQnum, silence); };
     var silence = function() { playHowlCallback("silent", begin); };
     var begin = function() { playHowlCallback("begin", self.startTicking); };
     
-    startCountdown();
+    countdown();
   };
 
   this.startTicking = function() {
     get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
     // if someone paused by clicking Pause or Back
-    console.log(currentState);
     if (currentState !== "paused") {
       currentState = "running";
       ticking = accurateInterval(function() { self.tick() }, deltaT);
@@ -220,13 +219,12 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // countdown --> paused section
     // the interface changes are handled in startTicking()
     if (currentState === "countdown") {
-      console.log("countdown-pause");
       currentState = "paused";
       get(pauseButton).innerHTML = "Resume";
     }
 
     // running --> paused section
-    if (currentState === "running") {
+    else if (currentState === "running") {
       currentState = "paused";
       // remove interval for now, to be replaced
       ticking.cancel();
@@ -254,28 +252,30 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
   this.finish = function() {
     // can be user initiated stop, or out of time (OoT)
-    ticking.cancel();
-    // now only reset once
-    if (currentState === "running" || currentState === "paused") {
-      get(roundBox).style.background = gray;
-      get(secondsBox).style.background = gray;
-      get(roundElement).style.color = whitish;
-      get(secondsElement).style.color = whitish;
-      
-      // let user advance, using the same parameters we've been using
-      currentState = "stopped";
-      
-      if (currentQnum < numQuestions)
-      currentQnum++;
+    if (ticking != null) { // it can be null when trying to stop if user clicks during countdown
+      ticking.cancel();
+      // now only reset once
+      if (currentState === "running" || currentState === "paused") {
+        get(roundBox).style.background = gray;
+        get(secondsBox).style.background = gray;
+        get(roundElement).style.color = whitish;
+        get(secondsElement).style.color = whitish;
+        
+        // let user advance, using the same parameters we've been using
+        currentState = "stopped";
+        
+        if (currentQnum < numQuestions)
+        currentQnum++;
 
-      // reset section
-      get(startButton).style.display = "inline-block";
-      get(ghostButton).style.display = "none";
-      get(redoButtonWrapper).style.display = "inline-block";
-      get(startButtonElement).innerHTML = "Question " + currentQnum;
-      get(ghostButtonElement).innerHTML = "Question " + currentQnum;
-      get(pauseButton).innerHTML = "Pause";
-      time = secondsPerQuestion;
+        // reset section
+        get(startButton).style.display = "inline-block";
+        get(ghostButton).style.display = "none";
+        get(redoButtonWrapper).style.display = "inline-block";
+        get(startButtonElement).innerHTML = "Question " + currentQnum;
+        get(ghostButtonElement).innerHTML = "Question " + currentQnum;
+        get(pauseButton).innerHTML = "Pause";
+        time = secondsPerQuestion;
+      }
     }
   };
 
@@ -450,8 +450,15 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
   this.startpause = function() {
     // called upon clicking -- initialize appearances, start timer
+
+    // countdown --> paused section
+    // the interface changes are handled in startTicking()
+    if (currentState === "countdown") {
+      currentState = "paused";
+      get(startPauseButton).innerHTML = "Resume";
+    }
     // running --> paused section
-    if (currentState === "running") {
+    else if (currentState === "running") {
       currentState = "paused";
       // remove interval for now, to be replaced
       ticking.cancel();
@@ -467,12 +474,14 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
     else {
       // standard start
+      // indiv, speed, mental
       if (roundBox == null && roundElement == null) {
         get(startPauseButton).innerHTML = "Pause";
-
-        currentState = "running";
-        ticking = accurateInterval(function() { self.tick() }, deltaT);
+        
+        self.startCountdown();
       }
+      // round-like start
+      // hustle, continuous
       else {
         // making sizes relative for adaptation to mobile devices
         get(roundElement).innerHTML = 1;
@@ -485,11 +494,46 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
 
         get(roundBox).style.background = "transparent";
         get(roundElement).style.color = "inherit";
-
-        currentState = "running";
-        ticking = accurateInterval(function() { self.tick() }, deltaT);
         get(startPauseButton).innerHTML = "Pause";
+
+        self.startCountdown();
       }
+    }
+  };
+
+  this.startCountdown = function() {
+    // COUNTDOWN
+    currentState = "countdown";
+
+    // "Ready. Begin!"
+    // reverse chain of callbacks...
+
+    // making the starting values
+    if (roundElement != null) {
+      get(roundElement).style.opacity = 0.5;
+      get(secondsElement).style.opacity = 0.5;
+      get(roundElement).innerHTML = 1;
+      get(secondsElement).innerHTML = self.parseSeconds(secondsPerRound);
+    }
+    else {
+      get(secondsElement).style.opacity = 0.5;
+      get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
+    }
+    var countdown = function() { playHowlCallback("ready", silence); };
+    var silence = function() { playHowlCallback("silent", begin); };
+    var begin = function() { playHowlCallback("begin", self.startTicking); };
+    
+    countdown();
+  }
+
+  this.startTicking = function() {
+    if (roundElement != null)
+      get(roundElement).style.opacity = 1;
+    get(secondsElement).style.opacity = 1;
+    // if someone paused by clicking Pause or Back
+    if (currentState !== "paused") {
+      currentState = "running";
+      ticking = accurateInterval(function() { self.tick() }, deltaT);
     }
   };
 
@@ -510,16 +554,18 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    ticking.cancel();
-    get(startPauseButton).innerHTML = "Start";
-    get(startPauseButton).style.display = "inline-block";
-    get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
-    time = secondsTotal;
-    currentState = "stopped";
-    get(secondsBox).style.background = "transparent";
-    get(secondsElement).style.color = "inherit";
-    if (roundElement != null)
-      get(roundElement).style.fontSize = roundNumSize;
+    if (ticking != null) { // similar to round timer, it can be null if user tries to reset during countdown
+      ticking.cancel();
+      get(startPauseButton).innerHTML = "Start";
+      get(startPauseButton).style.display = "inline-block";
+      get(secondsElement).innerHTML = self.parseSeconds(secondsTotal);
+      time = secondsTotal;
+      currentState = "stopped";
+      get(secondsBox).style.background = "transparent";
+      get(secondsElement).style.color = "inherit";
+      if (roundElement != null)
+        get(roundElement).style.fontSize = roundNumSize;
+    }
   };
 
   this.warn = function() {
