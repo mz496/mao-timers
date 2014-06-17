@@ -192,22 +192,24 @@ summary of changes:
   .half-box.round-box-wrapper {
     height: 200px;
     position: relative;
-    /*margin-left: -20%;*/
+    margin-left: -20%;
   }
   .half-box.sec-box-wrapper {
     height: 200px;
     position: relative;
-    /*margin-right: -20%;*/
+    margin-right: -20%;
   }
 
   .pound {
     font-size: 32px;
     height: 0;
+    width: 1em;
     font-weight: bold;
     position: absolute;
     margin-top: 1.3em;
-    margin-left: calc(50% - 55px + 0.2em);
+    margin-left: calc(50% - 55px);
     /* the count-box is 110px, so distance from container edge to box edge is (100%-110px)/2 */
+    /* kind of magic-number-y but... */
   }
 
   /* float the buttons to the opposite sides within the wrappers */
