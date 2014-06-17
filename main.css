@@ -189,15 +189,25 @@ summary of changes:
     display: none;
   }
 
-  .round-box-wrapper {
+  .half-box.round-box-wrapper {
+    height: 200px;
     position: relative;
-    float: left;
-    margin-left: -20%;
+    /*margin-left: -20%;*/
   }
-  .sec-box-wrapper {
+  .half-box.sec-box-wrapper {
+    height: 200px;
     position: relative;
-    float: right;
-    margin-right: -20%;
+    /*margin-right: -20%;*/
+  }
+
+  .pound {
+    font-size: 32px;
+    height: 0;
+    font-weight: bold;
+    position: absolute;
+    margin-top: 1.3em;
+    margin-left: calc(50% - 55px + 0.2em);
+    /* the count-box is 110px, so distance from container edge to box edge is (100%-110px)/2 */
   }
 
   /* float the buttons to the opposite sides within the wrappers */
