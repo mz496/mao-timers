@@ -9,17 +9,30 @@ html, body {
   color: #776e65;
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: anti-aliased;
-  font-size: 18px; }
+  font-size: 18px;
+}
+
+.mobile-styling { display: none; }
 
 p { text-align: center; }
-a { color: inherit; }
+a {
+  color: inherit;
+  -webkit-transition: background-color 0.4s;
+  transition: background-color 0.4s;
+}
+
 hr {
   border: none;
   border-bottom: 1px solid #d8d4d0;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-#title { font-size: 48px; }
+
+#title {
+  font-size: 48px;
+  margin-left: 0;
+  margin-right: 0;
+}
 
 .generic-box {
   margin: auto;
@@ -55,6 +68,7 @@ hr {
   position: absolute;
   top: 0%;
   float: left;
+  z-index: 1000;
 }
 #back-button {
   position: fixed;
@@ -163,10 +177,11 @@ summary of changes:
 
 ****************************************************************/
 @media only screen and (max-width: 601px) {
+  .mobile-styling { display: initial; }
+
   #title {
     font-size: 40px;
-    margin-top: 1.2em;
-    margin-bottom: 0.8em;
+    margin: 1.2em 0 0.8em 0;
   }
 
   .button {

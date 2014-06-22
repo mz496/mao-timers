@@ -28,22 +28,27 @@
     <div id="back-button-wrapper">
       <a class="button small" id="back-button">&laquo; back to menu</a>
     </div>
-    <p id="status"></p>
+    <p id="x"></p>
     <div class="generic-box" id="button-box">
-      <a class="button" id="team-open" title="4 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Team</a>
-      <a class="button" id="indiv-open" title="60 minutes, with warnings at 15 minutes, 5 minutes, and 1 minute remaining.">Individual</a>
       <div>
-        <a class="button" id="hustle-open" title="25 minutes total divided into 5 rounds of 5 min. each, with warnings at 1 min. and 15 sec. before the next round.">Hustle</a>
-        <a class="button" id="ciphering-open" title="3 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Ciphering</a>
-        <a class="button" id="relay-open" title="6 minutes per question divided into three rounds of 2 min. each, with warnings at the start of each round (after the first) and at 15 sec. before the next round.">Relay</a>
+      <!-- comments to get rid of extra whitespace -->
+      <!-- mobile-styling makes nice rows in mobile -->
+        <a class="button" id="team-open" title="4 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Team</a><br class="mobile-styling"><!--
+        --><a class="button" id="indiv-open" title="60 minutes, with warnings at 15 minutes, 5 minutes, and 1 minute remaining.">Individual</a>
       </div>
       <div>
-        <a class="button" id="speed-open" title="15 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Speed</a>
-        <a class="button" id="mental-open" title="8 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Mental</a>
+        <a class="button" id="hustle-open" title="25 minutes total divided into 5 rounds of 5 min. each, with warnings at 1 min. and 15 sec. before the next round.">Hustle</a><br class="mobile-styling"><!--
+        --><a class="button" id="ciphering-open" title="3 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Ciphering</a><br class="mobile-styling"><!--
+        --><a class="button" id="relay-open" title="6 minutes per question divided into three rounds of 2 min. each, with warnings at the start of each round (after the first) and at 15 sec. before the next round.">Relay</a>
       </div>
-      <a class="button" id="continuous-open" title="An unofficial, general-purpose, self-paced timer for assessing speed on any number of questions without having to stop/restart it. &#8776; &#8734; minutes, with warnings at each new minute (after the first) and at 15 sec. before the next minute.">Continuous</a>
-      <a class="button" id="custom-open" title="Set your own single-round (i.e. similar to Individual) timer with the duration and warnings of your choice.">Custom</a>
-
+      <div>
+        <a class="button" id="speed-open" title="15 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Speed</a><br class="mobile-styling"><!--
+        --><a class="button" id="mental-open" title="8 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Mental</a>
+      </div>
+      <div>
+        <a class="button" id="continuous-open" title="An unofficial, general-purpose, self-paced timer for assessing speed on any number of questions without having to stop/restart it. &#8776; &#8734; minutes, with warnings at each new minute (after the first) and at 15 sec. before the next minute.">Continuous</a><br class="mobile-styling"><!--
+        --><a class="button" id="custom-open" title="Set your own single-round (i.e. similar to Individual) timer with the duration and standard warnings of your choice.">Custom</a>
+      </div>
       <p title="This will create a delay between pressing Start and the timer actually starting. Uncheck if you do not want this to happen."><input type="checkbox" checked="true" id="toggleUseCountdown"> Use automatic voice countdown</p>
 
       <hr>
@@ -54,14 +59,13 @@
 
       <hr>
 
-      <p>You can use the timers on a smartphone or tablet.<br>You can also use the shortlink <strong><a href="http://git.io/mao-timers">git.io/mao-timers</a></strong>.
+      <p>You can use the timers on a smartphone or tablet.<br>You can also use the shortlink <strong><a href="http://git.io/mao-timers">git.io/mao-timers</a></strong>.</p>
 
       <hr>
 
       <p>Created by Matthew Zhu. Formatting overtly inspired by <strong><a href="http://git.io/2048">2048 by Gabriele Cirulli</a></strong> and conceptually similar to every <strong><a href="http://www.online-stopwatch.com/">stopwatch</a></strong> ever created.</p>
       <span style="font-size: 16px">Please email bug reports and suggestions to </span><img style="margin-bottom: -3px" src="images/email2.png" />
     </div>
-
 
     <!--======-->
     <!-- TEAM -->

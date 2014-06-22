@@ -4,12 +4,87 @@
     console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };*/
 
+// FORMATTING THINGS
+function getProperty(elem, prop) {
+  return parseFloat(window.getComputedStyle(get(elem), null).getPropertyValue(prop));
+}
+function getButtonWidth(button) { // displayed width
+  return getProperty(button, "width") + 2*getProperty(button, "margin-left") + 2*getProperty(button, "padding-left");
+}
+function setButtonWidth(button, displayedWidth) {
+  var elemWidth = displayedWidth - 2*getProperty(button, "margin-left") - 2*getProperty(button, "padding-left");
+  get(button).style.width = elemWidth + "px";
+}
+
+// detecting for mobile
+var mobile = getProperty("title", "width") < 601;
+
+var teamWidth = getButtonWidth("team-open");
+var indivWidth = getButtonWidth("indiv-open");
+
+var hustleWidth = getButtonWidth("hustle-open");
+var cipheringWidth = getButtonWidth("ciphering-open");
+var relayWidth = getButtonWidth("relay-open");
+
+var speedWidth = getButtonWidth("speed-open");
+var mentalWidth = getButtonWidth("mental-open");
+
+var continuousWidth = getButtonWidth("continuous-open");
+var customWidth = getButtonWidth("custom-open");
+
+if (!mobile) {
+  // find width of the largest (computed) row, distribute button sizes in the other rows to match
+  var row1 = teamWidth+indivWidth;
+  var row2 = hustleWidth+cipheringWidth+relayWidth;
+  var row3 = speedWidth+mentalWidth;
+  var row4 = continuousWidth+customWidth;
+  // the addition is somewhat inaccurate (?) so give each row 15px breathing room
+  // idk how sort is working here but w3schools says it does, so...
+  var descending = [row1+15, row2+15, row3+15, row4+15].sort(function(a, b){return b-a});
+  var largest = descending[0];
+
+  // distribute according to largest (largest row does not change)
+  setButtonWidth("team-open", teamWidth/row1 * largest);
+  setButtonWidth("indiv-open", indivWidth/row1 * largest);
+
+  setButtonWidth("hustle-open", hustleWidth/row2 * largest);
+  setButtonWidth("ciphering-open", cipheringWidth/row2 * largest);
+  setButtonWidth("relay-open", relayWidth/row2 * largest);
+
+  setButtonWidth("speed-open", speedWidth/row3 * largest);
+  setButtonWidth("mental-open", mentalWidth/row3 * largest);
+
+  setButtonWidth("continuous-open", continuousWidth/row4 * largest);
+  setButtonWidth("custom-open", customWidth/row4 * largest);
+}
+else {
+  // if we are mobile, then make each button the same width according to the largest
+  var widths = [teamWidth, indivWidth, hustleWidth, cipheringWidth, relayWidth, speedWidth, mentalWidth, continuousWidth, customWidth];
+  for (var w = 0; w < widths.length; w++) {
+    widths[w] += 5;
+  }
+  var descending = widths.sort(function(a, b){return b-a});
+  var largest = descending[0];
+
+  setButtonWidth("team-open", largest);
+  setButtonWidth("indiv-open", largest);
+  setButtonWidth("hustle-open", largest);
+  setButtonWidth("ciphering-open", largest);
+  setButtonWidth("relay-open", largest);
+  setButtonWidth("speed-open", largest);
+  setButtonWidth("mental-open", largest);
+  setButtonWidth("continuous-open", largest);
+  setButtonWidth("custom-open", largest);
+}
+
+// TIMER STARTS HERE
+
 // colors
-var red = "#f72d23";
-var orange = "#f4771f";
-var yellow = "#f2c01b";
-var gray = "#696969";
-var whitish = "#f9f6f2";
+var red = "hsl(0, 90%, 52%)";
+var orange = "hsl(25, 90%, 52%)";
+var yellow = "hsl(50, 90%, 52%)";
+var gray = "hsl(0, 0%, 40%)";
+var whitish = "hsl(34, 37%, 96%)";
 
 /*
 basic structure of a round timer
