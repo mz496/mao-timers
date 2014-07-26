@@ -4,6 +4,17 @@
     console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };*/
 
+// Note: jQuery is loaded but used minimally because I didn't know how to use it until later
+
+// SPLASH SCREEN
+$("#continue-button").click(function() {
+  $("#splash").fadeOut(400);
+  $("#splashcover").fadeOut(400, function() {
+    $("html").css("overflow", "auto");
+    $("body").css("overflow", "auto");
+  });
+});
+
 // FORMATTING THINGS
 function getProperty(elem, prop) {
   return parseFloat(window.getComputedStyle(get(elem), null).getPropertyValue(prop));
@@ -108,23 +119,23 @@ function get(elem)
 function back() {
   get("title").innerHTML = "MA&#920; Timers";
 
-  if (team.getState() !== ("stopped" || "paused"))
+  if (team.getState() === "running")
     team.pause();
-  if (ciphering.getState() !== ("stopped" || "paused"))
+  if (ciphering.getState() === "running")
     ciphering.pause();
-  if (relay.getState() !== ("stopped" || "paused"))
+  if (relay.getState() === "running")
     relay.pause();
-  if (indiv.getState() !== ("stopped" || "paused"))
+  if (indiv.getState() === "running")
     indiv.startpause();
-  if (hustle.getState() !== ("stopped" || "paused"))
+  if (hustle.getState() === "running")
     hustle.startpause();
-  if (continuous.getState() !== ("stopped" || "paused"))
+  if (continuous.getState() === "running")
     continuous.startpause();
-  if (speed.getState() !== ("stopped" || "paused"))
+  if (speed.getState() === "running")
     speed.startpause();
-  if (mental.getState() !== ("stopped" || "paused"))
+  if (mental.getState() === "running")
     mental.startpause();
-  if (custom != null && custom.getState() !== ("stopped" || "paused"))
+  if (custom != null && custom.getState() === "running")
     custom.startpause();
 
   // find which one to hide

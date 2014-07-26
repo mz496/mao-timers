@@ -10,6 +10,7 @@ html, body {
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: anti-aliased;
   font-size: 18px;
+  overflow: hidden; /* property for the splash screen */
 }
 
 .mobile-styling { display: none; }
@@ -43,7 +44,10 @@ hr {
   display: none;
 }
 
-#button-box { display: block; }
+#button-box {
+  display: block;
+  padding-bottom: 20px;
+}
 
 .button {
   color: #f9f6f2;
@@ -161,6 +165,24 @@ hr {
 .table-wrapper {
   display: table;
   width: 100%;
+}
+
+#splash {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  padding: 5% 15% 5% 15%;
+  overflow: scroll;
+  z-index: 1337;
+}
+#splashcover {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 0.7;
+  z-index: 1336;
 }
 
 /**************************************************************\
