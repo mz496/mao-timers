@@ -168,13 +168,14 @@ hr {
 }
 
 #splash {
-  position: fixed;
+  position: absolute;
   top: 0;
-  height: 100%;
-  padding: 5% 15% 5% 15%;
-  overflow: scroll;
+  height: calc(100% - 40px);
+  padding: 20px 15%;
+  overflow-y: auto;
   z-index: 1337;
 }
+
 #splashcover {
   position: fixed;
   top: 0;
