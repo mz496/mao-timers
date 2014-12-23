@@ -5,4 +5,4 @@ These timers are designed for Mu Alpha Theta (http://www.mualphatheta.org) compe
 
 Created by Matthew Zhu
 
-Email mzhu1@andrew.cmu.edu
+Email matt.z496@gmail.com for any questions/comments/concerns/bug reports regarding the timers.
