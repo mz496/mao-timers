@@ -279,7 +279,9 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
       this.warn();
 
     // parse time remaining into the divs
-    get(roundElement).innerHTML = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
+    var round = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
+    get(roundElement).innerHTML = time % 60 === 0 ? round + 1 : round
+    // special case when we want to show "2nd min, 60 sec" and not "1st min, 0 sec"
     get(secondsElement).innerHTML = this.parseSeconds(time);
     
     // 15 SECONDS!
