@@ -4,8 +4,6 @@
     console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
 };*/
 
-// Note: jQuery is loaded but used minimally because I didn't know how to use it until later
-
 // SPLASH SCREEN
 $("#continue-button").click(function() {
   $("#splash").fadeOut(400);
@@ -105,8 +103,8 @@ basic structure of a round timer
 running ---+       |
    ^       |       v
 countdown  +---> stopped (trigger via OoT or Stop)
-   |              |
-   +---next q.----+
+   |               |
+   +---next q.-----+
 ^ (trigger
 via Start
 or Resume)
@@ -187,7 +185,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   var self = this;
   var ticking;
   var time = secondsPerQuestion;
-  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = 10; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -274,14 +272,14 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     time--;
 
     // check warnings every 15 seconds to accommodate all test types
-    // placement of this line causes problems in offline mode, but whatever
     if (time % 15 === 0)
       this.warn();
 
     // parse time remaining into the divs
     var round = Math.ceil((secondsPerQuestion - time)/secondsPerRound);
-    get(roundElement).innerHTML = time % 60 === 0 ? round + 1 : round
-    // special case when we want to show "2nd min, 60 sec" and not "1st min, 0 sec"
+    get(roundElement).innerHTML = (time % 60 === 0 && time !== 0) ? round + 1 : round
+    // we want to show "2nd min, 60 sec" and not "1st min, 0 sec"
+    // but when time is expired, do not increment minute
     get(secondsElement).innerHTML = this.parseSeconds(time);
     
     // 15 SECONDS!
@@ -452,7 +450,6 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     time--;
 
     // check warnings every 15 seconds
-    // placement of this line causes problems in offline mode, but whatever
     if (time % 15 === 0)
       this.warn();
 
