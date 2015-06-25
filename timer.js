@@ -1,8 +1,12 @@
-// filename: root/timer.js
+/*
+MAO Timers
 
-/*window.onerror = function(errorMsg, url, lineNumber) {
-    console.log("JS ERROR: " + errorMsg + " (" + url + ", line " + lineNumber + ")");
-};*/
+Matthew Zhu (matt.z496@gmail.com)
+*/
+
+/*****************************************************************************\
+      Immediately-needed formatting
+\*****************************************************************************/
 
 // SPLASH SCREEN
 $("#continue-button").click(function() {
@@ -86,7 +90,9 @@ else {
   setButtonWidth("custom-open", largest);
 }
 
-// TIMER STARTS HERE
+/*****************************************************************************\
+      TIMER STARTS HERE
+\*****************************************************************************/
 
 // colors
 var red = "hsl(0, 90%, 52%)";
@@ -168,12 +174,12 @@ var accurateInterval = function(fn, time) {
   };
 };
 
-/******************************************************************\
-/******************************************************************
+/*****************************************************************************\
+/*****************************************************************************
       ROUND TIMER
       for "round-based" schemes -- team, ciphering, relay
-\******************************************************************
-\******************************************************************/
+\*****************************************************************************
+\*****************************************************************************/
 
 function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, timerContainer, roundBox, roundElement, secondsBox, secondsElement, startButton, startButtonElement, ghostButton, ghostButtonElement, pauseButton, stopButton, redoButtonWrapper, soundDict) {
   var currentState = "stopped";
@@ -260,7 +266,8 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.startTicking = function() {
     get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
-    // if someone paused by clicking Pause or Back, do not run once the voice has finished counting down, instead pause at full time
+    // if someone paused by clicking Pause or Back:
+    // do not run once the voice has finished counting down, instead pause at full time
     if (currentState !== "paused") {
       currentState = "running";
       ticking = accurateInterval(function() { self.tick() }, deltaT);
@@ -341,7 +348,8 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
 
   this.finish = function() {
     // can be user initiated stop, or out of time (OoT)
-    if (ticking != null) { // it can be null when trying to stop if user clicks during countdown
+    if (ticking != null) {
+    // it can be null when trying to stop if user clicks during countdown
       ticking.cancel();
       // now only reset once
       if (currentState === "running" || currentState === "paused") {
@@ -382,13 +390,13 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   this.setState = function(state) { currentState = state; };
 }
 
-/******************************************************************\
-/******************************************************************
+/*******************************************************************************\
+/*******************************************************************************
       EXTENDED TIMER
       for extended/continuous schemes --
       individual, speed, mental, hustle, continuous
-\******************************************************************
-\******************************************************************/
+\*******************************************************************************
+\*******************************************************************************/
 
 
 function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
@@ -624,7 +632,8 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
     if (roundElement != null)
       get(roundElement).style.opacity = 1;
     get(secondsElement).style.opacity = 1;
-    // if someone paused by clicking Pause or Back, do not run once the voice has finished counting down, instead pause at full time
+    // if someone paused by clicking Pause or Back:
+    // do not run once the voice has finished counting down, instead pause at full time
     if (currentState !== "paused") {
       currentState = "running";
       ticking = accurateInterval(function() { self.tick() }, deltaT);
@@ -648,7 +657,8 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    if (ticking != null) { // similar to round timer, it can be null if user tries to reset during countdown
+    if (ticking != null) {
+    // similar to round timer, it can be null if user tries to reset during countdown
       ticking.cancel();
       get(startPauseButton).innerHTML = "Start";
       get(startPauseButton).style.display = "inline-block";
@@ -679,12 +689,12 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   this.clearTicking = function() { ticking.cancel(); }
 }
 
-/******************************************************************\
-/******************************************************************
+/*****************************************************************************\
+/*****************************************************************************
       CONTINUOUS TIMER
       is-a ExtendedTimer
-\******************************************************************
-\******************************************************************/
+\*****************************************************************************
+\*****************************************************************************/
 
 function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict) {
   ExtendedTimer.call(this, title, secondsTotal, timerContainer, roundBox, roundElement, secondsPerRound, secondsBox, secondsElement, startPauseButton, resetButton, soundDict);
@@ -727,7 +737,8 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
   this.reset = function() {
     // reset section formerly in finish()
     // simply make it look like it did when just opened
-    if (self.tickingExists()) { // can be null if trying to reset during/before countdown
+    if (self.tickingExists()) {
+    // can be null if trying to reset during/before countdown
       self.clearTicking();
       get("title").innerHTML = "Continuous";
       get(startPauseButton).innerHTML = "Start";
@@ -756,12 +767,12 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
 
 ContinuousTimer.prototype = new ExtendedTimer();
 
-/******************************************************************\
-/******************************************************************
+/*****************************************************************************\
+/*****************************************************************************
       CUSTOM TIMER
       is-a ExtendedTimer
-\******************************************************************
-\******************************************************************/
+\*****************************************************************************
+\*****************************************************************************/
 
 var custom = null;
 
@@ -954,15 +965,12 @@ get("custom-open").onclick = function() {
   get("custom-box").style.display = "block";
   get("back-button").style.display = "inline-block";
 };
-var customSounds = {
-  900: "fifteenminutes",
-  300: "fiveminutes",
-  60: "oneminute",
-  15: "fifteenseconds",
-  0: "time"
-};
 
-// and all the rest of the timers:
+
+/*****************************************************************************\
+      TIMER ENDS HERE
+      Sounds and integration follow
+\*****************************************************************************/
 
 var teamSounds = {
   15: "fifteenseconds",
@@ -1024,6 +1032,15 @@ var speedSounds = {
   0: "time"
 };
 var mentalSounds = speedSounds;
+var customSounds = {
+  900: "fifteenminutes",
+  300: "fiveminutes",
+  60: "oneminute",
+  15: "fifteenseconds",
+  0: "time"
+};
+
+/* Instantiation/integration of timers */
 
 var team = new RoundTimer("Team Round", 240, 60, 15, "team-box", "team-min-box", "team-min-number", "team-sec-box", "team-sec-number", "team-start-button", "team-start-button-num", "team-ghost-button", "team-ghost-button-num", "team-pause-button", "team-stop-button", "team-redo-button-wrapper", teamSounds);
 var ciphering = new RoundTimer("Ciphering Round", 180, 60, 15, "ciphering-box", "ciphering-min-box", "ciphering-min-number", "ciphering-sec-box", "ciphering-sec-number", "ciphering-start-button", "ciphering-start-button-num", "ciphering-ghost-button", "ciphering-ghost-button-num", "ciphering-pause-button", "ciphering-stop-button", "ciphering-redo-button-wrapper", cipheringSounds);
@@ -1076,9 +1093,9 @@ get("mental-open").onclick = mental.makeInterface;
 get("mental-start-pause-button").onclick = mental.startpause;
 get("mental-reset-button").onclick = mental.reset;
 
-/******************************************************************\
+/*****************************************************************************\
       SOUND HANDLERS
-\******************************************************************/
+\*****************************************************************************/
 
 var audioDict = {};
 audioDict.audioBuffersByName = {};
