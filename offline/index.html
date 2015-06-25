@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MA&#920; Timers</title>
+    <link type="text/css" rel="stylesheet" href="scripts/main.css" />
+    <link type="text/css" rel="stylesheet" media="screen" href="fonts/clear-sans.css" />
+    
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/png-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="format-detection" content="telephone=no" />
+    
+    <meta property="og:title" content="MA&#920; Timers"/>
+    <meta property="og:site_name" content="MA&#920; Timers"/>
+    <meta property="og:description" content="Timers designed for Mu Alpha Theta style tests."/>
+    <meta property="og:image" content="images/og-image.png"/>
+  </head>
+  
+  <body>
+    <p id="title">MA&#920; Timers</p>
+    <div id="back-button-wrapper">
+      <a class="button small" id="back-button">&laquo; back to menu</a>
+    </div>
+    <h1 id="offline-warning">NOTE: If this is visible on the page, and the formatting looks funky, you may have downloaded this as a zipped file and forgotten to unzip it. Please unzip everything to a separate directory before using.</h1>
+
+    <div id="splashcover"> </div>
+    <div id="splash">
+      <p>Welcome to the Mu Alpha Theta timers, presented by the FAMAT Student Delegates!</p>
+
+      <p>These timers were designed to streamline self-practicing. Notable features include automatic warnings and color changes at the proper times, optional automatic countdown for the start of the timer, various preset styles, and custom single-round timers.</p>
+
+      <p>We also encourage sponsors to use the timers in a competition setting for ease and accuracy, but the audio/video setup required to use them as intended is often non-trivial. The optimal setup is to have the sound play loud enough for the entire room to hear, with the screen on a projector for the entire room to see. <strong>If you are unable to broadcast the sufficient sound from your device, do not check the box labeled "Use automatic voice countdown,"</strong> which creates a delay ("Ready - Begin!") between pressing Start and the timer actually starting. Also, if you are unable to display the screen, consider using the timers' colors to signal yourself to announce the appropriate warnings.</p>
+
+      <p><strong>Be sure to familiarize yourself with the timers before use, especially if used in any Mu Alpha Theta competition.</strong> We cannot be held responsible for any mistakes in scoring or administration.</p>
+
+      <p>Final note: using the timers in some browsers may produce undesired results, such as Internet Explorer. Best results are in Google Chrome on any platform (iOS 6+ if using an Apple device).</p>
+
+      <div style="text-align: center;">
+      <a class="button small" id="continue-button">continue &raquo;</a>
+      </div>
+    </div>
+
+    <div class="generic-box" id="button-box">
+      <div>
+      <!-- comments to get rid of extra whitespace -->
+      <!-- mobile-styling makes nice rows in mobile -->
+        <a class="button" id="team-open" title="4 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Team</a><br class="mobile-styling"><!--
+        --><a class="button" id="indiv-open" title="60 minutes, with warnings at 15 minutes, 5 minutes, and 1 minute remaining.">Individual</a>
+      </div>
+      <div>
+        <a class="button" id="hustle-open" title="25 minutes total divided into 5 rounds of 5 min. each, with warnings at 1 min. and 15 sec. before the next round.">Hustle</a><br class="mobile-styling"><!--
+        --><a class="button" id="ciphering-open" title="3 minutes per question, with warnings at the start of each minute (after the first) and at 15 sec. before the next minute.">Ciphering</a><br class="mobile-styling"><!--
+        --><a class="button" id="relay-open" title="6 minutes per question divided into three rounds of 2 min. each, with warnings at the start of each round (after the first) and at 15 sec. before the next round.">Relay</a>
+      </div>
+      <div>
+        <a class="button" id="speed-open" title="15 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Speed</a><br class="mobile-styling"><!--
+        --><a class="button" id="mental-open" title="8 minutes, with warnings at 1 min. remaining and 15 sec. remaining.">Mental</a>
+      </div>
+      <div>
+        <a class="button" id="continuous-open" title="An unofficial, general-purpose, self-paced timer for assessing speed on any number of questions without having to stop/restart it. &#8776; &#8734; minutes, with warnings at each new minute (after the first) and at 15 sec. before the next minute.">Continuous</a><br class="mobile-styling"><!--
+        --><a class="button" id="custom-open" title="Set your own single-round (i.e. similar to Individual) timer with the duration and standard warnings of your choice.">Custom</a>
+      </div>
+      <label><p title="This will create a delay between pressing Start and the timer actually starting. Leave unchecked if you do not want this to happen."><input type="checkbox" id="toggleUseCountdown"> Use automatic voice countdown</p></label>
+
+      <hr>
+
+      <p>The purpose of these timers is to make the timing process in Mu Alpha Theta easier and less prone to error. That means no more fuss with stopwatches and saying the right minute, missing the time warning marks, etc.</p>
+      <p>All behaviors are based on the most recent official Mu Alpha Theta rules, which can be found starting on page 4 of <a href="http://www.mualphatheta.org/National_Convention/2014/2014%20OrlandoPacket.pdf">this document</a>.</p>
+      <p>Hover over each button to see a short description of the timer.</p>
+
+      <hr>
+
+      <p>You can use the timers on a smartphone or tablet.<br>You can also use the shortlink <strong><a href="http://git.io/mao-timers">git.io/mao-timers</a></strong>.</p>
+
+      <hr>
+
+      <p>Created by Matthew Zhu for FAMAT Student Delegates 2014. Formatting overtly inspired by <a href="http://git.io/2048">2048 by Gabriele Cirulli</a> and conceptually similar to every <a href="http://www.online-stopwatch.com/">stopwatch</a> ever created.</p>
+      <span style="font-size: 16px">Please email bug reports and suggestions to </span><img style="margin-bottom: -3px" src="images/email2.png" />
+    </div>
+
+    <!--======-->
+    <!-- TEAM -->
+    <!--======-->
+
+    <div class="generic-box" id="team-box">
+      <div class="start-box">
+        <a class="button" id="team-start-button">
+          <div style="font-size: 32px;">Start</div>
+          <div class="q-number" id="team-start-button-num">Question 1</div>
+        </a>
+        <!-- here we make a "ghost button" so we can have the nice "question # in-place" effect without having to deal with ugly margin px values that are nonconstant -->
+        <!-- potential easter eggs in place of <br>? -->
+        <a class="button ghost" id="team-ghost-button">
+          <div style="font-size: 32px;"><br></div>
+          <div class="q-number" id="team-ghost-button-num">Question 1</div>
+        </a>
+      </div>
+
+      <div class="half-box round-box-wrapper">
+        <div class="pound">#</div>
+        Current minute
+        <div class="count-box" id="team-min-box">
+          <div class="generic-number" id="team-min-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box sec-box-wrapper">
+        <div>Seconds remaining</div>
+        <div>in this minute</div>
+        <div class="count-box" id="team-sec-box">
+          <div class="generic-number" id="team-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="team-pause-button">Pause</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="team-stop-button">Stop</a>
+      </div>
+
+      <div>
+        <div class="redo-button-wrapper" id="team-redo-button-wrapper">
+          <a class="button small" id="team-redo-button">Redo last question</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!--===========-->
+    <!-- CIPHERING -->
+    <!--===========-->
+
+    <div class="generic-box" id="ciphering-box">
+      <div class="start-box">
+        <a class="button" id="ciphering-start-button">
+          <div style="font-size: 32px;">Start</div>
+          <div class="q-number" id="ciphering-start-button-num">Question 1</div>
+        </a>
+        <a class="button ghost" id="ciphering-ghost-button">
+          <div style="font-size: 32px;"><br></div>
+          <div class="q-number" id="ciphering-ghost-button-num">Question 1</div>
+        </a>
+      </div>
+
+      <div class="half-box round-box-wrapper">
+        <div class="pound">#</div>
+        Current minute
+        <div class="count-box" id="ciphering-min-box">
+          <div class="generic-number" id="ciphering-min-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box sec-box-wrapper">
+        <div>Seconds remaining</div>
+        <div>in this minute</div>
+        <div class="count-box" id="ciphering-sec-box">
+          <div class="generic-number" id="ciphering-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="ciphering-pause-button">Pause</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="ciphering-stop-button">Stop</a>
+      </div>
+
+      <div>
+        <div class="redo-button-wrapper" id="ciphering-redo-button-wrapper">
+          <a class="button small" id="ciphering-redo-button">Redo last question</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!--=======-->
+    <!-- RELAY -->
+    <!--=======-->
+
+    <div class="generic-box" id="relay-box">
+      <div class="start-box">
+        <a class="button" id="relay-start-button">
+          <div style="font-size: 32px;">Start</div>
+          <div class="q-number" id="relay-start-button-num">Question 1</div>
+        </a>
+        <a class="button ghost" id="relay-ghost-button">
+          <div style="font-size: 32px;"><br></div>
+          <div class="q-number" id="relay-ghost-button-num">Question 1</div>
+        </a>
+      </div>
+
+      <div class="half-box round-box-wrapper">
+        <div class="pound">#</div>
+        Current round
+        <div class="count-box" id="relay-round-box">
+          <div class="generic-number" id="relay-round-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box sec-box-wrapper">
+        <div>Time remaining</div>
+        <div>in this round</div>
+        <div class="count-box" id="relay-sec-box">
+          <div class="generic-number" id="relay-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="relay-pause-button">Pause</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="relay-stop-button">Stop</a>
+      </div>
+
+      <div>
+        <div class="redo-button-wrapper" id="relay-redo-button-wrapper">
+          <a class="button small" id="relay-redo-button">Redo last question</a>
+        </div>
+      </div>
+    </div>
+
+    <!--============-->
+    <!-- INDIVIDUAL -->
+    <!--============-->
+
+    <div class="generic-box" id="indiv-box">
+      Time remaining
+      <div class="whole-wrapper">
+        <div class="whole-box" id="indiv-sec-box">
+          <div class="generic-number big" id="indiv-sec-number">60:00</div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="indiv-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="indiv-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--========-->
+    <!-- HUSTLE -->
+    <!--========-->
+
+    <div class="generic-box" id="hustle-box">
+      <div class="half-box round-box-wrapper">
+        <div class="pound">#</div>
+        Current round
+        <div class="count-box" id="hustle-round-box">
+          <div class="generic-number" id="hustle-round-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box sec-box-wrapper">
+        <div>Time remaining</div>
+        <div>in this round</div>
+        <div class="count-box" id="hustle-sec-box">
+          <div class="generic-number" id="hustle-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="hustle-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="hustle-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--============-->
+    <!-- CONTINUOUS -->
+    <!--============-->
+
+    <div class="generic-box" id="continuous-box">
+      <div class="half-box round-box-wrapper">
+        <div class="pound">#</div>
+        Current minute
+        <div class="count-box" id="continuous-min-box">
+          <div class="generic-number" id="continuous-min-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box sec-box-wrapper">
+        <div>Seconds remaining</div>
+        <div>in this minute</div>
+        <div class="count-box" id="continuous-sec-box">
+          <div class="generic-number" id="continuous-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="continuous-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="continuous-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--=======-->
+    <!-- SPEED -->
+    <!--=======-->
+
+    <div class="generic-box" id="speed-box">
+      Time remaining
+      <div class="whole-wrapper">
+        <div class="whole-box" id="speed-sec-box">
+          <div class="generic-number big" id="speed-sec-number">15:00</div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="speed-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="speed-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--========-->
+    <!-- MENTAL -->
+    <!--========-->
+
+    <div class="generic-box" id="mental-box">
+      Time remaining
+      <div class="whole-wrapper">
+        <div class="whole-box" id="mental-sec-box">
+          <div class="generic-number big" id="mental-sec-number">08:00</div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="mental-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="mental-reset-button">Reset</a>
+      </div>
+    </div>
+
+    <!--========-->
+    <!-- CUSTOM -->
+    <!--========-->
+    <div class="generic-box" id="custom-box">
+      <div id="custom-head">Change settings</div>
+      <div class="whole-wrapper">
+        <div class="whole-box" id="custom-sec-box">
+          <div class="generic-number big" id="custom-sec-number"></div>
+        </div>
+      </div>
+
+      <div class="half-box pause-button-wrapper">
+        <a class="button" id="custom-start-pause-button">Start</a>
+      </div>
+
+      <div class="half-box stop-button-wrapper">
+        <a class="button" id="custom-reset-button">Reset</a>
+      </div>
+
+      <div><a class="button small" id="change-settings-button">Change settings</a></div>
+      
+      <div id="settings-box">
+        <div class="table-wrapper">
+          <div class="vert-align-wrapper" style="height: 70px; border-right: 1px solid #bdb9b5;">
+            Timer duration:
+          </div>
+
+          <div class="vert-align-wrapper" style="height: 70px;">
+            Warn when there is/are ___ remaining:
+          </div>
+        </div>
+
+        <hr style="margin: 10px 0px 10px 0px; border-bottom: 1px solid #bdb9b5;">
+
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+          <div class="vert-align-wrapper" style="border-right: 1px solid #bdb9b5;">
+            <div class="input-box">
+              <div><select id="hour-field">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </select> hour(s)</div>
+              <div><select id="min-field">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+                <option value="32">32</option>
+                <option value="33">33</option>
+                <option value="34">34</option>
+                <option value="35">35</option>
+                <option value="36">36</option>
+                <option value="37">37</option>
+                <option value="38">38</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+                <option value="45">45</option>
+                <option value="46">46</option>
+                <option value="47">47</option>
+                <option value="48">48</option>
+                <option value="49">49</option>
+                <option value="50">50</option>
+                <option value="51">51</option>
+                <option value="52">52</option>
+                <option value="53">53</option>
+                <option value="54">54</option>
+                <option value="55">55</option>
+                <option value="56">56</option>
+                <option value="57">57</option>
+                <option value="58">58</option>
+                <option value="59">59</option>
+              </select> minute(s)</div>
+              <div><select id="sec-field">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+                <option value="31">31</option>
+                <option value="32">32</option>
+                <option value="33">33</option>
+                <option value="34">34</option>
+                <option value="35">35</option>
+                <option value="36">36</option>
+                <option value="37">37</option>
+                <option value="38">38</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+                <option value="45">45</option>
+                <option value="46">46</option>
+                <option value="47">47</option>
+                <option value="48">48</option>
+                <option value="49">49</option>
+                <option value="50">50</option>
+                <option value="51">51</option>
+                <option value="52">52</option>
+                <option value="53">53</option>
+                <option value="54">54</option>
+                <option value="55">55</option>
+                <option value="56">56</option>
+                <option value="57">57</option>
+                <option value="58">58</option>
+                <option value="59">59</option>
+              </select> second(s)</div>
+            </div>
+          </div>
+
+          <div class="vert-align-wrapper">
+            <div class="input-box">
+              <div><input type="checkbox" id="15-min-checkbox" />15 minutes</div>
+              <div><input type="checkbox" id="5-min-checkbox" />5 minutes</div>
+              <div><input type="checkbox" id="1-min-checkbox" />1 minute</div>
+              <div><input type="checkbox" id="15-sec-checkbox" />15 seconds</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div><a class="button" id="done-button">Done</a></div>
+    </div>
+
+    <script src="scripts/jquery-1.11.3.min.js"></script>
+    <script src="scripts/timer.js"></script>
+    <script src="scripts/howler.min.js"></script>
+  </body>
+</html>
