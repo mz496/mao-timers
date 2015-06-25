@@ -1,6 +1,6 @@
 /*
 MAO Timers
-Matthew Zhu (matt.z496@gmail.com)
+Matthew Zhu
 */
 
 /*****************************************************************************\
@@ -295,7 +295,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
     // 15 SECONDS!
     if (time % secondsPerRound === 15) {
       get(secondsBox).style.background = yellow;
-      get(secondsElement).style.color = whitish;
+      // get(secondsElement).style.color = whitish;
     }
     
      // NEW ROUND!
@@ -473,7 +473,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       if (secondsTotal > 30*60) {
         if (time === 15*60) {
           get(secondsBox).style.background = yellow;
-          get(secondsElement).style.color = whitish;
+          // get(secondsElement).style.color = whitish;
         }
 
         // 5 MINUTES!
@@ -492,7 +492,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
         // 1 MINUTE!
         if (time === 60) {
           get(secondsBox).style.background = yellow;
-          get(secondsElement).style.color = whitish;
+          // get(secondsElement).style.color = whitish;
         }
 
         // 15 SECONDS!
@@ -521,7 +521,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
       // 1 MINUTE!
       if (time % secondsPerRound === 60) {
         get(secondsBox).style.background = yellow;
-        get(secondsElement).style.color = whitish;
+        // get(secondsElement).style.color = whitish;
       }
 
       // 15 SECONDS!
@@ -712,7 +712,7 @@ function ContinuousTimer(title, secondsTotal, timerContainer, roundBox, roundEle
     // 15 SECONDS!
     if (time % 60 === 15) {
       get(secondsBox).style.background = yellow;
-      get(secondsElement).style.color = whitish;
+      // get(secondsElement).style.color = whitish;
       this.warn();
     }
 
