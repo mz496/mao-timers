@@ -111,9 +111,9 @@ running ---+       |
 countdown  +---> stopped (trigger via OoT or Stop)
    |               |
    +---next q.-----+
-^ (trigger
-via Start
-or Resume)
+      ^ (trigger
+      via Start
+      or Resume)
 
 */
 
