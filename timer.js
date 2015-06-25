@@ -1,6 +1,5 @@
 /*
 MAO Timers
-
 Matthew Zhu (matt.z496@gmail.com)
 */
 
@@ -93,6 +92,10 @@ else {
 /*****************************************************************************\
       TIMER STARTS HERE
 \*****************************************************************************/
+
+// for debugging purposes
+var roundDeltaT = 1000;
+var extendedDeltaT = 1000;
 
 // colors
 var red = "hsl(0, 90%, 52%)";
@@ -191,7 +194,7 @@ function RoundTimer(title, secondsPerQuestion, secondsPerRound, numQuestions, ti
   var self = this;
   var ticking;
   var time = secondsPerQuestion;
-  var deltaT = 10; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = roundDeltaT; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
@@ -408,7 +411,7 @@ function ExtendedTimer(title, secondsTotal, timerContainer, roundBox, roundEleme
   var self = this; // very important for accurateInterval
   var ticking;
   var time = secondsTotal;
-  var deltaT = 1000; // actual time (ms) between increments of the time variable -- 1000 in normal situation
+  var deltaT = extendedDeltaT; // actual time (ms) between increments of the time variable -- 1000 in normal situation
 
   this.makeInterface = function() {
     // triggers upon click of the test type button
